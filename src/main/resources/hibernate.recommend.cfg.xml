@@ -1,0 +1,11 @@
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<mapping class="com.wondertek.mobilevideo.core.recommend.model.SystemConfig"/>
+		<mapping class="com.wondertek.mobilevideo.core.recommend.model.PrdTypeRelation"/>
+		<mapping class="com.wondertek.mobilevideo.core.recommend.model.RecommendInfo"/>
+		<mapping class="com.wondertek.mobilevideo.core.recommend.model.EnumsInfo"/>
+	</session-factory>
+</hibernate-configuration>

@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.wondertek.mobilevideo</groupId>
+		<artifactId>parent</artifactId>
+		<version>5.0.0</version>
+	</parent>
+	
+    <groupId>com.wondertek.mobilevideo.recommend</groupId>
+    <artifactId>recommend-core</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0.0</version>
+    <name>recommend-core</name>
+
+    <build>
+        <defaultGoal>install</defaultGoal>
+        
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>hibernate3-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <components>
+                        <component>
+                            <name>hbm2ddl</name>
+                            <implementation>annotationconfiguration</implementation>							
+                        </component>
+                    </components>
+                    <componentProperties>
+                        <drop>true</drop>
+                        <jdk5>true</jdk5>
+                        <propertyfile>target/test-classes/jdbc.properties</propertyfile>
+						<configurationfile>src/main/resources/hibernate.recommend.cfg.xml</configurationfile>
+                        <skip>${skipTests}</skip>
+                        <outputfilename>create.sql</outputfilename>
+                    </componentProperties>
+                </configuration>
+                <!--
+                <executions>
+                    <execution>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>hbm2ddl</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                -->
+                <dependencies>
+                    <dependency>
+                        <groupId>${jdbc.groupId}</groupId>
+                        <artifactId>${jdbc.artifactId}</artifactId>
+                        <version>${jdbc.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>native2ascii-maven-plugin</artifactId>
+                <version>1.0-alpha-1</version>
+                <configuration>
+                    <dest>target/classes</dest>
+                    <src>src/main/resources</src>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>native2ascii-utf8</id>
+                        <goals>
+                            <goal>native2ascii</goal>
+                        </goals>
+                        <configuration>
+                            <encoding>UTF8</encoding>
+                            <includes>
+                                *.properties,
+                            </includes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>native2ascii-8859_1</id>
+                        <goals>
+                            <goal>native2ascii</goal>
+                        </goals>
+                        <configuration>
+                            <encoding>8859_1</encoding>
+                            <includes>ApplicationResources_de.properties,
+                                ApplicationResources_fr.properties,
+                                ApplicationResources_nl.properties,
+                                ApplicationResources_pt*.properties</includes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>dbunit-maven-plugin</artifactId>
+                <version>1.0-beta-3</version>
+                <configuration>
+                    <dataTypeFactoryName>${dbunit.dataTypeFactoryName}</dataTypeFactoryName>
+                    <driver>${jdbc.driverClassName}</driver>
+                    <username>${jdbc.username.recommend}</username>
+                    <password>${jdbc.password.recommend}</password>
+                    <show_sql>true</show_sql> 
+                    <url>${oms.jdbc.url}</url>
+                    <src>src/test/resources/sample-data.xml</src>
+                    <type>${dbunit.operation.type}</type>
+                     <skip>${skipTests}</skip>
+                    <transaction>true</transaction>
+                </configuration>
+                <!--
+                <executions>
+                    <execution>
+                        <id>test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>operation</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                -->
+                <dependencies>
+                    <dependency>
+                        <groupId>${jdbc.groupId}</groupId>
+                        <artifactId>${jdbc.artifactId}</artifactId>
+                        <version>${jdbc.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+        
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+            <testResource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</testResource>
+        </testResources>
+    </build>
+	<repositories>
+		<repository>
+	    	<id>spring-milestone</id>
+	    	<name>Spring Maven MILESTONE Repository</name>
+	   	 	<url>http://repo.spring.io/libs-milestone</url>
+  		</repository>
+	</repositories>
+	<dependencies>
+		
+		<!-- <dependency>
+			<groupId>org.beanshell</groupId>
+			<artifactId>bsh</artifactId>
+			<version>${beanshell.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>jaxen</groupId>
+			<artifactId>jaxen</artifactId>
+			<version>1.1-beta-9</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf</groupId>
+			<scope>compile</scope>
+			<artifactId>json-lib</artifactId>
+			<version>${json-lib-version}</version>
+		</dependency> -->
+		<dependency>
+			<groupId>com.wondertek.mobilevideo.core</groupId>
+			<artifactId>core-base</artifactId>
+			<version>${core-base.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>quartz</groupId>
+					<artifactId>quartz</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- <dependency>
+         	<groupId>com.wondertek.mobilevideo.core</groupId>
+        	<artifactId>core-mina</artifactId>
+        	<version>${core-mina.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.wondertek.mobilevideo.core</groupId>
+					<artifactId>core-util</artifactId>
+				</exclusion>
+				<exclusion>
+					<artifactId>stax-api</artifactId>
+					<groupId>javax.xml.stream</groupId>
+				</exclusion>
+			</exclusions>
+        </dependency> -->
+        <!-- <dependency>
+			<groupId>com.mmseg4j</groupId>
+			<artifactId>mmseg4j</artifactId>
+			<version>${mmseg4j.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency> -->
+		<!-- <dependency>
+			<groupId>org.apache.xmlbeans</groupId>
+			<artifactId>xmlbeans</artifactId>
+			<version>${xmlbeans.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.ezmorph</groupId>
+			<artifactId>ezmorph</artifactId>
+			<version>1.0.6</version>
+		</dependency>
+		<dependency>
+			<groupId>it.sauronsoftware</groupId>
+			<artifactId>jave</artifactId>
+			<version>${jave.version}</version>
+		</dependency> -->
+		
+		<!-- redis need start-->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${redis.version}</version>
+        </dependency>
+		<dependency>
+            <groupId>org.msgpack</groupId>
+            <artifactId>msgpack</artifactId>
+            <version>${msgpack.version}</version>
+        </dependency>
+        <!-- redis need end-->
+        
+        <!-- <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <version>${commons.pool2.version}</version>
+        </dependency> -->
+		
+       	<dependency>                        
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.1.15</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+		  	<artifactId>spring-data-mongodb</artifactId>
+		  	<version>1.9.3.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver</artifactId>
+			<version>3.3.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.mongodb</groupId>
+  					<artifactId>bson</artifactId>
+  				</exclusion>
+  			</exclusions>
+		</dependency>
+		<dependency>
+	        <groupId>org.springframework</groupId>
+	        <artifactId>spring-context</artifactId>
+	        <version>4.3.3.RELEASE</version>
+	    </dependency>
+	    <dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz-jobs</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+	</dependencies>
+   
+	<properties>
+        <msgpack.version>0.6.12</msgpack.version>
+        <redis.version>2.8.0</redis.version>
+        <commons.pool2.version>2.2</commons.pool2.version>
+		<json-lib-version>2.4</json-lib-version>
+		<mmseg4j.version>1.8.3</mmseg4j.version>
+		<core-mina.version>4.0.0</core-mina.version>
+		<core-base.version>5.0.0</core-base.version>
+		<xmlbeans.version>2.4.0</xmlbeans.version>
+		<jave.version>1.0.2.1</jave.version>
+		<hibernate.cfg.xml>hibernate.recommend.cfg.xml</hibernate.cfg.xml>
+        <!-- Supported types are UPDATE, INSERT, DELETE, DELETE_ALL, REFRESH, CLEAN_INSERT, 
+            MSSQL_INSERT, MSSQL_REFRESH, MSSQL_CLEAN_INSERT -->
+        <dbunit.operation.type>REFRESH</dbunit.operation.type>
+        <spring.version>4.3.3.RELEASE</spring.version>
+	</properties>
+
+</project>

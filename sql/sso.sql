@@ -22,7 +22,7 @@ insert into RESOURCE_INFO (RESID, ISDISABLE, DISPORDER, LINKPATH, RESDESC, RESMO
 (RESOURCE_SEQ.nextval,1,1,'/menuSysManage.htm','系统管理','个性化推荐管理系统','系统管理',10030985);
 
 insert into RESOURCE_INFO (RESID, ISDISABLE, DISPORDER, LINKPATH, RESDESC, RESMODEL, RESNAME, APPID) values 
-(RESOURCE_SEQ.nextval,1,1,'/menuSysManage.htm','系统管理->系统参数管理','个性化推荐管理系统','系统管理->系统参数管理',10030985);
+(RESOURCE_SEQ.nextval,1,1,'/menuSysParmsManage.htm','系统管理->系统参数管理','个性化推荐管理系统','系统管理->系统参数管理',10030985);
 insert into RESOURCE_INFO (RESID, ISDISABLE, DISPORDER, LINKPATH, RESDESC, RESMODEL, RESNAME, APPID) values 
 (RESOURCE_SEQ.nextval,1,1,'/sys/addConfig.htm','系统管理->系统参数管理(添加)','个性化推荐管理系统','系统管理->系统参数管理(添加)',10030985);
 insert into RESOURCE_INFO (RESID, ISDISABLE, DISPORDER, LINKPATH, RESDESC, RESMODEL, RESNAME, APPID) values 

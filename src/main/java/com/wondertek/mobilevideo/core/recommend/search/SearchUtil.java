@@ -122,7 +122,14 @@ public class SearchUtil {
 	private static List<SearchResult> pomsParserXML(SearchRequest request, String xml) {
 		List<SearchResult> searchResult = new ArrayList<SearchResult>();
 		try {
-			Document doc = DocumentHelper.parseText(xml);
+			if(StringUtil.isNullStr(xml)){
+				return searchResult;
+			}
+			Document doc = null;
+			try {
+				doc = DocumentHelper.parseText(xml);
+			} catch (Exception e) {
+			}
 			if (doc != null) {
 				Node rootNode = doc.selectSingleNode("//RESULT/searchResults");
 				if (rootNode != null) {

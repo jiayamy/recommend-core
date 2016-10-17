@@ -3,6 +3,7 @@ package com.wondertek.mobilevideo.core.recommend.cache.redis.service.impl;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -14,7 +15,13 @@ import org.msgpack.unpacker.Unpacker;
 import com.wondertek.mobilevideo.core.recommend.cache.redis.commons.RedisManager;
 import com.wondertek.mobilevideo.core.recommend.cache.redis.service.UserTagCacheManager;
 import com.wondertek.mobilevideo.core.recommend.mongo.service.UserTagService;
+import com.wondertek.mobilevideo.core.recommend.util.CatInfoSort;
+import com.wondertek.mobilevideo.core.recommend.util.CatItemSort;
+import com.wondertek.mobilevideo.core.recommend.util.RecomdItemSort;
 import com.wondertek.mobilevideo.core.recommend.util.RequestConstants;
+import com.wondertek.mobilevideo.core.recommend.vo.mongo.CatInfo;
+import com.wondertek.mobilevideo.core.recommend.vo.mongo.CatItem;
+import com.wondertek.mobilevideo.core.recommend.vo.mongo.RecomdItem;
 import com.wondertek.mobilevideo.core.recommend.vo.mongo.UserTag;
 
 import redis.clients.jedis.Jedis;
@@ -35,6 +42,8 @@ public class UserTagCacheManagerImpl implements UserTagCacheManager
     
     private UserTagService userTagService;
     private static final String UT_PREFIX_KEY = "RI:USERTAG:";
+    private static final String UT_CUT_PREFIX_KEY = "RI:USERTAG:CUT:";
+    
     private int expireTime = 60*3;//3分钟
     private static MessagePack msgpack = null;
     
@@ -201,9 +210,6 @@ public class UserTagCacheManagerImpl implements UserTagCacheManager
         userTag = changeByteArrayToVal(jedis.get(keyBytes));
         if(userTag == null){
         	com.wondertek.mobilevideo.core.recommend.mongo.model.UserTag mongoUserTag = userTagService.queryById(id);
-        	if(log.isDebugEnabled()){
-        		log.debug("search from redis");
-        	}
         	if(mongoUserTag == null){
         		userTag = new UserTag();
         	}else{
@@ -217,6 +223,136 @@ public class UserTagCacheManagerImpl implements UserTagCacheManager
         }else if(log.isDebugEnabled() && RequestConstants.V_PRINT_REQUEST_ENABLE){
     		log.debug("search from redis,userTag:" + userTag);
     	}
+		return userTag;
+	}
+	@Override
+	public UserTag queryCutById(String id) {
+		Jedis jedis = null;
+        try {
+            jedis = redisManager.getJedis();
+        } catch (Exception e) {
+            log.error("redis getObject failed.error info:" + e);
+        }
+        UserTag userTag = null;
+        if (jedis == null) {//redis为空，从数据库中获取
+        	userTag = this.queryById(id);
+        	if(userTag != null){
+        		//排序删除方法
+        		userTag = fillSortCut(userTag);
+        	}
+        	if(log.isDebugEnabled() && RequestConstants.V_PRINT_REQUEST_ENABLE){
+        		log.debug("search from mongodb,userTag:" + userTag);
+        	}
+        	return userTag;
+        }
+        //
+        String key = UT_CUT_PREFIX_KEY + id;
+        byte[] keyBytes = changeKeyToByteArray(key);
+//        jedis.del(keyBytes);
+        userTag = changeByteArrayToVal(jedis.get(keyBytes));
+        if(userTag == null){
+        	userTag = this.queryById(id);
+        	if(userTag == null){
+        		userTag = new UserTag();
+        	}else{
+        		userTag = fillSortCut(userTag);
+        	}
+        	if(log.isDebugEnabled() && RequestConstants.V_PRINT_REQUEST_ENABLE){
+        		log.debug("search from mongodb,userTag:" + userTag);
+        	}
+        	jedis.set(keyBytes, changeValueToByteArray(userTag));
+        	jedis.expire(keyBytes, expireTime);
+        }else if(log.isDebugEnabled() && RequestConstants.V_PRINT_REQUEST_ENABLE){
+    		log.debug("search from redis,userTag:" + userTag);
+    	}
+		return userTag;
+	}
+	/**
+	 * 填充默认分数，排序，剪切
+	 * @param userTag
+	 * @return
+	 */
+	private UserTag fillSortCut(UserTag userTag) {
+		Double defaultScore = RequestConstants.V_DEFAULT_USERTAG_SCORE;
+		if(userTag.getCats() != null && userTag.getCats().size() > 0){
+			int count = 0;
+			
+			int catMaxCount = RequestConstants.V_DEFAUL_REQUEST_TAG_CAT_MAX;
+			int catItemMaxCount = RequestConstants.V_DEFAUL_REQUEST_TAG_CATITEM_MAX;
+			int catRecomdMaxCount = RequestConstants.V_DEFAUL_REQUEST_TAG_RECOMD_MAX;
+			
+			for(CatInfo catInfo : userTag.getCats()){
+				//一级分类的分数
+				if(catInfo.getScore() == null){
+					catInfo.setScore(defaultScore);
+				}
+				//一级分类下推荐标签分数
+				if(catInfo.getRecommendation() != null){
+					for(RecomdItem recomdItem : catInfo.getRecommendation()){
+						if(recomdItem.getScore() == null){
+							recomdItem.setScore(defaultScore);
+						}
+					}
+					//排序，分从高到低
+					List<RecomdItem> recommendation = catInfo.getRecommendation();
+					Collections.sort(recommendation,new RecomdItemSort());
+					catInfo.setRecommendation(recommendation);
+					//剪切
+					count = 0;
+					List<RecomdItem> tmp = new ArrayList<RecomdItem>();
+					for(RecomdItem recomdItem : recommendation){
+						if(count < catRecomdMaxCount){
+							tmp.add(recomdItem);
+						}else{
+							break;
+						}
+						count ++;
+					}
+					catInfo.setRecommendation(tmp);
+					
+				}
+				//一级分类下标签分数
+				if(catInfo.getItems() != null){
+					for(CatItem catItem : catInfo.getItems()){
+						if(catItem.getScore() == null){
+							catItem.setScore(defaultScore);
+						}
+					}
+					//一级分类下的标签分数填充完后做一次排序
+					List<CatItem> items = catInfo.getItems();
+					Collections.sort(items,new CatItemSort());
+					catInfo.setItems(items);
+					//剪切
+					count = 0;
+					List<CatItem> tmp = new ArrayList<CatItem>();
+					for(CatItem catItem : items){
+						if(count < catItemMaxCount){
+							tmp.add(catItem);
+						}else{
+							break;
+						}
+						count ++;
+					}
+					catInfo.setItems(tmp);
+				}
+			}
+			//一级分类分数填充完后做一次排序
+			List<CatInfo> items = userTag.getCats();
+			Collections.sort(items,new CatInfoSort());
+			userTag.setCats(items);
+			//剪切
+			count = 0;
+			List<CatInfo> tmp = new ArrayList<CatInfo>();
+			for(CatInfo catInfo : userTag.getCats()){
+				if(count < catMaxCount){
+					tmp.add(catInfo);
+				}else{
+					break;
+				}
+				count ++;
+			}
+			userTag.setCats(tmp);
+		}
 		return userTag;
 	}
     /**

@@ -17,6 +17,21 @@ public class RequestConstants {
 	public static final String P_DEFAUL_REQUEST_LIMIT = "request.default.limit";
 	public static int V_DEFAUL_REQUEST_LIMIT = 10;
 	/**
+	 * 请求用户标签时一级分类的最大个数
+	 */
+	public static final String P_DEFAUL_REQUEST_TAG_CAT_MAX = "request.default.tag.cat.max";
+	public static int V_DEFAUL_REQUEST_TAG_CAT_MAX = 10;
+	/**
+	 * 请求用户标签时一级分类下的普通标签最大个数
+	 */
+	public static final String P_DEFAUL_REQUEST_TAG_CATITEM_MAX = "request.default.tag.catitem.max";
+	public static int V_DEFAUL_REQUEST_TAG_CATITEM_MAX = 10;
+	/**
+	 * 请求用户标签时一级分类下的推荐标签最大个数
+	 */
+	public static final String P_DEFAUL_REQUEST_TAG_RECOMD_MAX = "request.default.tag.recomd.max";
+	public static int V_DEFAUL_REQUEST_TAG_RECOMD_MAX = 10;
+	/**
 	 * 正常调用请求最多查询多少条记录进行分页
 	 */
 	public static final String P_DEFAULT_SEARCH_COUNT_MAX = "search.default.count.max";

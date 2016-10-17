@@ -97,6 +97,12 @@ public class SystemConfigCache
 		
 		RequestConstants.V_DEFAUL_REQUEST_LIMIT = getIntValueDefault(RequestConstants.P_DEFAUL_REQUEST_LIMIT,10);
 		
+		RequestConstants.V_DEFAUL_REQUEST_TAG_CAT_MAX = getIntValueDefault(RequestConstants.P_DEFAUL_REQUEST_TAG_CAT_MAX,10);
+		
+		RequestConstants.V_DEFAUL_REQUEST_TAG_CATITEM_MAX = getIntValueDefault(RequestConstants.P_DEFAUL_REQUEST_TAG_CATITEM_MAX,10);
+		
+		RequestConstants.V_DEFAUL_REQUEST_TAG_RECOMD_MAX = getIntValueDefault(RequestConstants.P_DEFAUL_REQUEST_TAG_RECOMD_MAX,10);
+		
 		RequestConstants.V_DEFAULT_SEARCH_COUNT_MAX = getIntValueDefault(RequestConstants.P_DEFAULT_SEARCH_COUNT_MAX,100);
 		
 		RequestConstants.V_PRINT_REQUEST_ENABLE = StringUtil.nullToBoolean(getValue(RequestConstants.P_PRINT_REQUEST_ENABLE));

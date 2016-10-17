@@ -185,5 +185,10 @@ insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (12, 
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (14, 'recomd.default.cat.max', '5', '人工推荐时，最多查询多少个一级分类');
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (15, 'recomd.default.catitem.max', '10', '人工推荐时，最多查询多少个一级分类下推荐标签');
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (16, 'search.default.enable', 'false', '是否调用搜索引擎');
+--20161017
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (16, 'print.request.enable', 'true', '是否大数据的日志');
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (16, 'request.default.tag.cat.max', '10', '请求用户标签时一级分类的最大个数');
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (16, 'request.default.tag.catitem.max', '10', '请求用户标签时一级分类下的普通标签最大个数');
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (16, 'request.default.tag.recomd.max', '10', '请求用户标签时一级分类下的推荐标签最大个数');
 
 

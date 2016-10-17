@@ -15,4 +15,10 @@ public interface UserTagCacheManager
      *@return 返回一个对象，或者空，或者空对象
      */
     public UserTag queryById(String id);
+    /**
+     * 查询经过删减的用户标签
+     * @param userId
+     * @return
+     */
+	public UserTag queryCutById(String userId);
 }

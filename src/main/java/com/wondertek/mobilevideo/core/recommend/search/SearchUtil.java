@@ -101,7 +101,9 @@ public class SearchUtil {
 		if(request.getContDisplayType() != null && !"".equals(request.getContDisplayType())){
 			list.add(new NameValuePair("contDisplayType", request.getContDisplayType()));
 		}
-		
+		if(request.getMediaShape() != null && !"".equals(request.getMediaShape())){
+			list.add(new NameValuePair("mediaShape", request.getMediaShape()));
+		}
 		
 		//排序相关
 		if(request.getPageSize() != null && !"".equals(request.getPageSize())){

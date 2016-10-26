@@ -98,7 +98,8 @@ public class RequestConstants {
 	public static final String MAP_KEY_PREFIX_CAT_LABEL = "2_";
 	public static final String MAP_KEY_PREFIX_RECOMMEND = "3_";
 	
-	public static final String SEARCH_KEY_RECOMMD = "contRecomm";
+	public static final String SEARCH_KEY_RECOMMD = "1081";
+	public static final String SEARCH_KEY_MEDIASHAPE = "1039";
 	
 	public static final String R_SUCC = "success";
 	public static final String R_CODE = "returnCode";

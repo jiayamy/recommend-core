@@ -339,7 +339,7 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
         if(records == null || records.size() == 0){//为空
         	return null;
         }
-        List<String> tmp = null;
+        List<String> tmp = new ArrayList<String>();
         for (byte[] bytes : records){
         	tmp = changeByteArrayToStrings(bytes);
         	break;
@@ -362,6 +362,7 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
         Map<String,Object> paramMap = new HashMap<String, Object>();
         paramMap.put("sord","asc");
         synchronized (obj){
+        	log.debug("updateCache start");
             cacheAvailable = false;
             List<RecommendInfo> list = recommendInfoService.queryAllAvailable();
             Map<String,List<RecommendInfoVo>> vos = new HashMap<String,List<RecommendInfoVo>>();
@@ -403,6 +404,7 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
         	jedis.expire(keyBytes,expireTime);//设置过期时间
         	
             cacheAvailable = true;
+            log.debug("updateCache end,labels size:" + labels.size());
         }
         redisManager.releaseJedis(jedis);//释放连接
     }

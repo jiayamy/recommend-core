@@ -23,5 +23,8 @@
 	<bean id="enumsInfoService" class="com.wondertek.mobilevideo.core.recommend.service.impl.EnumsInfoServiceImpl">
 		<constructor-arg ref="enumsInfoDao" />
 	</bean>
-	
+	<!-- 20161108 -->
+	<bean id="vomsRecommendService" class="com.wondertek.mobilevideo.core.recommend.service.impl.VomsRecommendServiceImpl">
+		<constructor-arg ref="vomsRecommendDao" />
+	</bean>
 </beans>

@@ -11,37 +11,32 @@ import org.msgpack.MessagePack;
 import org.msgpack.packer.Packer;
 import org.msgpack.unpacker.Unpacker;
 
-import com.wondertek.mobilevideo.core.recommend.cache.redis.commons.RedisManager;
+import com.wondertek.mobilevideo.core.recommend.cache.redis.commons.BinaryJedisClusterFactory;
 import com.wondertek.mobilevideo.core.recommend.cache.redis.service.SearchCacheClusterManager;
-import com.wondertek.mobilevideo.core.recommend.cache.redis.service.SearchCacheManager;
 import com.wondertek.mobilevideo.core.recommend.search.SearchRequest;
 import com.wondertek.mobilevideo.core.recommend.search.SearchResult;
 import com.wondertek.mobilevideo.core.recommend.search.SearchUtil;
 
-import redis.clients.jedis.Jedis;
+import redis.clients.jedis.BinaryJedisCluster;
 
-/**
- * 用户标签信息
- * @author lvliuzhong
- *
- */
-public class SearchCacheManagerImpl implements SearchCacheManager
-{
+public class SearchCacheClusterManagerImpl implements SearchCacheClusterManager{
 
     public static Object obj = new Object();
-    protected static Boolean cacheAvailable = true;	//标记是否正在从数据库中更新stars全量数据到redis中
-    private Log log = LogFactory.getLog(this.getClass());
     
-    private RedisManager redisManager;
+   
+    protected static Boolean jedisClusterManager = false;//判断redis是否符合集群
     
+    private Log log = LogFactory.getLog(this.getClass());   
+    
+    private BinaryJedisClusterFactory jedisClusterFactory;  
+        
     private static final String UT_PREFIX_KEY = "RI:SchRst:";
-    private Boolean isCluster = Boolean.FALSE; 
-    private SearchCacheClusterManager searchCacheClusterManager;
     
     private int expireTime = 60 * 3;//3分钟
+    
     private static MessagePack msgpack = null;
     
-    public SearchCacheManagerImpl(){}
+    public SearchCacheClusterManagerImpl(){}
     static {
 		if (msgpack == null) {
 			msgpack = new MessagePack();
@@ -171,16 +166,14 @@ public class SearchCacheManagerImpl implements SearchCacheManager
     }
 	@Override
 	public List<SearchResult> queryByParam(String httpUrl, SearchRequest searchRequest) {
-		if(isCluster){
-			return searchCacheClusterManager.queryByParam(httpUrl, searchRequest);
+		BinaryJedisCluster jedisCluster = null;
+		try{
+			jedisCluster = jedisClusterFactory.getObject();
+		}catch(Exception e){
+			log.error("redis getObject failed.error info:" + e);
 		}
-		Jedis jedis = null;
-        try {
-        	jedis = redisManager.getJedis();;
-        } catch (Exception e) {
-            log.error("redis getObject failed.error info:" + e);
-        }
-        if (jedis == null) {//redis为空，从数据库中获取
+        if(jedisCluster == null){
+        //if (jedis == null) {//redis为空，从数据库中获取
         	//通知搜索服务器
         	return SearchUtil.httpRequest(httpUrl, searchRequest);
         }
@@ -188,9 +181,9 @@ public class SearchCacheManagerImpl implements SearchCacheManager
         String id = SearchUtil.getSearchKey(searchRequest);
         String key = UT_PREFIX_KEY + id;
         byte[] keyBytes = changeKeyToByteArray(key);
-//        jedis.del(keyBytes);
+          // jedis.del(keyBytes);
         List<SearchResult> rst = null;
-        rst = changeByteArrayToObjects(jedis.get(keyBytes));
+        rst = changeByteArrayToObjects(jedisCluster.get(keyBytes));      
         
         if(rst == null || rst.isEmpty()){
         	log.debug("search from engine,id:"+id);
@@ -200,26 +193,21 @@ public class SearchCacheManagerImpl implements SearchCacheManager
         		//放置一个空对象进去，后期循环的时候去掉
         		rst.add(new SearchResult());
         	}
-        	jedis.set(keyBytes, changeObjectsToByteArray(rst));
         	
-        	jedis.expire(keyBytes, expireTime);
+        	jedisCluster.set(keyBytes, changeObjectsToByteArray(rst));        	
+        	jedisCluster.expire(keyBytes, expireTime);
+        
         }else if(log.isDebugEnabled()){
         	log.debug("search from redis,id:"+id);
         }
 		return rst;
 	}
+	public BinaryJedisClusterFactory getJedisClusterFactory() {
+		return jedisClusterFactory;
+	}
+	public void setJedisClusterFactory(BinaryJedisClusterFactory jedisClusterFactory) {
+		this.jedisClusterFactory = jedisClusterFactory;
+	}
 	
-	public RedisManager getRedisManager() {
-		return redisManager;
-	}
-	public void setRedisManager(RedisManager redisManager) {
-		this.redisManager = redisManager;
-	}
-	public SearchCacheClusterManager getSearchCacheClusterManager() {
-		return searchCacheClusterManager;
-	}
-	public void setSearchCacheClusterManager(SearchCacheClusterManager searchCacheClusterManager) {
-		this.searchCacheClusterManager = searchCacheClusterManager;
-	}
-    
+	
 }

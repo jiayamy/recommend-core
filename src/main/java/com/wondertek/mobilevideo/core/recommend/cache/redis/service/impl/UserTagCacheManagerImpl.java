@@ -13,6 +13,7 @@ import org.msgpack.packer.Packer;
 import org.msgpack.unpacker.Unpacker;
 
 import com.wondertek.mobilevideo.core.recommend.cache.redis.commons.RedisManager;
+import com.wondertek.mobilevideo.core.recommend.cache.redis.service.UserTagCacheClusterManager;
 import com.wondertek.mobilevideo.core.recommend.cache.redis.service.UserTagCacheManager;
 import com.wondertek.mobilevideo.core.recommend.mongo.service.UserTagService;
 import com.wondertek.mobilevideo.core.recommend.util.CatInfoSort;
@@ -33,16 +34,16 @@ import redis.clients.jedis.Jedis;
  */
 public class UserTagCacheManagerImpl implements UserTagCacheManager
 {
-
-    public static Object obj = new Object();
-    protected static Boolean cacheAvailable = true;	//标记是否正在从数据库中更新stars全量数据到redis中
     private Log log = LogFactory.getLog(this.getClass());
-    
+  
     private RedisManager redisManager;
     
     private UserTagService userTagService;
     private static final String UT_PREFIX_KEY = "RI:USERTAG:";
     private static final String UT_CUT_PREFIX_KEY = "RI:USERTAG:CUT:";
+    
+    private Boolean isCluster = Boolean.FALSE; 
+    private UserTagCacheClusterManager userTagCacheClusterManager;
     
     private int expireTime = 60*3;//3分钟
     private static MessagePack msgpack = null;
@@ -71,6 +72,18 @@ public class UserTagCacheManagerImpl implements UserTagCacheManager
 	}
 	public void setExpireTime(int expireTime) {
 		this.expireTime = expireTime;
+	}
+	public Boolean getIsCluster() {
+		return isCluster;
+	}
+	public void setIsCluster(Boolean isCluster) {
+		this.isCluster = isCluster;
+	}
+	public UserTagCacheClusterManager getUserTagCacheClusterManager() {
+		return userTagCacheClusterManager;
+	}
+	public void setUserTagCacheClusterManager(UserTagCacheClusterManager userTagCacheClusterManager) {
+		this.userTagCacheClusterManager = userTagCacheClusterManager;
 	}
 	/**
      * 将KEY序列化为byte
@@ -186,6 +199,9 @@ public class UserTagCacheManagerImpl implements UserTagCacheManager
     }
 	@Override
 	public UserTag queryById(String id) {
+		if(isCluster){
+			return userTagCacheClusterManager.queryById(id);
+		}
 		Jedis jedis = null;
         try {
             jedis = redisManager.getJedis();
@@ -227,6 +243,9 @@ public class UserTagCacheManagerImpl implements UserTagCacheManager
 	}
 	@Override
 	public UserTag queryCutById(String id) {
+		if(isCluster){
+			return userTagCacheClusterManager.queryCutById(id);
+		}
 		Jedis jedis = null;
         try {
             jedis = redisManager.getJedis();
@@ -366,4 +385,5 @@ public class UserTagCacheManagerImpl implements UserTagCacheManager
 		userTag.setCats(mongoUserTag.getCats());
 		return userTag;
 	}
+	
 }

@@ -7,5 +7,7 @@
 		<mapping class="com.wondertek.mobilevideo.core.recommend.model.PrdTypeRelation"/>
 		<mapping class="com.wondertek.mobilevideo.core.recommend.model.RecommendInfo"/>
 		<mapping class="com.wondertek.mobilevideo.core.recommend.model.EnumsInfo"/>
+		<!-- 20161108 -->
+		<mapping class="com.wondertek.mobilevideo.core.recommend.model.VomsRecommend"/>
 	</session-factory>
 </hibernate-configuration>

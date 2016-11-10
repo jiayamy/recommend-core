@@ -10,7 +10,7 @@ import com.wondertek.mobilevideo.core.recommend.search.SearchResult;
  * @author lvliuzhong
  *
  */
-public interface SearchCacheManager
+public interface SearchCacheClusterManager
 {
     /**
      * 搜索，先从缓存找，如果缓存没有就从搜索服务器查找

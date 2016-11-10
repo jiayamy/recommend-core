@@ -14,33 +14,26 @@ import org.msgpack.MessagePack;
 import org.msgpack.packer.Packer;
 import org.msgpack.unpacker.Unpacker;
 
-import com.wondertek.mobilevideo.core.recommend.cache.redis.commons.RedisManager;
+import com.wondertek.mobilevideo.core.recommend.cache.redis.commons.BinaryJedisClusterFactory;
+
 import com.wondertek.mobilevideo.core.recommend.cache.redis.service.RecommendInfoCacheClusterManager;
-import com.wondertek.mobilevideo.core.recommend.cache.redis.service.RecommendInfoCacheManager;
 import com.wondertek.mobilevideo.core.recommend.model.RecommendInfo;
 import com.wondertek.mobilevideo.core.recommend.service.RecommendInfoService;
 import com.wondertek.mobilevideo.core.recommend.util.RecommendConstants;
 import com.wondertek.mobilevideo.core.recommend.vo.RecommendInfoVo;
 import com.wondertek.mobilevideo.core.util.StringUtil;
 
-import redis.clients.jedis.Jedis;
+import redis.clients.jedis.BinaryJedisCluster;
 
-/**
- * 推荐信息
- * @author lvliuzhong
- *
- */
-public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
-{
 
-    public static Object obj = new Object();
+public class RecommendInfoCacheClusterManagerImpl implements RecommendInfoCacheClusterManager {
+	public static Object obj = new Object();
     protected static Boolean cacheAvailable = true;	//标记是否正在从数据库中更新stars全量数据到redis中
-    private Log log = LogFactory.getLog(this.getClass());
+    protected static Boolean jedisClusterManager = false;//判断redis是否符合集群
     
-    private Boolean isCluster = Boolean.FALSE; 
-    private RecommendInfoCacheClusterManager recommendInfoCacheClusterManager;
+    private Log log = LogFactory.getLog(this.getClass());    
     
-    private RedisManager redisManager;
+    private BinaryJedisClusterFactory jedisClusterFactory;    
     
     private RecommendInfoService recommendInfoService;
     private static final String RI_PREFIX_KEY = "RI:RI:";
@@ -48,19 +41,14 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
     private int expireTime = 60*60*1;//24个小时
     private static MessagePack msgpack = null;
     
-    public RecommendInfoCacheManagerImpl(){}
+    public RecommendInfoCacheClusterManagerImpl(){}
     static {
 		if (msgpack == null) {
 			msgpack = new MessagePack();
 			msgpack.register(RecommendInfoVo.class);
 		}
 	}
-    public RedisManager getRedisManager() {
-		return redisManager;
-	}
-	public void setRedisManager(RedisManager redisManager) {
-		this.redisManager = redisManager;
-	}
+   
 	public RecommendInfoService getRecommendInfoService() {
 		return recommendInfoService;
 	}
@@ -93,6 +81,7 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
      * @param recommendInfoVo
      * @return
      */
+    @SuppressWarnings("unused")
 	private byte[] changeValueToByteArray(RecommendInfoVo recommendInfoVo) {
         byte[] valueBytes = null;
         try {
@@ -187,18 +176,15 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
         }
     }
     @Override
-	public List<RecommendInfoVo> queryByLabel(String labelName, String prdType, String catId) {
-    	if(isCluster){
-			return recommendInfoCacheClusterManager.queryByLabel(labelName, prdType, catId);
+	public List<RecommendInfoVo> queryByLabel(String labelName, String prdType, String catId) {   
+    	BinaryJedisCluster jedisCluster = null;
+		try{
+			jedisCluster = jedisClusterFactory.getObject();
+		}catch(Exception e){
+			log.error("redis getObject failed.error info:" + e);
 		}
-    	Jedis jedis = null;
-        try {
-            jedis = redisManager.getJedis();
-        } catch (Exception e) {
-            log.error("redis getObject failed.error info:" + e);
-        }
-        List<RecommendInfoVo> returnList = null;
-        if (jedis == null) {//redis为空，从数据库中获取
+        List<RecommendInfoVo> returnList = null;       
+        if (jedisCluster == null) {//redis为空，从数据库中获取
         	List<RecommendInfo> list = recommendInfoService.queryByLabels(labelName,prdType, catId);
         	returnList = new ArrayList<RecommendInfoVo>();
         	for(RecommendInfo recommendInfo : list){
@@ -215,14 +201,14 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
         	return returnList;
         }
         //获取标签，如果存在就查询
-        List<String> labels = getAllLabelKeys(jedis);
+        List<String> labels = getAllLabelKeys(jedisCluster);
         if(!labels.contains(getRecomdRedisKey(prdType, labelName,catId))){
         	return returnList;
         }
         Set<byte[]> records = null;
         String key = RI_PREFIX_KEY + getRecomdRedisKey(prdType, labelName,catId);
         byte []keyBytes = changeKeyToByteArray(key);
-        records = jedis.zrange(keyBytes, 0, -1);
+        records = jedisCluster.zrange(keyBytes, 0, -1);
         if(records == null || records.size() == 0){//为空
         	//查询数据库，若数据库还为空，则存储个空对象进去
         	
@@ -247,25 +233,23 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
 	        }
 	        if(log.isDebugEnabled())
 	        	log.debug("queried result from redis successfully!labelName:" + labelName + ",size:" + (returnList == null ? null : returnList.size()));
-	        jedis.expire(keyBytes,expireTime);//设置过期时间
+	        jedisCluster.expire(keyBytes,expireTime);//设置过期时间
         }
-        redisManager.releaseJedis(jedis);//释放连接
+
 		return returnList;
 	}
     
 	@Override
 	public List<RecommendInfoVo> queryByLabels(String labelNames, String prdType, String catId) {
-		if(isCluster){
-			return recommendInfoCacheClusterManager.queryByLabel(labelNames, prdType, catId);
+		BinaryJedisCluster jedisCluster = null;
+		try{
+			jedisCluster = jedisClusterFactory.getObject();
+		}catch(Exception e){
+			log.error("redis getObject failed.error info:" + e);
 		}
-		Jedis jedis = null;
-        try {
-            jedis = redisManager.getJedis();
-        } catch (Exception e) {
-            log.error("redis getObject failed.error info:" + e);
-        }
         List<RecommendInfoVo> returnList = null;
-        if (jedis == null) {//redis为空，从数据库中获取
+       
+        if (jedisCluster == null) {//redis为空，从数据库中获取
         	List<RecommendInfo> list = recommendInfoService.queryByLabels(labelNames, prdType, catId);
         	returnList = new ArrayList<RecommendInfoVo>();
         	for(RecommendInfo recommendInfo : list){
@@ -283,7 +267,7 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
         }
         //一个个标签的查找
         //获取标签，如果存在就查询
-        List<String> labels = getAllLabelKeys(jedis);
+        List<String> labels = getAllLabelKeys(jedisCluster);
         
         returnList = new ArrayList<RecommendInfoVo>();
         for(String labelName : labelNames.split(RecommendConstants.SPLIT_COMMA)){
@@ -293,7 +277,7 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
 	        Set<byte[]> records = null;
 	        String key = RI_PREFIX_KEY + getRecomdRedisKey(prdType,labelName,catId);
 	        byte []keyBytes = changeKeyToByteArray(key);
-	        records = jedis.zrange(keyBytes, 0, -1);
+	        records = jedisCluster.zrange(keyBytes, 0, -1);
 	        
 	        if(records == null || records.size() == 0){//为空
 	        	//查询数据库，若数据库还为空，则存储个空对象进去
@@ -323,10 +307,10 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
 		        	returnList.addAll(tmp);
 		        if(log.isDebugEnabled())
 		        	log.debug("queried result from redis successfully!labelName:" + labelName + ",size:" + (tmp == null ? null : tmp.size()));
-		        jedis.expire(keyBytes,expireTime);//设置过期时间
+		        jedisCluster.expire(keyBytes,expireTime);//设置过期时间
 	        }
         }
-        redisManager.releaseJedis(jedis);//释放连接
+  
         
         //排序去重
         List<RecommendInfoVo> rst = new ArrayList<RecommendInfoVo>();
@@ -342,15 +326,15 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
 	private String getRecomdRedisKey(String prdType, String labelName, String catId) {
 		return prdType + ":" + catId + ":" + labelName;
 	}
-	private List<String> getAllLabelKeys(Jedis jedis){
+	private List<String> getAllLabelKeys(BinaryJedisCluster jedisCluster){
 		Set<byte[]> records = null;
 		String key = RI_KEY_KEY;
         byte []keyBytes = changeKeyToByteArray(key);
-        records = jedis.zrange(keyBytes, 0, -1);
+        records = jedisCluster.zrange(keyBytes, 0, -1);
         if(records == null || records.size() == 0){//为空
         	return null;
         }
-        List<String> tmp = null;
+        List<String> tmp = new ArrayList<String>();
         for (byte[] bytes : records){
         	tmp = changeByteArrayToStrings(bytes);
         	break;
@@ -358,16 +342,14 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
         return tmp;
 	}
     @Override
-    public void updateCache(){
+    public void updateCache()
+    {
     	if(cacheAvailable == false){//正在刷新的暂时不刷新，等待下一次的定时任务启动
     		return;
     	}
-    	if(isCluster){
-			return;
-		}
-        Jedis jedis = null;
+    	BinaryJedisCluster jedisCluster = null;
         try {
-            jedis = redisManager.getJedis();
+        	jedisCluster =jedisClusterFactory.getObject();
         } catch (Exception e) {
             log.error("redis getObject failed.error info:" + e);
             return;
@@ -375,6 +357,7 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
         Map<String,Object> paramMap = new HashMap<String, Object>();
         paramMap.put("sord","asc");
         synchronized (obj){
+        	log.debug("updateCache start");
             cacheAvailable = false;
             List<RecommendInfo> list = recommendInfoService.queryAllAvailable();
             Map<String,List<RecommendInfoVo>> vos = new HashMap<String,List<RecommendInfoVo>>();
@@ -402,29 +385,30 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
             	labels.add(labelName);
             	key = RI_PREFIX_KEY + labelName;
             	byte []keyBytes = changeKeyToByteArray(key);
-            	jedis.del(keyBytes);
+            	jedisCluster.del(keyBytes);
             	
-            	jedis.zadd(keyBytes, 1, changeObjectsToByteArray(vos.get(labelName)));
-            	jedis.expire(keyBytes,expireTime);//设置过期时间
+            	jedisCluster.zadd(keyBytes, 1, changeObjectsToByteArray(vos.get(labelName)));
+            	jedisCluster.expire(keyBytes,expireTime);//设置过期时间
             }
             
             key = RI_KEY_KEY;
             byte []keyBytes = changeKeyToByteArray(key);
-            jedis.del(keyBytes);
+            jedisCluster.del(keyBytes);
         	
-        	jedis.zadd(keyBytes, 1, changeStringsToByteArray(labels));
-        	jedis.expire(keyBytes,expireTime);//设置过期时间
-        	
+            jedisCluster.zadd(keyBytes, 1, changeStringsToByteArray(labels));
+            jedisCluster.expire(keyBytes,expireTime);//设置过期时间
+            log.debug("updateCache end,labels size:" + labels.size());
             cacheAvailable = true;
         }
-        redisManager.releaseJedis(jedis);//释放连接
+       
+        
     }
-	public RecommendInfoCacheClusterManager getRecommendInfoCacheClusterManager() {
-		return recommendInfoCacheClusterManager;
+	public BinaryJedisClusterFactory getJedisClusterFactory() {
+		return jedisClusterFactory;
 	}
-	public void setRecommendInfoCacheClusterManager(RecommendInfoCacheClusterManager recommendInfoCacheClusterManager) {
-		this.recommendInfoCacheClusterManager = recommendInfoCacheClusterManager;
+	public void setJedisClusterFactory(BinaryJedisClusterFactory jedisClusterFactory) {
+		this.jedisClusterFactory = jedisClusterFactory;
 	}
     
-    
+
 }

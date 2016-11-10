@@ -221,5 +221,10 @@ public class SearchCacheManagerImpl implements SearchCacheManager
 	public void setSearchCacheClusterManager(SearchCacheClusterManager searchCacheClusterManager) {
 		this.searchCacheClusterManager = searchCacheClusterManager;
 	}
-    
+	public Boolean getIsCluster() {
+		return isCluster;
+	}
+	public void setIsCluster(Boolean isCluster) {
+		this.isCluster = isCluster;
+	}
 }

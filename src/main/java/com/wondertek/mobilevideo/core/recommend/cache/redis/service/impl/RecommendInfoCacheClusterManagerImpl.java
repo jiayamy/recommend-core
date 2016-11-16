@@ -354,6 +354,9 @@ public class RecommendInfoCacheClusterManagerImpl implements RecommendInfoCacheC
             log.error("redis getObject failed.error info:" + e);
             return;
         }
+        if(jedisCluster == null){
+        	return;
+        }
         Map<String,Object> paramMap = new HashMap<String, Object>();
         paramMap.put("sord","asc");
         synchronized (obj){

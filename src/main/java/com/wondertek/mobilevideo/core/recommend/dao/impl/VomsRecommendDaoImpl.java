@@ -10,8 +10,8 @@ import com.wondertek.mobilevideo.core.recommend.model.VomsRecommend;
 
 public class VomsRecommendDaoImpl extends GenericDaoHibernate<VomsRecommend,Long> implements VomsRecommendDao{
 
-	public VomsRecommendDaoImpl(Class<VomsRecommend> persistentClass) {
-		super(persistentClass);
+	public VomsRecommendDaoImpl() {
+		super(VomsRecommend.class);
 	}
 
 	@Override

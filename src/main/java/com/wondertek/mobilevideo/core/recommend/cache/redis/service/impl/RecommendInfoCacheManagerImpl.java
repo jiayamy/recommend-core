@@ -372,6 +372,9 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
             log.error("redis getObject failed.error info:" + e);
             return;
         }
+        if(jedis == null){
+        	return;
+        }
         Map<String,Object> paramMap = new HashMap<String, Object>();
         paramMap.put("sord","asc");
         synchronized (obj){

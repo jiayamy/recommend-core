@@ -40,6 +40,6 @@
     </bean>
     <!-- 20161108 -->
     <bean id="vomsRecommendDao" class="com.wondertek.mobilevideo.core.recommend.dao.impl.VomsRecommendDaoImpl">
-    <property name="sessionFactory" ref="sessionFactory_recommend"></property>
+    	<property name="sessionFactory" ref="sessionFactory_recommend"></property>
     </bean>
 </beans>

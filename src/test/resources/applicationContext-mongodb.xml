@@ -13,8 +13,11 @@
 
     <!-- Default bean name is 'mongo' 
     -->
+    <!--
 	<mongo:mongo-client id="mongo" replica-set="${mongo.replicaSet}"
-	>
+		credentials="${mongo.username}:${mongo.passwd}@${mongo.dbname}">
+	-->
+	<mongo:mongo-client id="mongo" replica-set="${mongo.replicaSet}"> 
 		<mongo:client-options 
 			connections-per-host="8"
 	   		threads-allowed-to-block-for-connection-multiplier="4"

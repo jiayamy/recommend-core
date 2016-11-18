@@ -11,12 +11,12 @@ import org.msgpack.annotation.Message;
 public class UserTag implements Serializable{
 	private static final long serialVersionUID = 3521383326178114024L;
 	
-	private String id;
-	private String prdType;//产品
-	private Integer start;//开始
-	private Integer limit;//段数
-	private String order;
-	private String ctVer;//版本号
+	private String id;		//用户ID
+	private String prdType;	//产品类型
+	private Integer start;	//分页开始
+	private Integer limit;	//每页条数
+	private String order;	//排序（暂时不用传参数）
+	private String ctVer;	//客户端版本号
 	private List<CatInfo> cats;
 	public String getId() {
 		return id;

@@ -12,11 +12,11 @@ public class UserTag implements Serializable{
 	private static final long serialVersionUID = 3521383326178114024L;
 	
 	private String id;
-	private String prdType;
-	private Integer start;
-	private Integer limit;
+	private String prdType;//产品
+	private Integer start;//开始
+	private Integer limit;//段数
 	private String order;
-	private String ctVer;
+	private String ctVer;//版本号
 	private List<CatInfo> cats;
 	public String getId() {
 		return id;

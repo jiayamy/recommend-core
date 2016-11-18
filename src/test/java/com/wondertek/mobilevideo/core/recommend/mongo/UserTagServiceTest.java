@@ -14,7 +14,7 @@ public class UserTagServiceTest extends BaseTestCase {
 		int count = 681274129;
 		for(count = 681274129 ; count < 681274140; count++){
 			String id = ""+count;
-//			userTagService.insert(id);
+			userTagService.insert(id);
 			UserTag userTag = userTagService.queryById(id);
 			System.out.println(userTag.getId().toString());
 			System.out.println(userTag);	

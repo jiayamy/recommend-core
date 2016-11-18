@@ -43,7 +43,7 @@ public class RecommendInfoDaoImpl extends GenericDaoHibernate<RecommendInfo,Long
 
 	@Override
 	public List<RecommendInfo> queryAllAvailable() {
-		return this.query("from RecommendInfo where status = ?", new Object[]{RecommendConstants.VALID});
+		return this.query("from RecommendInfo where status = ? order by updateTime desc,id desc", new Object[]{RecommendConstants.VALID});
 	}
 
 	@Override

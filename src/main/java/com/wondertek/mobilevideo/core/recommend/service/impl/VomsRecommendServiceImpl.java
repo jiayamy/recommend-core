@@ -1,6 +1,8 @@
 package com.wondertek.mobilevideo.core.recommend.service.impl;
 
 
+import java.util.List;
+
 import com.wondertek.mobilevideo.core.base.GenericManagerImpl;
 import com.wondertek.mobilevideo.core.recommend.dao.VomsRecommendDao;
 import com.wondertek.mobilevideo.core.recommend.model.VomsRecommend;
@@ -15,8 +17,8 @@ public class VomsRecommendServiceImpl extends GenericManagerImpl<VomsRecommend, 
 	}
 	
 	@Override
-	public VomsRecommend queryByParam(String prdType, int type, Long objId) {
-		return vomsRecommendDao.queryByParam(prdType, type, objId);
+	public List<VomsRecommend> queryByParam(String prdType, String type,String objType, Long objId) {
+		return vomsRecommendDao.queryByParam(prdType, type, objType,objId);
 	}
 	
 }

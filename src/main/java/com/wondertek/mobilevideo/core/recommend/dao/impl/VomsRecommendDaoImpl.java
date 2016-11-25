@@ -41,11 +41,10 @@ public class VomsRecommendDaoImpl extends GenericDaoHibernate<VomsRecommend,Long
 	}
 	
 	@Override
-	public List<RecommendDataVo> getRecommendDataVos(String type, String prdType, String labelInfo) {
-		StringBuffer hql = new StringBuffer("select new RecommendDataVo(objId,name,objType) from VomsRecommend where status = ? and type=? and prdType=? ");
+	public List<RecommendDataVo> getRecommendDataVos(List<String> types, String prdType, String labelInfo) {
+		StringBuffer hql = new StringBuffer("select new RecommendDataVo(objId,name,objType,type) from VomsRecommend where isRecommend = ? and prdType=? ");
 		List<Object> param = new ArrayList<Object>();
-		param.add(RecommendConstants.VALID);
-		param.add(type);
+		param.add(Boolean.TRUE);
 		param.add(prdType);
 		
 		//添加循环判断  labelInfo like %,tes1,% or labelInfo like %,tes2,%..
@@ -55,7 +54,7 @@ public class VomsRecommendDaoImpl extends GenericDaoHibernate<VomsRecommend,Long
 			labelName = labelName.trim();
 			if (!StringUtil.isNullStr(labelName)) {
 				if (count != 0) {
-					hql.append(" or");
+					hql.append(" or ");
 				}
 				hql.append("labelInfo like ?");
 				param.add("%,"+labelName + ",%");
@@ -63,6 +62,21 @@ public class VomsRecommendDaoImpl extends GenericDaoHibernate<VomsRecommend,Long
 			}
 		}
 		hql.append(")");
+		
+		//type多个
+		if(types != null && !types.isEmpty()){
+			count = 0;
+			hql.append(" and (");
+			for (String type : types) {
+				if (count != 0) {
+					hql.append(" or ");
+				}
+				hql.append("type = ?");
+				param.add(type);
+				count++;
+			}
+			hql.append(")");
+		}
 		return this.query(hql.toString(),param.toArray());
 	}
 	public List<VomsRecommend> getByParam(Map<String, Object> paramsMap, int start, int limit) {
@@ -102,7 +116,7 @@ public class VomsRecommendDaoImpl extends GenericDaoHibernate<VomsRecommend,Long
         }
         Object objType = paramsMap.get("objType");
         if (objType != null) {
-        	hql.append(" and catId = ?");
+        	hql.append(" and objType = ?");
         	params.add(objType);
         }
         Object type = paramsMap.get("type");
@@ -177,7 +191,7 @@ public class VomsRecommendDaoImpl extends GenericDaoHibernate<VomsRecommend,Long
         }
         Object objType = paramsMap.get("objType");
         if (objType != null) {
-        	hql.append(" and catId = ?");
+        	hql.append(" and objType = ?");
         	params.add(objType);
         }
         Object type = paramsMap.get("type");
@@ -194,7 +208,7 @@ public class VomsRecommendDaoImpl extends GenericDaoHibernate<VomsRecommend,Long
         if (isRecommend != null) {
         	hql.append(" and isRecommend = ?");
         	params.add(isRecommend);
-        }       
+        } 
 		return this.count(hql.toString(), params.toArray());
 	}
 }

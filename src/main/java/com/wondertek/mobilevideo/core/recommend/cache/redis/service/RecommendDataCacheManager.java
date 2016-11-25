@@ -9,6 +9,6 @@ public interface RecommendDataCacheManager {
 	/**
 	 * 根据 type protype 和 labelInfo 查询recommendDataVo
 	 */
-	public List<RecommendDataVo> queryByLabelInfo(String type, String prdType, String labelInfo);	
+	public List<RecommendDataVo> queryByLabelInfo(List<String> types, String prdType, String labelInfo);	
 	public void updataCache();
 }

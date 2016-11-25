@@ -37,8 +37,8 @@ public class UserTagCacheClusterManagerImpl implements UserTagCacheClusterManage
     
     private UserTagService userTagService;
     
-    private static final String UT_PREFIX_KEY = "RI:USERTAG:";
-    private static final String UT_CUT_PREFIX_KEY = "RI:USERTAG:CUT:";
+    private static final String UT_PREFIX_KEY = "RI:CLUSTER:USERTAG:";
+    private static final String UT_CUT_PREFIX_KEY = "RI:CLUSTER:USERTAG:CUT:";
     
     private int expireTime = 60*3;//3分钟
     private static MessagePack msgpack = null;

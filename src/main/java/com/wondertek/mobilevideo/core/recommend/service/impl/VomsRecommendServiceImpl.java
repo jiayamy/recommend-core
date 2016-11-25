@@ -26,8 +26,8 @@ public class VomsRecommendServiceImpl extends GenericManagerImpl<VomsRecommend, 
 		return vomsRecommendDao.getAllRecommend();
 	}
 	@Override
-	public List<RecommendDataVo> getRecommendDataVos(String type, String prdType, String labelInfo){
-		return vomsRecommendDao.getRecommendDataVos(type, prdType, labelInfo);
+	public List<RecommendDataVo> getRecommendDataVos(List<String> types, String prdType, String labelInfo){
+		return vomsRecommendDao.getRecommendDataVos(types, prdType, labelInfo);
 		
 	}
 	@Override

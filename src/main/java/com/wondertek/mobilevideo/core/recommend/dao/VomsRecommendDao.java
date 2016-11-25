@@ -19,7 +19,7 @@ public interface VomsRecommendDao extends GenericDao<VomsRecommend, Long>{
 
 	public List<VomsRecommend> getAllRecommend ();
 	
-	public List<RecommendDataVo> getRecommendDataVos(String type, String prdType, String labelInfo);
+	public List<RecommendDataVo> getRecommendDataVos(List<String> types, String prdType, String labelInfo);
 	/**
 	 * 按页搜索
 	 * @param paramsMap

@@ -28,5 +28,5 @@ public interface VomsRecommendService  extends GenericManager<VomsRecommend, Lon
 
 	public List<VomsRecommend> getAllRecommend();
 	
-	public List<RecommendDataVo> getRecommendDataVos(String type, String prdType, String labelInfo);
+	public List<RecommendDataVo> getRecommendDataVos(List<String> types, String prdType, String labelInfo);
 }

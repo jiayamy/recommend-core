@@ -14,7 +14,7 @@ public class RecommendDataVo implements Serializable{
 	private Long objId;
 	private String name;
 	private String objType;
-
+	private String type;
 
 	public Long getObjId() {
 		return objId;
@@ -43,15 +43,18 @@ public class RecommendDataVo implements Serializable{
 	public RecommendDataVo() {
 	}
 
-	public RecommendDataVo(Long objId, String name, String objType) {
+	public RecommendDataVo(Long objId, String name, String objType, String type) {
 		this.objId = objId;
 		this.name = name;
 		this.objType = objType;
+		this.type = type;
 	}
 
-	@Override
-	public String toString() {
-		return "RecommendDataVo [objId=" + objId + ", name=" + name + ", objType=" + objType + "]";
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	@Override
@@ -61,6 +64,7 @@ public class RecommendDataVo implements Serializable{
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((objId == null) ? 0 : objId.hashCode());
 		result = prime * result + ((objType == null) ? 0 : objType.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
 
@@ -88,9 +92,17 @@ public class RecommendDataVo implements Serializable{
 				return false;
 		} else if (!objType.equals(other.objType))
 			return false;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
+			return false;
 		return true;
 	}
 
-	
-	
+	@Override
+	public String toString() {
+		return "RecommendDataVo [objId=" + objId + ", name=" + name + ", objType=" + objType + ", type=" + type + "]";
+	}
+
 }

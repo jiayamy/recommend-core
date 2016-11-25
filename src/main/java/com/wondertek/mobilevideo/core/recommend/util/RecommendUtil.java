@@ -11,6 +11,7 @@ public class RecommendUtil {
 	public static void init(){
 		initSysCache();
 		initRedisCache();
+		initRecommednDataRedisCache();
 	}
 	public static void initRedisCache() {
 		RecommendInfoCacheManager recommendInfoCacheManager = (RecommendInfoCacheManager) Constants.ctx.getBean("recommendInfoCacheManager");

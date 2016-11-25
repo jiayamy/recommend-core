@@ -36,8 +36,8 @@ public class RecommendInfoCacheClusterManagerImpl implements RecommendInfoCacheC
     private BinaryJedisClusterFactory jedisClusterFactory;    
     
     private RecommendInfoService recommendInfoService;
-    private static final String RI_PREFIX_KEY = "RI:RI:";
-    private static final String RI_KEY_KEY = "RI:RIKEY:KEY";	//里面的数据是个list，值为 prdType:label
+    private static final String RI_PREFIX_KEY = "RI:CLUSTER:RI:";
+    private static final String RI_KEY_KEY = "RI:CLUSTER:RIKEY:KEY";	//里面的数据是个list，值为 prdType:label
     private int expireTime = 60*60*1;//24个小时
     private static MessagePack msgpack = null;
     
@@ -361,6 +361,8 @@ public class RecommendInfoCacheClusterManagerImpl implements RecommendInfoCacheC
         	log.debug("updateCache start");
             cacheAvailable = false;
             List<RecommendInfo> list = recommendInfoService.queryAllAvailable();
+            log.debug("updateCache list size:" + list.size());
+            
             Map<String,List<RecommendInfoVo>> vos = new HashMap<String,List<RecommendInfoVo>>();
             if(list != null && !list.isEmpty()){
             	for(RecommendInfo recommendInfo : list){
@@ -398,6 +400,10 @@ public class RecommendInfoCacheClusterManagerImpl implements RecommendInfoCacheC
         	
             jedisCluster.zadd(keyBytes, 1, changeStringsToByteArray(labels));
             jedisCluster.expire(keyBytes,expireTime);//设置过期时间
+            
+            vos.clear();
+        	vos = null;
+        	
             log.debug("updateCache end,labels size:" + labels.size());
             cacheAvailable = true;
         }

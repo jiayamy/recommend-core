@@ -16,12 +16,10 @@ import org.msgpack.unpacker.Unpacker;
 
 import com.wondertek.mobilevideo.core.recommend.cache.redis.commons.BinaryJedisClusterFactory;
 import com.wondertek.mobilevideo.core.recommend.cache.redis.service.RecommendDataCacheClusterManager;
-import com.wondertek.mobilevideo.core.recommend.dao.VomsRecommendDao;
 import com.wondertek.mobilevideo.core.recommend.model.VomsRecommend;
 import com.wondertek.mobilevideo.core.recommend.service.VomsRecommendService;
 import com.wondertek.mobilevideo.core.recommend.util.RecommendConstants;
 import com.wondertek.mobilevideo.core.recommend.vo.RecommendDataVo;
-import com.wondertek.mobilevideo.core.recommend.vo.RecommendInfoVo;
 import com.wondertek.mobilevideo.core.util.StringUtil;
 
 import redis.clients.jedis.BinaryJedisCluster;
@@ -29,13 +27,12 @@ import redis.clients.jedis.BinaryJedisCluster;
 public class RecommendDataCacheClusterManagerImpl implements RecommendDataCacheClusterManager {
 	private VomsRecommendService vomsRecommendService;
 	protected static Boolean cacheAvailable = true;
-	protected static Boolean jedisClusterManager = false;// 判断redis是否符合集群
 	private BinaryJedisClusterFactory jedisClusterFactory; //jedis 集群工厂
 	
 	private Log log = LogFactory.getLog(this.getClass());
 	public static Object obj = new Object();
-	private static final String RC_PERFIX_KEY = "RC:RC:";
-	private static final String RC_KEY_KEY = "RC:RIKEY:KEY";
+	private static final String RC_PERFIX_KEY = "RI:CLUSTER:VOMSRI:";
+	private static final String RC_KEY_KEY = "RI:CLUSTER:VOMSRIKEY:KEY";
 	private static MessagePack msgpack = null;
 	private int expireTime = 60 * 60 * 1;// 24个小时
 
@@ -44,11 +41,11 @@ public class RecommendDataCacheClusterManagerImpl implements RecommendDataCacheC
 	static { 
 		if (msgpack == null) {
 			msgpack = new MessagePack();
-			msgpack.register(RecommendInfoVo.class);
+			msgpack.register(RecommendDataVo.class);
 		}
 	}
-	private String getRecomdRedisKey(String type, String prdType, String labelInfo) {
-		return type + ":" + prdType + ":" + labelInfo;
+	private String getRecomdRedisKey(String prdType, String labelInfo) {
+		return prdType + ":" + labelInfo;
 	}
 	/**
 	 * 将KEY序列化为byte
@@ -70,7 +67,7 @@ public class RecommendDataCacheClusterManagerImpl implements RecommendDataCacheC
 	/**
 	 * 将单个对象序列化为ByteArray
 	 * 
-	 * @param recommendInfoVo
+	 * @param RecommendDataVo
 	 * @return
 	 */
 	private byte[] changeValueToByteArray(RecommendDataVo recommendDataVo) {
@@ -114,10 +111,10 @@ public class RecommendDataCacheClusterManagerImpl implements RecommendDataCacheC
 		}
 	}
 
-	private RecommendInfoVo changeByteArrayToVal(byte[] bytes) {
+	private RecommendDataVo changeByteArrayToVal(byte[] bytes) {
 		try {
-			RecommendInfoVo recommendInfoVo = msgpack.read(bytes, RecommendInfoVo.class);
-			return recommendInfoVo;
+			RecommendDataVo recommendDataVo = msgpack.read(bytes, RecommendDataVo.class);
+			return recommendDataVo;
 		} catch (Exception e) {
 			log.error("change bytes to star failed.error info:" + e);
 		}
@@ -184,7 +181,7 @@ public class RecommendDataCacheClusterManagerImpl implements RecommendDataCacheC
 	}
 
 	@Override
-	public List<RecommendDataVo> queryByLabelInfo(String type, String prdType, String labelInfo) {
+	public List<RecommendDataVo> queryByLabelInfo(List<String> types, String prdType, String labelInfo) {
 		BinaryJedisCluster jedisCluster = null;
 		try {
 			jedisCluster = jedisClusterFactory.getObject();
@@ -193,11 +190,10 @@ public class RecommendDataCacheClusterManagerImpl implements RecommendDataCacheC
 		}
 		List<RecommendDataVo> returnList = null;
 		if (jedisCluster == null) { // redis为空，从数据库中获取
-			returnList = vomsRecommendService.getRecommendDataVos(type, prdType, labelInfo);
-		}
-		if (log.isDebugEnabled()) {
-			log.debug(
-					"queried result from database successfully!labelInfo:" + labelInfo + ",size:" + returnList.size());
+			returnList = vomsRecommendService.getRecommendDataVos(types, prdType, labelInfo);
+			if (log.isDebugEnabled()) {
+				log.debug("queried result from database successfully!labelInfo:" + labelInfo + ",size:" + returnList.size());
+			}
 			return returnList;
 		}
 		// 获取标签，如果存在，就查询
@@ -206,11 +202,11 @@ public class RecommendDataCacheClusterManagerImpl implements RecommendDataCacheC
 		returnList = new ArrayList<RecommendDataVo>();
 
 		for (String labelName : labelInfo.split(RecommendConstants.SPLIT_COMMA)) {
-			if (StringUtil.isNullStr(labelName) || !labels.contains(getRecomdRedisKey(type, prdType, labelName))) {
+			if (StringUtil.isNullStr(labelName) || !labels.contains(getRecomdRedisKey(prdType, labelName))) {
 				continue;
 			}
 			Set<byte[]> recordes = null;
-			String key = RC_PERFIX_KEY + getRecomdRedisKey(type, prdType, labelName);
+			String key = RC_PERFIX_KEY + getRecomdRedisKey(prdType, labelName);
 			byte[] keyBytes = changeKeyToByteArray(key);
 			recordes = jedisCluster.zrange(keyBytes, 0, -1);
 			if (recordes == null || recordes.size() == 0) {
@@ -222,16 +218,25 @@ public class RecommendDataCacheClusterManagerImpl implements RecommendDataCacheC
 					break;
 				}
 				if (temp != null) {
-					returnList.addAll(temp);
+					if(types != null && !types.isEmpty()){
+						for(RecommendDataVo vo : temp){
+							if(types.contains(vo.getType())){
+								returnList.add(vo);
+							}
+						}
+					}else{
+						returnList.addAll(temp);
+					}
 				}
 				if (log.isDebugEnabled()) {
 					log.debug("queried result from redis successfully!labelName:" + labelName + ",size:"
 							+ (temp == null ? null : temp.size()));
-					jedisCluster.expire(keyBytes, expireTime);// 设置过期时间
 				}
+					jedisCluster.expire(keyBytes, expireTime);// 设置过期时间
 			}
 
 		}
+
 		// 去重
 		List<RecommendDataVo> rst = new ArrayList<RecommendDataVo>();
 		Map<Long, String> contIdMap = new HashMap<Long, String>();
@@ -261,6 +266,8 @@ public class RecommendDataCacheClusterManagerImpl implements RecommendDataCacheC
 			log.debug("updataRecommendDataCache start");
 			cacheAvailable = false;
 			List<VomsRecommend> list = vomsRecommendService.getAllRecommend();
+			log.debug("updateRecommendDataCache list size:" + list.size());
+			
 			Map<String, List<RecommendDataVo>> recommendDataMap = new HashMap<String, List<RecommendDataVo>>();
 			// 得到具有相同标签名字的RecommendDataVo 的map集合
 			if (list != null && !list.isEmpty()) {
@@ -269,10 +276,11 @@ public class RecommendDataCacheClusterManagerImpl implements RecommendDataCacheC
 					recommendDataVo.setName(v.getName());
 					recommendDataVo.setObjId(v.getObjId());
 					recommendDataVo.setObjType(v.getObjType());
+					recommendDataVo.setType(v.getType());
 					// 获取标签
 					for (String labelName : v.getLabelInfo().split(RecommendConstants.SPLIT_COMMA)) {
 						if (!StringUtil.isNullStr(labelName)) {
-							labelName = getRecomdRedisKey(v.getType(), v.getPrdType(), labelName);
+							labelName = getRecomdRedisKey(v.getPrdType(), labelName);
 							if (!recommendDataMap.containsKey(labelName)) {
 								recommendDataMap.put(labelName, new ArrayList<RecommendDataVo>());
 							}
@@ -296,7 +304,10 @@ public class RecommendDataCacheClusterManagerImpl implements RecommendDataCacheC
 			jedisCluster.del(keyBytes);
 			jedisCluster.zadd(keyBytes, 1, changeStringsToByteArray(labels));
 			jedisCluster.expire(keyBytes, expireTime);
-
+			
+			recommendDataMap.clear();
+			recommendDataMap = null;
+			
 			cacheAvailable = true;
 			log.debug("updateRecommendDataCache end,labels size:" + labels.size());
 		}

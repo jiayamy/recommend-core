@@ -375,8 +375,6 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
         if(jedis == null){
         	return;
         }
-        Map<String,Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("sord","asc");
         synchronized (obj){
         	log.debug("updateCache start");
             cacheAvailable = false;

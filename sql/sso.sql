@@ -33,3 +33,7 @@ insert into RESOURCE_INFO (RESID, ISDISABLE, DISPORDER, LINKPATH, RESDESC, RESMO
 (RESOURCE_SEQ.nextval,1,1,'/sys/refreshAllCache.htm','系统管理->系统参数管理(刷新所有缓存)','个性化推荐管理系统','系统管理->系统参数管理(刷新所有缓存)',10030985);
 insert into RESOURCE_INFO (RESID, ISDISABLE, DISPORDER, LINKPATH, RESDESC, RESMODEL, RESNAME, APPID) values 
 (RESOURCE_SEQ.nextval,1,1,'/sys/delConfig.htm','系统管理->系统参数管理(删除)','个性化推荐管理系统','系统管理->系统参数管理(删除)',10030985);
+
+insert into RESOURCE_INFO (RESID, ISDISABLE, DISPORDER, LINKPATH, RESDESC, RESMODEL, RESNAME, APPID) values 
+(RESOURCE_SEQ.nextval,1,1,'/menuVomsRecommend.htm','推荐管理->VOMS推荐','个性化推荐管理系统','推荐管理->VOMS推荐',10030985);
+

@@ -60,7 +60,7 @@ public class VomsRecommend extends BaseObject{
 	public void setObjId(Long objId) {
 		this.objId = objId;
 	}
-	@Column(name = "NAME")
+	@Column(name = "NAME_")
 	public String getName() {
 		return name;
 	}

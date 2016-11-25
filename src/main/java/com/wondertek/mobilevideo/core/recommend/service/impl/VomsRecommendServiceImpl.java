@@ -1,7 +1,7 @@
 package com.wondertek.mobilevideo.core.recommend.service.impl;
 
-
 import java.util.List;
+import java.util.Map;
 
 import com.wondertek.mobilevideo.core.base.GenericManagerImpl;
 import com.wondertek.mobilevideo.core.recommend.dao.VomsRecommendDao;
@@ -20,5 +20,14 @@ public class VomsRecommendServiceImpl extends GenericManagerImpl<VomsRecommend, 
 	public List<VomsRecommend> queryByParam(String prdType, String type,String objType, Long objId) {
 		return vomsRecommendDao.queryByParam(prdType, type, objType,objId);
 	}
-	
+
+	@Override
+	public List<VomsRecommend> getByParam(Map<String, Object> paramsMap, int start, int limit) {		
+		return vomsRecommendDao.getByParam(paramsMap, start, limit);
+	}
+
+	@Override
+	public Long getCountByParam(Map<String, Object> paramsMap) {		
+		return vomsRecommendDao.getCountByParam(paramsMap);
+	}
 }

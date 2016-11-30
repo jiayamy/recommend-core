@@ -1,5 +1,7 @@
 package com.wondertek.mobilevideo.core.recommend.service.impl;
 
+import java.util.List;
+
 import com.wondertek.mobilevideo.core.base.GenericManagerImpl;
 import com.wondertek.mobilevideo.core.recommend.dao.EnumsInfoDao;
 import com.wondertek.mobilevideo.core.recommend.model.EnumsInfo;
@@ -11,6 +13,11 @@ public class EnumsInfoServiceImpl extends GenericManagerImpl<EnumsInfo, Long> im
 	public EnumsInfoServiceImpl(EnumsInfoDao enumsInfoDao) {
 		super(enumsInfoDao);
 		this.enumsInfoDao = enumsInfoDao;
+	}
+
+	@Override
+	public List<EnumsInfo> queryByType(int type) {
+		return enumsInfoDao.queryByType(type);
 	}
 	
 }

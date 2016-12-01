@@ -17,7 +17,7 @@ public class EnumsConfigDaoImpl extends GenericDaoHibernate<EnumsConfig,Long> im
 	public List<EnumsConfig> findByType(String type) {
 		StringBuffer sb = new StringBuffer();
 		List<Object> params = new ArrayList<Object>();
-		sb.append("from EnumsConfig where type = ?");
+		sb.append("from EnumsConfig where type = ? order by id");
 		params.add(type);
 		
 		return this.query(sb.toString(), params.toArray());
@@ -27,7 +27,7 @@ public class EnumsConfigDaoImpl extends GenericDaoHibernate<EnumsConfig,Long> im
 	public List<EnumsConfig> findByParent(String parent) {
 		StringBuffer sb = new StringBuffer();
 		List<Object> params = new ArrayList<Object>();
-		sb.append("from EnumsConfig where parent = ?");
+		sb.append("from EnumsConfig where parent = ? order by id");
 		params.add(parent);
 		
 		return this.query(sb.toString(), params.toArray());

@@ -22,4 +22,6 @@ public class EnumsInfoDaoImpl extends GenericDaoHibernate<EnumsInfo,Long> implem
 		
 		return this.query(sb.toString(), params.toArray());
 	}
+
+	
 }

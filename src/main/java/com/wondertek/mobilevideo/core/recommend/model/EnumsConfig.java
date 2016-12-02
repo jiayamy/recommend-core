@@ -28,7 +28,6 @@ public class EnumsConfig extends BaseObject{
 	
 	private String key;
 	
-	private String value;
 	
 	private String type;
 	
@@ -37,8 +36,8 @@ public class EnumsConfig extends BaseObject{
 	private String parent;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SEQ_R_ENUMS_INFO")
-	@SequenceGenerator(name = "SEQ_R_ENUMS_INFO", allocationSize = 1, sequenceName = "SEQ_R_ENUMS_INFO")
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SEQ_R_ENUMS_CONFIG")
+	@SequenceGenerator(name = "SEQ_R_ENUMS_CONFIG", allocationSize = 1, sequenceName = "SEQ_R_ENUMS_CONFIG")
 	public Long getId() {
 		return id;
 	}
@@ -56,14 +55,7 @@ public class EnumsConfig extends BaseObject{
 		this.key = key;
 	}
 	
-	@Column(name="VALUE_")
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
+	
 	
 	@Column(name="TYPE_")
 	public String getType() {
@@ -100,7 +92,6 @@ public class EnumsConfig extends BaseObject{
 		result = prime * result + ((key == null) ? 0 : key.hashCode());
 		result = prime * result + ((parent == null) ? 0 : parent.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		result = prime * result + ((value == null) ? 0 : value.hashCode());
 		result = prime * result + ((weight == null) ? 0 : weight.hashCode());
 		return result;
 	}
@@ -134,11 +125,6 @@ public class EnumsConfig extends BaseObject{
 				return false;
 		} else if (!type.equals(other.type))
 			return false;
-		if (value == null) {
-			if (other.value != null)
-				return false;
-		} else if (!value.equals(other.value))
-			return false;
 		if (weight == null) {
 			if (other.weight != null)
 				return false;
@@ -149,9 +135,10 @@ public class EnumsConfig extends BaseObject{
 
 	@Override
 	public String toString() {
-		return "EnumsConfig [id=" + id + ", key=" + key + ", value=" + value + ", type=" + type + ", weight=" + weight
-				+ ", parent=" + parent + "]";
+		return "EnumsConfig [id=" + id + ", key=" + key + ", type=" + type + ", weight=" + weight + ", parent=" + parent
+				+ "]";
 	}
+
 	
 	
 }

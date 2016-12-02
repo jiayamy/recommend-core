@@ -10,4 +10,5 @@ import com.wondertek.mobilevideo.core.recommend.model.EnumsInfo;
 public interface EnumsInfoDao extends GenericDao<EnumsInfo, Long> {
 	
 	public List<EnumsInfo> queryByType(int type);
-}
+	
+}	

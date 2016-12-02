@@ -19,5 +19,7 @@ public class EnumsInfoServiceImpl extends GenericManagerImpl<EnumsInfo, Long> im
 	public List<EnumsInfo> queryByType(int type) {
 		return enumsInfoDao.queryByType(type);
 	}
+
+	
 	
 }

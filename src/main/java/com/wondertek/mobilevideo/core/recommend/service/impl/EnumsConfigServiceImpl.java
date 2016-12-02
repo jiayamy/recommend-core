@@ -12,7 +12,7 @@ public class EnumsConfigServiceImpl extends GenericManagerImpl<EnumsConfig,Long>
 	private EnumsConfigDao enumsConfigDao;
 
 	public EnumsConfigServiceImpl(EnumsConfigDao enumsConfigDao) {
-		super();
+		super(enumsConfigDao);
 		this.enumsConfigDao = enumsConfigDao;
 	}
 
@@ -31,5 +31,17 @@ public class EnumsConfigServiceImpl extends GenericManagerImpl<EnumsConfig,Long>
 		return enumsConfigDao.findByParent(parent);
 	}
 	
-	
+
+	@Override
+	public void deleteById(Long id) {
+		enumsConfigDao.remove(id);
+	}
+
+
+	@Override
+	public Boolean checkExistLabel(String key, String parent, String type) {
+		return enumsConfigDao.checkExist(key, parent,type);
+	}
+
+
 }

@@ -12,4 +12,12 @@ public interface EnumsConfigService extends GenericManager<EnumsConfig,Long> {
 	public List<EnumsConfig> findAll();
 	
 	public List<EnumsConfig> findByParent(String parent);
+	
+	/**
+	 * 删除二级标签
+	 * @param id
+	 */
+	public void deleteById(Long id);
+	
+	public Boolean checkExistLabel(String key,String parent,String type);
 }

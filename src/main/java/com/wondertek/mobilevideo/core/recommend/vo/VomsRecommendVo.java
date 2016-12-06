@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author madongwei
  *
  */
-public class RecommendDataVo implements Serializable{
+public class VomsRecommendVo implements Serializable{
 	private static final long serialVersionUID = -7685693390446591745L;
 	
 	private Long objId;
@@ -40,10 +40,10 @@ public class RecommendDataVo implements Serializable{
 		this.objType = objType;
 	}
 
-	public RecommendDataVo() {
+	public VomsRecommendVo() {
 	}
 
-	public RecommendDataVo(Long objId, String name, String objType, String type) {
+	public VomsRecommendVo(Long objId, String name, String objType, String type) {
 		this.objId = objId;
 		this.name = name;
 		this.objType = objType;
@@ -76,7 +76,7 @@ public class RecommendDataVo implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		RecommendDataVo other = (RecommendDataVo) obj;
+		VomsRecommendVo other = (VomsRecommendVo) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -102,7 +102,6 @@ public class RecommendDataVo implements Serializable{
 
 	@Override
 	public String toString() {
-		return "RecommendDataVo [objId=" + objId + ", name=" + name + ", objType=" + objType + ", type=" + type + "]";
+		return "VomsRecommendVo [objId=" + objId + ", name=" + name + ", objType=" + objType + ", type=" + type + "]";
 	}
-
 }

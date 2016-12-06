@@ -7,7 +7,7 @@ import com.wondertek.mobilevideo.core.base.GenericManagerImpl;
 import com.wondertek.mobilevideo.core.recommend.dao.VomsRecommendDao;
 import com.wondertek.mobilevideo.core.recommend.model.VomsRecommend;
 import com.wondertek.mobilevideo.core.recommend.service.VomsRecommendService;
-import com.wondertek.mobilevideo.core.recommend.vo.RecommendDataVo;
+import com.wondertek.mobilevideo.core.recommend.vo.VomsRecommendVo;
 
 public class VomsRecommendServiceImpl extends GenericManagerImpl<VomsRecommend, Long>implements VomsRecommendService {
 	private VomsRecommendDao vomsRecommendDao;
@@ -26,8 +26,8 @@ public class VomsRecommendServiceImpl extends GenericManagerImpl<VomsRecommend, 
 		return vomsRecommendDao.getAllRecommend();
 	}
 	@Override
-	public List<RecommendDataVo> getRecommendDataVos(List<String> types, String prdType, String labelInfo){
-		return vomsRecommendDao.getRecommendDataVos(types, prdType, labelInfo);
+	public List<VomsRecommendVo> getVomsRecommendVos(List<String> types, String prdType, String labelInfo){
+		return vomsRecommendDao.getVomsRecommendVos(types, prdType, labelInfo);
 		
 	}
 	@Override

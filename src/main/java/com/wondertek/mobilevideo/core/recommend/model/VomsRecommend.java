@@ -21,7 +21,8 @@ public class VomsRecommend extends BaseObject{
 	private Long id;
 	private Long objId;
 	private String name;
-	private int type; //0代表项目，1代表内容
+	private String type;//10代表栏目（专题），11内容组合推荐，20代表大图内容推荐，21代表多图内容推荐（撤回接口为空时取所有）;
+	private String objType; //0代表栏目，1代表展现对象，101代表页面对象
 	private Boolean isRecommend;    //true推荐   false撤回
 	private String labelInfo;	//标签名（多个以英文逗号分隔），保存时头尾都带“,”
 	private String prdType;		//产品
@@ -42,11 +43,11 @@ public class VomsRecommend extends BaseObject{
 	}
 	
 	@Column(name = "TYPE_")
-	public int getType() {
+	public String getType() {
 		return type;
 	}
 	
-	public void setType(int type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 	
@@ -59,7 +60,7 @@ public class VomsRecommend extends BaseObject{
 	public void setObjId(Long objId) {
 		this.objId = objId;
 	}
-	@Column(name = "NAME")
+	@Column(name = "NAME_")
 	public String getName() {
 		return name;
 	}
@@ -126,6 +127,14 @@ public class VomsRecommend extends BaseObject{
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
+	
+	@Column(name = "OBJ_TYPE")
+	public String getObjType() {
+		return objType;
+	}	
+	public void setObjType(String objType) {
+		this.objType = objType;
+	}
 
 	@Override
 	public int hashCode() {
@@ -138,15 +147,15 @@ public class VomsRecommend extends BaseObject{
 		result = prime * result + ((labelInfo == null) ? 0 : labelInfo.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((objId == null) ? 0 : objId.hashCode());
+		result = prime * result + ((objType == null) ? 0 : objType.hashCode());
 		result = prime * result + ((prdType == null) ? 0 : prdType.hashCode());
-		result = prime * result + type;
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		result = prime * result + ((updateTime == null) ? 0 : updateTime.hashCode());
 		result = prime * result + ((updator == null) ? 0 : updator.hashCode());
 		return result;
 	}
 
 	@Override
-	
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -190,12 +199,20 @@ public class VomsRecommend extends BaseObject{
 				return false;
 		} else if (!objId.equals(other.objId))
 			return false;
+		if (objType == null) {
+			if (other.objType != null)
+				return false;
+		} else if (!objType.equals(other.objType))
+			return false;
 		if (prdType == null) {
 			if (other.prdType != null)
 				return false;
 		} else if (!prdType.equals(other.prdType))
 			return false;
-		if (type != other.type)
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
 			return false;
 		if (updateTime == null) {
 			if (other.updateTime != null)
@@ -212,12 +229,12 @@ public class VomsRecommend extends BaseObject{
 
 	@Override
 	public String toString() {
-		return "VomsRecommend [id=" + id + ", objId=" + objId + ", name=" + name + ", type=" + type + ", isRecommend="
-				+ isRecommend + ", labelInfo=" + labelInfo + ", prdType=" + prdType + ", updator=" + updator
-				+ ", creator=" + creator + ", createTime=" + createTime + ", updateTime=" + updateTime + "]";
+		return "VomsRecommend [id=" + id + ", objId=" + objId + ", name=" + name + ", type=" + type + ", objType="
+				+ objType + ", isRecommend=" + isRecommend + ", labelInfo=" + labelInfo + ", prdType=" + prdType
+				+ ", updator=" + updator + ", creator=" + creator + ", createTime=" + createTime + ", updateTime="
+				+ updateTime + "]";
 	}
 
-	
-	
+		
 	
 }

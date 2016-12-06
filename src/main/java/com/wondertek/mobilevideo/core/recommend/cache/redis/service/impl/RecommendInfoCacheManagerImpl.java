@@ -372,12 +372,15 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
             log.error("redis getObject failed.error info:" + e);
             return;
         }
-        Map<String,Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("sord","asc");
+        if(jedis == null){
+        	return;
+        }
         synchronized (obj){
         	log.debug("updateCache start");
             cacheAvailable = false;
             List<RecommendInfo> list = recommendInfoService.queryAllAvailable();
+            log.debug("updateCache list size:" + list.size());
+            
             Map<String,List<RecommendInfoVo>> vos = new HashMap<String,List<RecommendInfoVo>>();
             if(list != null && !list.isEmpty()){
             	for(RecommendInfo recommendInfo : list){
@@ -416,6 +419,9 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
         	jedis.zadd(keyBytes, 1, changeStringsToByteArray(labels));
         	jedis.expire(keyBytes,expireTime);//设置过期时间
         	
+        	vos.clear();
+        	vos = null;
+			
             cacheAvailable = true;
             log.debug("updateCache end,labels size:" + labels.size());
         }

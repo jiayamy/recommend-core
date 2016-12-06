@@ -30,7 +30,7 @@ public class SearchCacheClusterManagerImpl implements SearchCacheClusterManager{
     
     private BinaryJedisClusterFactory jedisClusterFactory;  
         
-    private static final String UT_PREFIX_KEY = "RI:SchRst:";
+    private static final String UT_PREFIX_KEY = "RI:CLUSTER:SchRst:";
     
     private int expireTime = 60 * 3;//3分钟
     

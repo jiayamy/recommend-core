@@ -63,5 +63,4 @@
 		<property name="redisManager" ref="redisManager" />
 		<property name="expireTime" value="180" /><!--3分 失效-->
 	</bean>
-	
 </beans>

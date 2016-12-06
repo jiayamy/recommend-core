@@ -12,7 +12,7 @@ public class TestJson {
 		text = "{\"id\":\"100033899\",\"cats\":[{\"catName\":\"电视剧\",\"score\":342,\"items\":[{\"labelName\":\"播出年代\",\"labelValue\":\"2015\",\"score\":342},{\"labelName\":\"首播时间\",\"labelValue\":\"2015-05-03\",\"score\":342},{\"labelName\":\"内容类型\",\"labelValue\":\"都市\",\"score\":342},{\"labelName\":\"内容类型\",\"labelValue\":\"言情\",\"score\":342}]},{\"catName\":\"电影\",\"score\":342,\"items\":[{\"labelName\":\"内容类型\",\"labelValue\":\"冒险\",\"score\":342}]},{\"catName\":\"原创\",\"score\":342,\"items\":[{\"labelName\":\"国家及地区\",\"labelValue\":\"内地\",\"score\":342},{\"labelName\":\"播出年代\",\"labelValue\":\"2016\",\"score\":342},{\"labelName\":\"内容形态\",\"labelValue\":\"全片\",\"score\":342}]}],\"recommendation\":{\"items\":[{\"label\":\"影视资讯\",\"score\":342},{\"label\":\"社会\",\"score\":342}]},\"keywords\":{\"items\":[{\"keyword\":\" 保健秘籍\",\"score\":342},{\"keyword\":\" 时尚女性\",\"score\":342}]}}";
 		//
 		text = "{}";
-		UserTag UserTag = JSON.parseObject(text, UserTag.class);
-		System.out.println(UserTag);
+		UserTag userTag = JSON.parseObject(text, UserTag.class);
+		System.out.println(userTag);
 	}
 }

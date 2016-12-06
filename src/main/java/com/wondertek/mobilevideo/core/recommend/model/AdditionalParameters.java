@@ -3,11 +3,11 @@ package com.wondertek.mobilevideo.core.recommend.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.struts2.json.annotations.JSON;
+
 import com.wondertek.mobilevideo.core.base.BaseObject;
 
 public class AdditionalParameters extends BaseObject{
-	
 	/**
 	 * 
 	 */
@@ -26,7 +26,6 @@ public class AdditionalParameters extends BaseObject{
 	/**
 	 * 是否被选中
 	 */
-	@JsonProperty("item-selected")
 	private boolean itemSelected;
 
 	public List<RecommendParam> getChildren() {
@@ -44,7 +43,7 @@ public class AdditionalParameters extends BaseObject{
 	public void setId(String id) {
 		this.id = id;
 	}
-
+	@JSON(name="item-selected")
 	public boolean isItemSelected() {
 		return itemSelected;
 	}

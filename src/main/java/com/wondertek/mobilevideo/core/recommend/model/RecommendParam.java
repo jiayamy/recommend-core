@@ -125,9 +125,5 @@ public class RecommendParam extends BaseObject{
 	public String toString() {
 		return "RecommendParam [text=" + text + ", type=" + type + "]";
 	}
-	
-	
-
-	
 
 }

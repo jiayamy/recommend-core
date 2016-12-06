@@ -28,7 +28,6 @@ public class EnumsConfig extends BaseObject{
 	
 	private String key;
 	
-	
 	private String type;
 	
 	private String weight;
@@ -54,8 +53,6 @@ public class EnumsConfig extends BaseObject{
 	public void setKey(String key) {
 		this.key = key;
 	}
-	
-	
 	
 	@Column(name="TYPE_")
 	public String getType() {
@@ -138,7 +135,5 @@ public class EnumsConfig extends BaseObject{
 		return "EnumsConfig [id=" + id + ", key=" + key + ", type=" + type + ", weight=" + weight + ", parent=" + parent
 				+ "]";
 	}
-
-	
 	
 }

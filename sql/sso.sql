@@ -37,3 +37,16 @@ insert into RESOURCE_INFO (RESID, ISDISABLE, DISPORDER, LINKPATH, RESDESC, RESMO
 insert into RESOURCE_INFO (RESID, ISDISABLE, DISPORDER, LINKPATH, RESDESC, RESMODEL, RESNAME, APPID) values 
 (RESOURCE_SEQ.nextval,1,1,'/menuVomsRecommend.htm','推荐管理->VOMS推荐','个性化推荐管理系统','推荐管理->VOMS推荐',10030985);
 
+--20161206
+insert into RESOURCE_INFO (RESID, ISDISABLE, DISPORDER, LINKPATH, RESDESC, RESMODEL, RESNAME, APPID) values 
+(RESOURCE_SEQ.nextval,1,1,'/menuTestManage.htm','测试管理','个性化推荐管理系统','测试管理',10030985);
+
+insert into RESOURCE_INFO (RESID, ISDISABLE, DISPORDER, LINKPATH, RESDESC, RESMODEL, RESNAME, APPID) values 
+(RESOURCE_SEQ.nextval,1,1,'/menuTestQueryTagManage.htm','测试管理->获取用户标签','个性化推荐管理系统','测试管理->获取用户标签',10030985);
+
+insert into RESOURCE_INFO (RESID, ISDISABLE, DISPORDER, LINKPATH, RESDESC, RESMODEL, RESNAME, APPID) values 
+(RESOURCE_SEQ.nextval,1,1,'/menuTestSearchManage.htm','测试管理->内容推荐','个性化推荐管理系统','测试管理->内容推荐',10030985);
+
+insert into RESOURCE_INFO (RESID, ISDISABLE, DISPORDER, LINKPATH, RESDESC, RESMODEL, RESNAME, APPID) values 
+(RESOURCE_SEQ.nextval,1,1,'/menuRecommonParmsManage.htm','系统管理->推荐标签权重管理','个性化推荐管理系统','系统管理->推荐标签权重管理',10030985);
+

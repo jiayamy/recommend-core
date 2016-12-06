@@ -204,3 +204,8 @@ CREATE SEQUENCE  SEQ_R_VOMS_RECOMMEND MINVALUE 1 MAXVALUE 9999999999999999999999
 	alter table R_VOMS_RECOMMEND add OBJ_TYPE VARCHAR2(3);
 	ALTER TABLE R_VOMS_RECOMMEND DROP CONSTRAINT VOMS_RECOMMEND_PRDCONTID;
 	ALTER TABLE R_VOMS_RECOMMEND add CONSTRAINT VOMS_RECOMMEND_PRDCONTID UNIQUE (OBJ_ID, PRD_TYPE, TYPE_,OBJ_TYPE);
+--20161130
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (21, 'recomd.default.specialTopic.ratio', '0', '综合推荐时，专题推荐比例，只可为正小数，否则为0，如0.02');
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (22, 'recomd.default.combinedCont.ratio', '0', '综合推荐时，组合内容推荐比例，只可为正小数，否则为0，如0.02');
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (23, 'recomd.default.bigPicCont.ratio', '0.125', '综合推荐时，大图内容推荐比例，只可为正小数，否则为0，如0.02');
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (24, 'recomd.default.multiPicCont.ratio', '0', '综合推荐时，多图内容推荐比例，只可为正小数，否则为0，如0.02');

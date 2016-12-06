@@ -129,6 +129,23 @@ public class SystemConfigCache
 		RequestConstants.V_DEFAULT_RECOMD_CAT_MAX = getIntValueDefault(RequestConstants.P_DEFAULT_RECOMD_CAT_MAX,5);
 		
 		RequestConstants.V_DEFAULT_RECOMD_CATITEM_MAX = getIntValueDefault(RequestConstants.P_DEFAULT_RECOMD_CATITEM_MAX,10);
+		
+		RequestConstants.V_DEFAULT_RECOMD_SPECIALTOPIC_RATIO = getDoubleValueDefault(RequestConstants.P_DEFAULT_RECOMD_SPECIALTOPIC_RATIO,0d);
+		if(RequestConstants.V_DEFAULT_RECOMD_SPECIALTOPIC_RATIO < 0){
+			RequestConstants.V_DEFAULT_RECOMD_SPECIALTOPIC_RATIO = 0d;
+		}
+		RequestConstants.V_DEFAULT_RECOMD_COMBINEDCONT_RATIO = getDoubleValueDefault(RequestConstants.P_DEFAULT_RECOMD_COMBINEDCONT_RATIO,0d);
+		if(RequestConstants.V_DEFAULT_RECOMD_COMBINEDCONT_RATIO < 0){
+			RequestConstants.V_DEFAULT_RECOMD_COMBINEDCONT_RATIO = 0d;
+		}
+		RequestConstants.V_DEFAULT_RECOMD_BIGPICCONT_RATIO = getDoubleValueDefault(RequestConstants.P_DEFAULT_RECOMD_BIGPICCONT_RATIO,0d);
+		if(RequestConstants.V_DEFAULT_RECOMD_BIGPICCONT_RATIO < 0){
+			RequestConstants.V_DEFAULT_RECOMD_BIGPICCONT_RATIO = 0d;
+		}
+		RequestConstants.V_DEFAULT_RECOMD_MULTIPICCONT_RATIO = getDoubleValueDefault(RequestConstants.P_DEFAULT_RECOMD_MULTIPICCONT_RATIO,0d);
+		if(RequestConstants.V_DEFAULT_RECOMD_MULTIPICCONT_RATIO < 0){
+			RequestConstants.V_DEFAULT_RECOMD_MULTIPICCONT_RATIO = 0d;
+		}
 	}
 
 	public static Map<String, String> getAllConfigs()

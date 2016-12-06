@@ -42,4 +42,9 @@
     <bean id="vomsRecommendDao" class="com.wondertek.mobilevideo.core.recommend.dao.impl.VomsRecommendDaoImpl">
     	<property name="sessionFactory" ref="sessionFactory_recommend"></property>
     </bean>
+    
+    <bean id="enumsConfigDao" class="com.wondertek.mobilevideo.core.recommend.dao.impl.EnumsConfigDaoImpl">
+    	<property name="sessionFactory" ref="sessionFactory_recommend"></property>
+    </bean>
+    
 </beans>

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.wondertek.mobilevideo.core.base.GenericManager;
 import com.wondertek.mobilevideo.core.recommend.model.VomsRecommend;
-import com.wondertek.mobilevideo.core.recommend.vo.RecommendDataVo;
+import com.wondertek.mobilevideo.core.recommend.vo.VomsRecommendVo;
 
 public interface VomsRecommendService  extends GenericManager<VomsRecommend, Long>{
 	/**
@@ -28,5 +28,5 @@ public interface VomsRecommendService  extends GenericManager<VomsRecommend, Lon
 
 	public List<VomsRecommend> getAllRecommend();
 	
-	public List<RecommendDataVo> getRecommendDataVos(List<String> types, String prdType, String labelInfo);
+	public List<VomsRecommendVo> getVomsRecommendVos(List<String> types, String prdType, String labelInfo);
 }

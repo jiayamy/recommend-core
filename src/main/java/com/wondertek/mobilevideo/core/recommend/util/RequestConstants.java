@@ -92,7 +92,26 @@ public class RequestConstants {
 	 */
 	public static final String P_DEFAULT_RECOMD_CATITEM_MAX = "recomd.default.catitem.max";
 	public static int V_DEFAULT_RECOMD_CATITEM_MAX = 10;
-	
+	/**
+	 * 综合推荐时，专题推荐比例，只可为正小数，否则为0，如0.02
+	 */
+	public static final String P_DEFAULT_RECOMD_SPECIALTOPIC_RATIO = "recomd.default.specialTopic.ratio";
+	public static Double V_DEFAULT_RECOMD_SPECIALTOPIC_RATIO = 0d;
+	/**
+	 * 综合推荐时，组合内容推荐比例，只可为正小数，否则为0，如0.02
+	 */
+	public static final String P_DEFAULT_RECOMD_COMBINEDCONT_RATIO = "recomd.default.combinedCont.ratio";
+	public static Double V_DEFAULT_RECOMD_COMBINEDCONT_RATIO = 0d;
+	/**
+	 * 综合推荐时，大图内容推荐比例，只可为正小数，否则为0，如0.02
+	 */
+	public static final String P_DEFAULT_RECOMD_BIGPICCONT_RATIO = "recomd.default.bigPicCont.ratio";
+	public static Double V_DEFAULT_RECOMD_BIGPICCONT_RATIO = 0d;
+	/**
+	 * 综合推荐时，多图内容推荐比例，只可为正小数，否则为0，如0.02
+	 */
+	public static final String P_DEFAULT_RECOMD_MULTIPICCONT_RATIO = "recomd.default.multiPicCont.ratio";
+	public static Double V_DEFAULT_RECOMD_MULTIPICCONT_RATIO = 0d;
 	
 	public static final String MAP_KEY_PREFIX_CAT = "1_";
 	public static final String MAP_KEY_PREFIX_CAT_LABEL = "2_";
@@ -105,7 +124,16 @@ public class RequestConstants {
 	public static final String R_CODE = "returnCode";
 	public static final String R_MSG = "returnMsg";
 	public static final String R_ROOT = "root";
+	public static final String R_POMS_CONT = "pomsCont";
+	public static final String R_VOMS_SPECIALTOPIC = "specialTopic";
+	public static final String R_VOMS_COMBINEDCONT = "combinedCont";
+	public static final String R_VOMS_BIGPICCONT = "bigPicCont";
+	public static final String R_VOMS_MULTIPICCONT = "multiPicCont";
 	public static final String R_TOTAL = "total";
+	public static final String R_TOTAL_SPECIALTOPIC = "specialTopicTotal";
+	public static final String R_TOTAL_COMBINEDCONT = "combinedContTotal";
+	public static final String R_TOTAL_BIGPICCONT = "bigPicContTotal";
+	public static final String R_TOTAL_MULTIPICCONT = "multiPicContTotal";
 	
 	/**	 * 成功	 */
 	public static final String R_CODE_000000 = "000000";

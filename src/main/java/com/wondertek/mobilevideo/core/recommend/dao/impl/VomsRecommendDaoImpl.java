@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
+
 import com.wondertek.mobilevideo.core.base.GenericDaoHibernate;
 import com.wondertek.mobilevideo.core.recommend.dao.VomsRecommendDao;
 import com.wondertek.mobilevideo.core.recommend.model.VomsRecommend;
 import com.wondertek.mobilevideo.core.recommend.util.RecommendConstants;
-import com.wondertek.mobilevideo.core.recommend.vo.RecommendDataVo;
+import com.wondertek.mobilevideo.core.recommend.vo.VomsRecommendVo;
 import com.wondertek.mobilevideo.core.util.StringUtil;
 
 public class VomsRecommendDaoImpl extends GenericDaoHibernate<VomsRecommend,Long> implements VomsRecommendDao{
@@ -41,8 +44,8 @@ public class VomsRecommendDaoImpl extends GenericDaoHibernate<VomsRecommend,Long
 	}
 	
 	@Override
-	public List<RecommendDataVo> getRecommendDataVos(List<String> types, String prdType, String labelInfo) {
-		StringBuffer hql = new StringBuffer("select new RecommendDataVo(objId,name,objType,type) from VomsRecommend where isRecommend = ? and prdType=? ");
+	public List<VomsRecommendVo> getVomsRecommendVos(List<String> types, String prdType, String labelInfo) {
+		StringBuffer hql = new StringBuffer("select new VomsRecommendVo(objId,name,objType,type) from VomsRecommend where isRecommend = ? and prdType=? ");
 		List<Object> param = new ArrayList<Object>();
 		param.add(Boolean.TRUE);
 		param.add(prdType);
@@ -212,3 +215,5 @@ public class VomsRecommendDaoImpl extends GenericDaoHibernate<VomsRecommend,Long
 		return this.count(hql.toString(), params.toArray());
 	}
 }
+
+	

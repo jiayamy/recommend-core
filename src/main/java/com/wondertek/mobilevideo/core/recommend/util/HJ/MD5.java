@@ -2,6 +2,7 @@ package com.wondertek.mobilevideo.core.recommend.util.HJ;
 
 import java.io.UnsupportedEncodingException;
 import java.security.SignatureException;
+
 import org.apache.commons.codec.digest.DigestUtils;
 
 /**

@@ -1,13 +1,14 @@
 package com.wondertek.mobilevideo.core.recommend.cache.redis.commons;
 
-import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-import redis.clients.jedis.BinaryJedisCluster;
-import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.JedisCluster;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
+
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+
+import redis.clients.jedis.BinaryJedisCluster;
+import redis.clients.jedis.HostAndPort;
+import redis.clients.jedis.JedisCluster;
 
 public class BinaryJedisClusterFactory
 {

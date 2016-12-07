@@ -9,5 +9,8 @@
 		<mapping class="com.wondertek.mobilevideo.core.recommend.model.EnumsInfo"/>
 		<!-- 20161108 -->
 		<mapping class="com.wondertek.mobilevideo.core.recommend.model.VomsRecommend"/>
+		<mapping class="com.wondertek.mobilevideo.core.recommend.model.EnumsConfig"/>
+		<!-- 20161205 -->
+		<mapping class="com.wondertek.mobilevideo.core.recommend.model.TopRecommend"/>
 	</session-factory>
 </hibernate-configuration>

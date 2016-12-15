@@ -25,7 +25,7 @@ public class TopRecommend extends BaseObject{
 	 */
 	private static final long serialVersionUID = 1L;
 	private Long id;
-	private Long tId;              //ID
+	private Long topId;             //ID
 	private String prdType;    //所属产品
 	private String topName;  //节目名称
 	private int status;			//状态，0禁用，1启用
@@ -44,12 +44,12 @@ public class TopRecommend extends BaseObject{
 		this.id = id;
 	}
 	
-	@Column(name = "T_ID")
-	public Long gettId() {
-		return tId;
+	@Column(name = "Top_ID")
+	public Long getTopId() {
+		return topId;
 	}
-	public void settId(Long tId) {
-		this.tId = tId;
+	public void setTopId(Long topId) {
+		this.topId = topId;
 	}
 	
 	@Column(name = "PRD_TYPE")
@@ -118,7 +118,7 @@ public class TopRecommend extends BaseObject{
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((prdType == null) ? 0 : prdType.hashCode());
 		result = prime * result + status;
-		result = prime * result + ((tId == null) ? 0 : tId.hashCode());
+		result = prime * result + ((topId == null) ? 0 : topId.hashCode());
 		result = prime * result + ((topName == null) ? 0 : topName.hashCode());
 		result = prime * result + ((updateTime == null) ? 0 : updateTime.hashCode());
 		result = prime * result + ((updator == null) ? 0 : updator.hashCode());
@@ -155,10 +155,10 @@ public class TopRecommend extends BaseObject{
 			return false;
 		if (status != other.status)
 			return false;
-		if (tId == null) {
-			if (other.tId != null)
+		if (topId == null) {
+			if (other.topId != null)
 				return false;
-		} else if (!tId.equals(other.tId))
+		} else if (!topId.equals(other.topId))
 			return false;
 		if (topName == null) {
 			if (other.topName != null)
@@ -180,7 +180,7 @@ public class TopRecommend extends BaseObject{
 	
 	@Override
 	public String toString() {
-		return "TopRecommend [id=" + id + ", tId=" + tId + ", prdType=" + prdType + ", topName=" + topName + ", status="
+		return "TopRecommend [id=" + id + ", topId=" + topId + ", prdType=" + prdType + ", topName=" + topName + ", status="
 				+ status + ", updator=" + updator + ", creator=" + creator + ", createTime=" + createTime
 				+ ", updateTime=" + updateTime + "]";
 	}

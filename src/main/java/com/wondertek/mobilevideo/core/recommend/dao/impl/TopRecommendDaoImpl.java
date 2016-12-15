@@ -7,6 +7,7 @@ import java.util.Map;
 import com.wondertek.mobilevideo.core.base.GenericDaoHibernate;
 import com.wondertek.mobilevideo.core.recommend.dao.TopRecommendDao;
 import com.wondertek.mobilevideo.core.recommend.model.TopRecommend;
+import com.wondertek.mobilevideo.core.recommend.util.RecommendConstants;
 import com.wondertek.mobilevideo.core.util.StringUtil;
 
 public class TopRecommendDaoImpl extends GenericDaoHibernate<TopRecommend,Long> implements TopRecommendDao{
@@ -16,16 +17,19 @@ public class TopRecommendDaoImpl extends GenericDaoHibernate<TopRecommend,Long> 
 	}
 
 	@Override
-	public List<TopRecommend> queryByParam(Long tId, String prdType, String topName) {
+	public List<TopRecommend> queryByParam(String prdType) {
 		StringBuffer sb = new StringBuffer();
 		List<Object> params = new ArrayList<Object>();
-		sb.append("from TopRecommend where and tId = ? and prdType = ? and topName = ?");		
-		params.add(tId);
-		params.add(prdType);
-		params.add(topName);
+		sb.append("from TopRecommend where status = ? and prdType = ?");
+		params.add(RecommendConstants.VALID);		
+		params.add(prdType);		
 		return this.query(sb.toString(),params.toArray());
 	}
 
+	@Override
+	public List<TopRecommend> queryAllAvailable() {
+		return this.query("from TopRecommend where status = ? order by updateTime desc,id desc", new Object[]{RecommendConstants.VALID});
+	}
 	@Override
 	public List<TopRecommend> getByParam(Map<String, Object> paramsMap, int start, int limit) {
 		StringBuffer hql = new StringBuffer("from TopRecommend where 1 = 1");
@@ -126,5 +130,5 @@ public class TopRecommendDaoImpl extends GenericDaoHibernate<TopRecommend,Long> 
         	params.add(id);
         }        
 		return this.count(hql.toString(),params.toArray()) > 0;
-	}
+	}	
 }

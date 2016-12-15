@@ -8,11 +8,15 @@ import com.wondertek.mobilevideo.core.recommend.model.TopRecommend;
 
 public interface TopRecommendService  extends GenericManager<TopRecommend, Long>{
 	/**
-	 * 根据tId,prdType,topName查找
+	 * 根据prdType查找
 	 * 
 	 */
-	public List<TopRecommend> queryByParam(Long objId,String prdType, String topName);	
-	
+	public List<TopRecommend> queryByParam(String prdType);	
+	/**
+	 * 定时扫描所有有效地置顶推荐信息
+	 * @return
+	 */
+	public List<TopRecommend> queryAllAvailable();
 	/**
 	 * 按页搜索
 	 * @param paramsMap
@@ -31,5 +35,5 @@ public interface TopRecommendService  extends GenericManager<TopRecommend, Long>
 	 * 删除
 	 * @param id
 	 */
-	public void deleteById(Long id);
+	public void deleteById(Long id);	
 }

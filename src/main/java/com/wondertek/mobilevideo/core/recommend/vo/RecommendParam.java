@@ -1,5 +1,7 @@
 package com.wondertek.mobilevideo.core.recommend.vo;
 
+import org.apache.struts2.json.annotations.JSON;
+
 import com.wondertek.mobilevideo.core.base.BaseObject;
 
 public class RecommendParam extends BaseObject{
@@ -8,9 +10,10 @@ public class RecommendParam extends BaseObject{
 	
 	private String text;
 	
-	private String type;
+	private String iconCls;
 	
-	private AdditionalParameters additionalParameters;
+	private Boolean isParent;
+	
 	
 	private String laberType;
 	
@@ -30,21 +33,7 @@ public class RecommendParam extends BaseObject{
 		this.text = text;
 	}
 
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public AdditionalParameters getAdditionalParameters() {
-		return additionalParameters;
-	}
-
-	public void setAdditionalParameters(AdditionalParameters additionalParameters) {
-		this.additionalParameters = additionalParameters;
-	}
+	
 
 	public String getLaberType() {
 		return laberType;
@@ -55,7 +44,6 @@ public class RecommendParam extends BaseObject{
 	}
 	
 	
-	
 	public String getWeight() {
 		return weight;
 	}
@@ -63,7 +51,8 @@ public class RecommendParam extends BaseObject{
 	public void setWeight(String weight) {
 		this.weight = weight;
 	}
-
+	
+	@JSON(name = "nodeId")
 	public Long getId() {
 		return id;
 	}
@@ -72,8 +61,6 @@ public class RecommendParam extends BaseObject{
 		this.id = id;
 	}
 	
-	
-
 	public String getParentId() {
 		return parentId;
 	}
@@ -90,12 +77,34 @@ public class RecommendParam extends BaseObject{
 		this.parentText = parentText;
 	}
 
+	public String getIconCls() {
+		return iconCls;
+	}
+
+	public void setIconCls(String iconCls) {
+		this.iconCls = iconCls;
+	}
+
+	public Boolean getIsParent() {
+		return isParent;
+	}
+
+	public void setIsParent(Boolean isParent) {
+		this.isParent = isParent;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((iconCls == null) ? 0 : iconCls.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((isParent == null) ? 0 : isParent.hashCode());
+		result = prime * result + ((laberType == null) ? 0 : laberType.hashCode());
+		result = prime * result + ((parentId == null) ? 0 : parentId.hashCode());
+		result = prime * result + ((parentText == null) ? 0 : parentText.hashCode());
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result + ((weight == null) ? 0 : weight.hashCode());
 		return result;
 	}
 
@@ -108,22 +117,55 @@ public class RecommendParam extends BaseObject{
 		if (getClass() != obj.getClass())
 			return false;
 		RecommendParam other = (RecommendParam) obj;
+		if (iconCls == null) {
+			if (other.iconCls != null)
+				return false;
+		} else if (!iconCls.equals(other.iconCls))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (isParent == null) {
+			if (other.isParent != null)
+				return false;
+		} else if (!isParent.equals(other.isParent))
+			return false;
+		if (laberType == null) {
+			if (other.laberType != null)
+				return false;
+		} else if (!laberType.equals(other.laberType))
+			return false;
+		if (parentId == null) {
+			if (other.parentId != null)
+				return false;
+		} else if (!parentId.equals(other.parentId))
+			return false;
+		if (parentText == null) {
+			if (other.parentText != null)
+				return false;
+		} else if (!parentText.equals(other.parentText))
+			return false;
 		if (text == null) {
 			if (other.text != null)
 				return false;
 		} else if (!text.equals(other.text))
 			return false;
-		if (type == null) {
-			if (other.type != null)
+		if (weight == null) {
+			if (other.weight != null)
 				return false;
-		} else if (!type.equals(other.type))
+		} else if (!weight.equals(other.weight))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "RecommendParam [text=" + text + ", type=" + type + "]";
+		return "RecommendParam [text=" + text + ", iconCls=" + iconCls + ", isParent=" + isParent + ", laberType="
+				+ laberType + ", weight=" + weight + ", id=" + id + ", parentText=" + parentText + ", parentId="
+				+ parentId + "]";
 	}
+
 
 }

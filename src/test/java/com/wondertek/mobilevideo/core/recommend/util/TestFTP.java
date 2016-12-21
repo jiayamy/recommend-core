@@ -1,10 +1,10 @@
 package com.wondertek.mobilevideo.core.recommend.util;
 
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPReply;
-
 import java.io.File;
 import java.io.FileInputStream;
+
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPReply;
 
 public class TestFTP {
     private FTPClient ftp;

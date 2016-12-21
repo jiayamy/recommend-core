@@ -11,11 +11,11 @@ import java.io.Serializable;
 public class VomsRecommendVo implements Serializable{
 	private static final long serialVersionUID = -7685693390446591745L;
 	
-	private Long objId;
-	private String name;
-	private String objType;
-	private String type;
-
+	private Long objId; //推荐对象ID
+	private String name; //名称
+	private String objType;//推荐对象
+	private String type; //类型
+	
 	public Long getObjId() {
 		return objId;
 	}

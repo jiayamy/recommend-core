@@ -2,7 +2,6 @@ package com.wondertek.mobilevideo.core.recommend.mongo;
 
 import org.junit.Test;
 
-import com.wondertek.mobilevideo.core.base.Constants;
 import com.wondertek.mobilevideo.core.recommend.BaseTestCase;
 
 public class PersonServiceTest extends BaseTestCase {

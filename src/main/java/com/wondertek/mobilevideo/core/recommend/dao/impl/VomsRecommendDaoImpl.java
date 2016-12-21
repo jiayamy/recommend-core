@@ -1,10 +1,12 @@
 package com.wondertek.mobilevideo.core.recommend.dao.impl;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
 import com.wondertek.mobilevideo.core.base.GenericDaoHibernate;
@@ -213,6 +215,24 @@ public class VomsRecommendDaoImpl extends GenericDaoHibernate<VomsRecommend,Long
         	params.add(isRecommend);
         } 
 		return this.count(hql.toString(), params.toArray());
+	}
+
+	@Override
+	public void updateIsRecommend(List<Long> ids, Boolean isRecommend, String updator) {
+		if(ids == null || ids.isEmpty()){
+			return;
+		}
+		Session session = this.getSession();
+		SQLQuery sqlQuery = session.createSQLQuery("update R_VOMS_RECOMMEND set IS_RECOMMEND = ?, UPDATOR_ = ?, UPDATE_TIME = ? where IS_RECOMMEND = ? and id in(:ids)");
+		sqlQuery.setString(0, isRecommend ? "1" : "0");
+		sqlQuery.setString(1, updator);
+		sqlQuery.setTimestamp(2, new Timestamp(new Date().getTime()));
+		sqlQuery.setString(3, isRecommend ? "0" : "1");
+		sqlQuery.setParameterList("ids", ids);
+		
+		sqlQuery.executeUpdate();
+		
+		releaseSession(session);
 	}
 }
 

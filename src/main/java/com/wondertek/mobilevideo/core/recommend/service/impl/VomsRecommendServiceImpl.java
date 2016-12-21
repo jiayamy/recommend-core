@@ -39,4 +39,9 @@ public class VomsRecommendServiceImpl extends GenericManagerImpl<VomsRecommend, 
 	public Long getCountByParam(Map<String, Object> paramsMap) {		
 		return vomsRecommendDao.getCountByParam(paramsMap);
 	}
+
+	@Override
+	public void updateIsRecommend(List<Long> ids, Boolean isRecommend, String updator) {
+		vomsRecommendDao.updateIsRecommend(ids, isRecommend, updator);
+	}
 }

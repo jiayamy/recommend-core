@@ -4,14 +4,20 @@ import com.wondertek.mobilevideo.core.base.Constants;
 import com.wondertek.mobilevideo.core.recommend.cache.EnumsInfoCache;
 import com.wondertek.mobilevideo.core.recommend.cache.PrdTypeRelationCache;
 import com.wondertek.mobilevideo.core.recommend.cache.SystemConfigCache;
-import com.wondertek.mobilevideo.core.recommend.cache.redis.service.VomsRecommendCacheManager;
 import com.wondertek.mobilevideo.core.recommend.cache.redis.service.RecommendInfoCacheManager;
+import com.wondertek.mobilevideo.core.recommend.cache.redis.service.TopRecommendCacheManager;
+import com.wondertek.mobilevideo.core.recommend.cache.redis.service.VomsRecommendCacheManager;
 
 public class RecommendUtil {
 	public static void init(){
 		initSysCache();
 		initRedisCache();
 		initVomsRecommednRedisCache();
+		initTopRecommednRedisCache();
+	}
+	public static void initTopRecommednRedisCache() {
+		TopRecommendCacheManager topRecommendCacheManager = (TopRecommendCacheManager) Constants.ctx.getBean("topRecommendCacheManager");
+		topRecommendCacheManager.updateCache();
 	}
 	public static void initRedisCache() {
 		RecommendInfoCacheManager recommendInfoCacheManager = (RecommendInfoCacheManager) Constants.ctx.getBean("recommendInfoCacheManager");

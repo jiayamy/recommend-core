@@ -14,8 +14,7 @@ public class RecommendParam extends BaseObject{
 	
 	private Boolean isParent;
 	
-	
-	private String laberType;
+	private String labelType;
 	
 	private String weight;
 	
@@ -33,17 +32,14 @@ public class RecommendParam extends BaseObject{
 		this.text = text;
 	}
 
-	
-
-	public String getLaberType() {
-		return laberType;
+	public String getLabelType() {
+		return labelType;
 	}
 
-	public void setLaberType(String laberType) {
-		this.laberType = laberType;
+	public void setLabelType(String labelType) {
+		this.labelType = labelType;
 	}
-	
-	
+
 	public String getWeight() {
 		return weight;
 	}
@@ -100,7 +96,7 @@ public class RecommendParam extends BaseObject{
 		result = prime * result + ((iconCls == null) ? 0 : iconCls.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((isParent == null) ? 0 : isParent.hashCode());
-		result = prime * result + ((laberType == null) ? 0 : laberType.hashCode());
+		result = prime * result + ((labelType == null) ? 0 : labelType.hashCode());
 		result = prime * result + ((parentId == null) ? 0 : parentId.hashCode());
 		result = prime * result + ((parentText == null) ? 0 : parentText.hashCode());
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
@@ -132,10 +128,10 @@ public class RecommendParam extends BaseObject{
 				return false;
 		} else if (!isParent.equals(other.isParent))
 			return false;
-		if (laberType == null) {
-			if (other.laberType != null)
+		if (labelType == null) {
+			if (other.labelType != null)
 				return false;
-		} else if (!laberType.equals(other.laberType))
+		} else if (!labelType.equals(other.labelType))
 			return false;
 		if (parentId == null) {
 			if (other.parentId != null)
@@ -162,10 +158,8 @@ public class RecommendParam extends BaseObject{
 
 	@Override
 	public String toString() {
-		return "RecommendParam [text=" + text + ", iconCls=" + iconCls + ", isParent=" + isParent + ", laberType="
-				+ laberType + ", weight=" + weight + ", id=" + id + ", parentText=" + parentText + ", parentId="
+		return "RecommendParam [text=" + text + ", iconCls=" + iconCls + ", isParent=" + isParent + ", labelType="
+				+ labelType + ", weight=" + weight + ", id=" + id + ", parentText=" + parentText + ", parentId="
 				+ parentId + "]";
 	}
-
-
 }

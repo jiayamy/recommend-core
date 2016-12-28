@@ -3,8 +3,6 @@ package com.wondertek.mobilevideo.core.recommend.vo;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.apache.struts2.json.annotations.JSON;
-
 
 /**
  * @author Administrator

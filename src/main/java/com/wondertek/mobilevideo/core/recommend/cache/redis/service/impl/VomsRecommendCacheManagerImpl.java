@@ -247,7 +247,7 @@ public class VomsRecommendCacheManagerImpl implements VomsRecommendCacheManager 
 			}
 
 		}
-		redisManager.releaseJedis(jedis);
+		redisManager.releaseJedis(jedis);// 释放连接
 
 		// 排序去重
 		List<VomsRecommendVo> rst = new ArrayList<VomsRecommendVo>();
@@ -267,6 +267,7 @@ public class VomsRecommendCacheManagerImpl implements VomsRecommendCacheManager 
 		}
 		if (isCluster) {
 			vomsRecommendCacheClusterManager.updataCache();
+			return;
 		}
 		Jedis jedis = null;
 		try {
@@ -279,10 +280,10 @@ public class VomsRecommendCacheManagerImpl implements VomsRecommendCacheManager 
 			return;
 		}
 		synchronized (obj) {
-			log.debug("updataVomsCommendCache start");
+			log.debug("updataVomsRecommendCache start");
 			cacheAvailable = false;
 			List<VomsRecommend> list = vomsRecommendService.getAllRecommend();
-			log.debug("updataVomsCommendCache list size:" + list.size());
+			log.debug("updateVomsRecommendCache list size:" + list.size());
 			
 			Map<String, List<VomsRecommendVo>> vomsRecommendVoMap = new HashMap<String, List<VomsRecommendVo>>();
 			// 得到具有相同标签名字的VomsRecommendVo 的map集合
@@ -325,8 +326,7 @@ public class VomsRecommendCacheManagerImpl implements VomsRecommendCacheManager 
 			vomsRecommendVoMap = null;
 			
 			cacheAvailable = true;
-			log.debug("updataVomsCommendCache end,labels size:" + labels.size());
-
+			log.debug("updateVomsRecommendCache end,labels size:" + labels.size());
 		}
 		redisManager.releaseJedis(jedis);// 释放连接
 	}

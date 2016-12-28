@@ -18,8 +18,8 @@ public class TopRecommendServiceImpl extends GenericManagerImpl<TopRecommend, Lo
 	}
 
 	@Override
-	public List<TopRecommend> queryByParam(String prdType) {
-		return topRecommendDao.queryByParam(prdType);
+	public List<TopRecommend> queryValidByParam(String prdType) {
+		return topRecommendDao.queryValidByParam(prdType);
 	} 
 	
 

@@ -17,7 +17,7 @@ public class TopRecommendDaoImpl extends GenericDaoHibernate<TopRecommend,Long> 
 	}
 
 	@Override
-	public List<TopRecommend> queryByParam(String prdType) {
+	public List<TopRecommend> queryValidByParam(String prdType) {
 		StringBuffer sb = new StringBuffer();
 		List<Object> params = new ArrayList<Object>();
 		sb.append("from TopRecommend where status = ? and prdType = ?");

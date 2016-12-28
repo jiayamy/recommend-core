@@ -37,13 +37,12 @@ public class UserTagCacheManagerImpl implements UserTagCacheManager
     private Log log = LogFactory.getLog(this.getClass());
   
     private RedisManager redisManager;
+    private Boolean isCluster = Boolean.FALSE; 
+    private UserTagCacheClusterManager userTagCacheClusterManager;
     
     private UserTagService userTagService;
     private static final String UT_PREFIX_KEY = "RI:USERTAG:";
     private static final String UT_CUT_PREFIX_KEY = "RI:USERTAG:CUT:";
-    
-    private Boolean isCluster = Boolean.FALSE; 
-    private UserTagCacheClusterManager userTagCacheClusterManager;
     
     private int expireTime = 60*3;//3分钟
     private static MessagePack msgpack = null;
@@ -239,6 +238,7 @@ public class UserTagCacheManagerImpl implements UserTagCacheManager
         }else if(log.isDebugEnabled() && RequestConstants.V_PRINT_REQUEST_ENABLE){
     		log.debug("search from redis,userTag:" + userTag);
     	}
+        redisManager.releaseJedis(jedis);// 释放连接
 		return userTag;
 	}
 	@Override
@@ -284,6 +284,7 @@ public class UserTagCacheManagerImpl implements UserTagCacheManager
         }else if(log.isDebugEnabled() && RequestConstants.V_PRINT_REQUEST_ENABLE){
     		log.debug("search from redis,userTag:" + userTag);
     	}
+        redisManager.releaseJedis(jedis);// 释放连接
 		return userTag;
 	}
 	/**

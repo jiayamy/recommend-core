@@ -25,6 +25,7 @@ import redis.clients.jedis.BinaryJedisCluster;
 public class TopRecommendCacheClusterManagerImpl implements TopRecommendCacheClusterManager {
 	private TopRecommendService topRecommendService;
 	protected static Boolean cacheAvailable = true;
+	
 	private BinaryJedisClusterFactory jedisClusterFactory; //jedis 集群工厂
 	
 	private Log log = LogFactory.getLog(this.getClass());
@@ -34,16 +35,20 @@ public class TopRecommendCacheClusterManagerImpl implements TopRecommendCacheClu
 	private int expireTime = 60 * 60 * 1;// 24个小时
 
 	public TopRecommendCacheClusterManagerImpl() {
+		
 	}
+
 	static { 
 		if (msgpack == null) {
 			msgpack = new MessagePack();
 			msgpack.register(RecommendTopVo.class);
 		}
 	}
+
 	private String getRecomdRedisKey(String prdType) {
 		return prdType;
 	}
+
 	/**
 	 * 将KEY序列化为byte
 	 * 
@@ -163,14 +168,13 @@ public class TopRecommendCacheClusterManagerImpl implements TopRecommendCacheClu
 			log.error("redis getObject failed.error info:" + e);
 		}
         List<RecommendTopVo> returnList = null;       
-        if (jedisCluster != null) {//redis为空，从数据库中获取
-        	List<TopRecommend> list = topRecommendService.queryByParam(prdType);        	
+        if (jedisCluster == null) {//redis为空，从数据库中获取
+        	List<TopRecommend> list = topRecommendService.queryValidByParam(prdType);        	
         	returnList = new ArrayList<RecommendTopVo>();
         	for(TopRecommend topRecommend : list){
         		RecommendTopVo recommendTopVo = new RecommendTopVo();
         		recommendTopVo.setTopId(topRecommend.getTopId());
         		recommendTopVo.setTopName(topRecommend.getTopName());
-        		
         		returnList.add(recommendTopVo);
         	}        	
         	if(log.isDebugEnabled())
@@ -185,25 +189,23 @@ public class TopRecommendCacheClusterManagerImpl implements TopRecommendCacheClu
         String key = RC_PERFIX_KEY + getRecomdRedisKey(prdType);
         byte []keyBytes = changeKeyToByteArray(key);
         records = jedisCluster.zrange(keyBytes, 0, -1);
-        
         if(records == null || records.size() == 0){//为空
         	//查询数据库，若数据库还为空，则存储个空对象进去
-        	List<TopRecommend> list = topRecommendService.queryByParam(prdType);
-        	List<RecommendTopVo> tmp = new ArrayList<RecommendTopVo>();
-        	for(TopRecommend topRecommend : list){
-        		RecommendTopVo recommendTopVo = new RecommendTopVo();
-        		recommendTopVo.setTopId(topRecommend.getTopId());
-        		recommendTopVo.setTopName(topRecommend.getTopName());
-
-        		tmp.add(recommendTopVo);
-        	}
-        	log.info("add the result queried from database into redis successfully!prdType:" + prdType + ",size:" + list.size());
-        	list.clear();
-        	list = null;
-        	
-        	jedisCluster.zadd(keyBytes, 1, changeObjectsToByteArray(tmp));
-        	
-        	returnList.addAll(tmp);
+//        	List<TopRecommend> list = topRecommendService.queryValidByParam(prdType);
+//        	List<RecommendTopVo> tmp = new ArrayList<RecommendTopVo>();
+//        	for(TopRecommend topRecommend : list){
+//        		RecommendTopVo recommendTopVo = new RecommendTopVo();
+//        		recommendTopVo.setTopId(topRecommend.getTopId());
+//        		recommendTopVo.setTopName(topRecommend.getTopName());
+//        		tmp.add(recommendTopVo);
+//        	}
+//        	log.info("add the result queried from database into redis successfully!prdType:" + prdType + ",size:" + list.size());
+//        	list.clear();
+//        	list = null;
+//        	
+//        	jedisCluster.zadd(keyBytes, 1, changeObjectsToByteArray(tmp));
+//        	
+//        	returnList.addAll(tmp);
         }else{
         	List<RecommendTopVo> tmp = null;
 	        for (byte[] bytes : records){
@@ -227,8 +229,9 @@ public class TopRecommendCacheClusterManagerImpl implements TopRecommendCacheClu
         }
 		return rst;
 	}	
+	
 	@Override
-	public void updataCache() {
+	public void updateCache() {
 		if (cacheAvailable == false) {
 			return;
 		}
@@ -238,6 +241,7 @@ public class TopRecommendCacheClusterManagerImpl implements TopRecommendCacheClu
 		} catch (Exception e) {
 			log.error("redis getObject failed.error info:" + e);
 		}
+
 		if (jedisCluster == null) {
 			return;
 		}
@@ -246,33 +250,37 @@ public class TopRecommendCacheClusterManagerImpl implements TopRecommendCacheClu
 			cacheAvailable = false;
 			List<TopRecommend> list = topRecommendService.queryAllAvailable();
 			log.debug("updateCache list size:" + list.size());
-			
-			Map<String, List<RecommendTopVo>> RecommendTopMap = new HashMap<String, List<RecommendTopVo>>();
-			// 得到具有相同prdType的RecommendTopVo 的map集合
+			Map<String, List<RecommendTopVo>> recommendTopVoMap = new HashMap<String, List<RecommendTopVo>>();			
 			if (list != null && !list.isEmpty()) {
-				for (TopRecommend tr : list) {
+				for (TopRecommend t : list) {
 					RecommendTopVo recommendTopVo = new RecommendTopVo();					
-					recommendTopVo.setTopId(tr.getTopId());
+					recommendTopVo.setTopId(t.getTopId());	
+					recommendTopVo.setTopName(t.getTopName());
+					
+					if(!recommendTopVoMap.containsKey(t.getPrdType())){
+						recommendTopVoMap.put(t.getPrdType(), new ArrayList<RecommendTopVo>());
 					}
+					recommendTopVoMap.get(t.getPrdType()).add(recommendTopVo);
+				}
 			}
-			List<String> labels = new ArrayList<String>();
 			String key = null;
-			for (String prdType : RecommendTopMap.keySet()) {
-				labels.add(prdType);
+			for (String prdType : recommendTopVoMap.keySet()) {
 				key = RC_PERFIX_KEY + prdType;
+				
 				byte[] keyBytes = changeKeyToByteArray(key);
 				jedisCluster.del(keyBytes);
-				jedisCluster.zadd(keyBytes, 1, changeObjectsToByteArray(RecommendTopMap.get(prdType)));
+				jedisCluster.zadd(keyBytes, 1, changeObjectsToByteArray(recommendTopVoMap.get(prdType)));
 				jedisCluster.expire(keyBytes, expireTime);
-				log.debug("updateCache end,labels size:" + labels.size());
+				log.debug("updateCache prdType:" + prdType + ",size:" + recommendTopVoMap.get(prdType).size());
 			}
-			
-			RecommendTopMap.clear();
-			RecommendTopMap = null;
+			recommendTopVoMap.clear();
+			recommendTopVoMap = null;
 			
 			cacheAvailable = true;
+			log.debug("updataVomsCommendCache end");
 		}		
 	}
+
 	public TopRecommendService getTopRecommendService() {
 		return topRecommendService;
 	}
@@ -291,4 +299,5 @@ public class TopRecommendCacheClusterManagerImpl implements TopRecommendCacheClu
 	public void setJedisClusterFactory(BinaryJedisClusterFactory jedisClusterFactory) {
 		this.jedisClusterFactory = jedisClusterFactory;
 	}	
+	
 }

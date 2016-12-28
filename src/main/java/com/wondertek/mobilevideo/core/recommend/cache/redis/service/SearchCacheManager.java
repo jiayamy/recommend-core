@@ -16,5 +16,5 @@ public interface SearchCacheManager
      * 搜索，先从缓存找，如果缓存没有就从搜索服务器查找
      *@param searchRequest
      */
-public List<SearchResult> queryByParam(String httpUrl, SearchRequest searchRequest);
+	public List<SearchResult> queryByParam(String httpUrl, SearchRequest searchRequest);
 }

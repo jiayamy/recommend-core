@@ -26,9 +26,9 @@ public class TopRecommend extends BaseObject{
 	private static final long serialVersionUID = 1L;
 	private Long id;
 	private Long topId;             //ID
-	private String prdType;    //所属产品
-	private String topName;  //节目名称
-	private int status;			//状态，0禁用，1启用
+	private String prdType;    		//所属产品
+	private String topName;  		//节目名称
+	private int status;				//状态，0禁用，1启用
 	private String updator;
 	private String creator;
 	private Date createTime;

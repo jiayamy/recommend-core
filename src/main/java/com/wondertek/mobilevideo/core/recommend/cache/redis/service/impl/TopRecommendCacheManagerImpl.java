@@ -20,13 +20,13 @@ import com.wondertek.mobilevideo.core.recommend.cache.redis.service.TopRecommend
 import com.wondertek.mobilevideo.core.recommend.model.TopRecommend;
 import com.wondertek.mobilevideo.core.recommend.service.TopRecommendService;
 import com.wondertek.mobilevideo.core.recommend.vo.RecommendTopVo;
-import com.wondertek.mobilevideo.core.recommend.vo.VomsRecommendVo;
 
 import redis.clients.jedis.Jedis;
 
 public class TopRecommendCacheManagerImpl implements TopRecommendCacheManager {
 	private TopRecommendService topRecommendService;
 	protected static Boolean cacheAvailable = true;
+	
 	private RedisManager redisManager;
 
 	private Boolean isCluster = Boolean.FALSE;
@@ -45,7 +45,7 @@ public class TopRecommendCacheManagerImpl implements TopRecommendCacheManager {
 	static {
 		if (msgpack == null) {
 			msgpack = new MessagePack();
-			msgpack.register(VomsRecommendVo.class);
+			msgpack.register(RecommendTopVo.class);
 		}
 	}
 
@@ -68,7 +68,24 @@ public class TopRecommendCacheManagerImpl implements TopRecommendCacheManager {
 			log.error("change key to bytes failed.error info:" + e);
 		}
 		return keyBytes;
-	}	
+	}
+
+	/**
+	 * 将单个对象序列化为ByteArray
+	 * 
+	 * @param VomsRecommendVo
+	 * @return
+	 */
+	@SuppressWarnings("unused")
+	private byte[] changeValueToByteArray(RecommendTopVo recommendTopVo){
+		byte[] valueBytes = null;
+		try {
+			valueBytes = msgpack.write(recommendTopVo);
+		} catch (Exception e) {
+			log.error("change value to bytes failed.error info:" + e);
+		}
+		return valueBytes;
+	}
 
 	/**
 	 * 将对象集合序列化为ByteArray
@@ -157,8 +174,8 @@ public class TopRecommendCacheManagerImpl implements TopRecommendCacheManager {
             log.error("redis getObject failed.error info:" + e);
         }
         List<RecommendTopVo> returnList = null;
-        if (jedis != null) {//redis为空，从数据库中获取
-        	List<TopRecommend> list = topRecommendService.queryByParam(prdType);
+        if (jedis == null) {//redis为空，从数据库中获取
+        	List<TopRecommend> list = topRecommendService.queryValidByParam(prdType);
         	returnList = new ArrayList<RecommendTopVo>();
         	for(TopRecommend topRecommend : list){
         		RecommendTopVo recommendTopVo = new RecommendTopVo();
@@ -179,23 +196,22 @@ public class TopRecommendCacheManagerImpl implements TopRecommendCacheManager {
         byte []keyBytes = changeKeyToByteArray(key);
         records = jedis.zrange(keyBytes, 0, -1);
         if(records == null || records.size() == 0){//为空
-        	//查询数据库，若数据库还为空，则存储个空对象进去//
-        	List<TopRecommend> list = topRecommendService.queryByParam(prdType);
-        	List<RecommendTopVo> tmp = new ArrayList<RecommendTopVo>();
-        	for(TopRecommend topRecommend : list){
-        		RecommendTopVo recommendTopVo = new RecommendTopVo();
-        		recommendTopVo.setTopId(topRecommend.getTopId());
-        		recommendTopVo.setTopName(topRecommend.getTopName());
-
-        		tmp.add(recommendTopVo);
-        	}
-        	log.info("add the result queried from database into redis successfully!prdType:" + prdType + ",size:" + list.size());
-        	list.clear();
-        	list = null;
-        	
-        	jedis.zadd(keyBytes, 1, changeObjectsToByteArray(tmp));
-        	
-        	returnList.addAll(tmp);
+//        	//查询数据库，若数据库还为空，则存储个空对象进去//
+//        	List<TopRecommend> list = topRecommendService.queryValidByParam(prdType);
+//        	List<RecommendTopVo> tmp = new ArrayList<RecommendTopVo>();
+//        	for(TopRecommend topRecommend : list){
+//        		RecommendTopVo recommendTopVo = new RecommendTopVo();
+//        		recommendTopVo.setTopId(topRecommend.getTopId());
+//        		recommendTopVo.setTopName(topRecommend.getTopName());
+//        		tmp.add(recommendTopVo);
+//        	}
+//        	log.info("add the result queried from database into redis successfully!prdType:" + prdType + ",size:" + list.size());
+//        	list.clear();
+//        	list = null;
+//        	
+//        	jedis.zadd(keyBytes, 1, changeObjectsToByteArray(tmp));
+//        	
+//        	returnList.addAll(tmp);
         }else{
         	List<RecommendTopVo> tmp = null;
 	        for (byte[] bytes : records){
@@ -204,6 +220,7 @@ public class TopRecommendCacheManagerImpl implements TopRecommendCacheManager {
 	        }
 	        if(tmp != null)
 	        	returnList.addAll(tmp);
+	        
 	        if(log.isDebugEnabled())
 	        	log.debug("queried result from redis successfully!prdType:" + prdType+ ",size:" + (tmp == null ? null : tmp.size()));
 	        jedis.expire(keyBytes,expireTime);//设置过期时间
@@ -223,12 +240,13 @@ public class TopRecommendCacheManagerImpl implements TopRecommendCacheManager {
 	}
 	
 	@Override
-	public void updataCache() {
+	public void updateCache() {
 		if (cacheAvailable == false) {//正在刷新的暂时不刷新，等待下一次的定时任务启动
 			return;
 		}
 		if (isCluster) {
-			topRecommendCacheClusterManager.updataCache();
+			topRecommendCacheClusterManager.updateCache();
+			return;
 		}
 		Jedis jedis = null;
 		try {
@@ -244,29 +262,35 @@ public class TopRecommendCacheManagerImpl implements TopRecommendCacheManager {
 			log.debug("updataCache start");
 			cacheAvailable = false;
 			List<TopRecommend> list = topRecommendService.queryAllAvailable();
-			log.debug("updataCache list size:" + list.size());
-			
+			log.debug("updateCache list size:" + list.size());
 			Map<String, List<RecommendTopVo>> recommendTopVoMap = new HashMap<String, List<RecommendTopVo>>();			
 			if (list != null && !list.isEmpty()) {
 				for (TopRecommend t : list) {
 					RecommendTopVo recommendTopVo = new RecommendTopVo();					
-					recommendTopVo.setTopId(t.getTopId());					
+					recommendTopVo.setTopId(t.getTopId());	
+					recommendTopVo.setTopName(t.getTopName());
+					
+					if(!recommendTopVoMap.containsKey(t.getPrdType())){
+						recommendTopVoMap.put(t.getPrdType(), new ArrayList<RecommendTopVo>());
+					}
+					recommendTopVoMap.get(t.getPrdType()).add(recommendTopVo);
 				}
 			}
 			String key = null;
 			for (String prdType : recommendTopVoMap.keySet()) {
 				key = RC_PERFIX_KEY + prdType;
+				
 				byte[] keyBytes = changeKeyToByteArray(key);
 				jedis.del(keyBytes);
 				jedis.zadd(keyBytes, 1, changeObjectsToByteArray(recommendTopVoMap.get(prdType)));
 				jedis.expire(keyBytes, expireTime);
-				log.debug("updataCache prdType size:" + recommendTopVoMap.get(prdType).size());
+				log.debug("updateCache prdType:" + prdType + ",size:" + recommendTopVoMap.get(prdType).size());
 			}
-			
 			recommendTopVoMap.clear();
 			recommendTopVoMap = null;
 			
 			cacheAvailable = true;
+			log.debug("updataVomsCommendCache end");
 		}
 		redisManager.releaseJedis(jedis);// 释放连接
 	}

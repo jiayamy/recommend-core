@@ -47,7 +47,7 @@ public class VomsRecommendDaoImpl extends GenericDaoHibernate<VomsRecommend,Long
 	
 	@Override
 	public List<VomsRecommendVo> getVomsRecommendVos(List<String> types, String prdType, String labelInfo) {
-		StringBuffer hql = new StringBuffer("select new VomsRecommendVo(objId,name,objType,type) from VomsRecommend where isRecommend = ? and prdType=? ");
+		StringBuffer hql = new StringBuffer("select objId,name,objType,type from VomsRecommend where isRecommend = ? and prdType=? ");
 		List<Object> param = new ArrayList<Object>();
 		param.add(Boolean.TRUE);
 		param.add(prdType);
@@ -82,7 +82,18 @@ public class VomsRecommendDaoImpl extends GenericDaoHibernate<VomsRecommend,Long
 			}
 			hql.append(")");
 		}
-		return this.query(hql.toString(),param.toArray());
+		List<Object[]> list = this.query(hql.toString(),param.toArray());
+		List<VomsRecommendVo> returnList = new ArrayList<VomsRecommendVo>();
+		if(list != null && !list.isEmpty()){
+			for(Object[] o : list){
+				returnList.add(new VomsRecommendVo(
+						StringUtil.nullToLong(o[0]),
+						StringUtil.null2Str(o[1]),
+						StringUtil.null2Str(o[2]),
+						StringUtil.null2Str(o[3])));
+			}
+		}
+		return returnList;
 	}
 	public List<VomsRecommend> getByParam(Map<String, Object> paramsMap, int start, int limit) {
 		StringBuffer hql = new StringBuffer("from VomsRecommend where 1 = 1");

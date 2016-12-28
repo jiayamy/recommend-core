@@ -12,7 +12,7 @@ public interface TopRecommendDao extends GenericDao<TopRecommend, Long>{
 	 * @param 	 prdType	
 	 * @return
 	 */
-	public List<TopRecommend> queryByParam(String prdType);
+	public List<TopRecommend> queryValidByParam(String prdType);
 	/**
 	 * 定时扫描所有有效地置顶推荐信息
 	 * @return

@@ -6,7 +6,6 @@ public class RecommendTopVo implements Serializable {
 	private static final long serialVersionUID = -6607618405340207571L;
 	
 	private Long topId;
-	
 	private String topName;
 	
 	public Long getTopId() {

@@ -1,6 +1,7 @@
 package com.wondertek.mobilevideo.core.recommend.util;
 
 import com.wondertek.mobilevideo.core.base.Constants;
+import com.wondertek.mobilevideo.core.recommend.cache.EnumsConfigCache;
 import com.wondertek.mobilevideo.core.recommend.cache.EnumsInfoCache;
 import com.wondertek.mobilevideo.core.recommend.cache.PrdTypeRelationCache;
 import com.wondertek.mobilevideo.core.recommend.cache.SystemConfigCache;
@@ -24,6 +25,8 @@ public class RecommendUtil {
 		SystemConfigCache.init(null);
 		EnumsInfoCache.init();
 		PrdTypeRelationCache.init();
+		//2016-12-19 推荐权重信息
+		EnumsConfigCache.init();
 	}
 	/**
 	 * 初始化RecommednDataRedi缓存

@@ -180,7 +180,9 @@ insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (17, 
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (18, 'request.default.tag.cat.max', '10', '请求用户标签时一级分类的最大个数');
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (19, 'request.default.tag.catitem.max', '10', '请求用户标签时一级分类下的普通标签最大个数');
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (20, 'request.default.tag.recomd.max', '10', '请求用户标签时一级分类下的推荐标签最大个数');
-
+--20161228
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (21, 'recomd.default.tag.cat.weight', '50', '人工推荐时，一级标签默认权重');
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (21, 'recomd.default.tag.item.weight', '10', '人工推荐时，二级标签默认权重');
 --20161108
 CREATE TABLE R_VOMS_RECOMMEND
 (
@@ -224,14 +226,14 @@ CREATE SEQUENCE  SEQ_R_ENUMS_CONFIG MINVALUE 1 MAXVALUE 999999999999999999999999
 
 insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(101,'1001','0',null,'100.00');
 insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(102,'1002','0',null,'100.00');
-insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(103,'1003','0',null,'10.03');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(103,'1003','0',null,'100.00');
 insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(104,'1004','0',null,'100.00');
-insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(105,'1005','0',null,'10.40');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(105,'1005','0',null,'100.00');
 insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(106,'1006','0',null,'100.00');
 insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(107,'1007','0',null,'100.00');
 insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(108,'1008','0',null,'100.00');
 insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(109,'1009','0',null,'100.00');
-insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(100,'1000','0',null,'90.02');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(100,'1000','0',null,'100.00');
 insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(110,'1010','0',null,'100.00');
 insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(111,'1011','0',null,'100.00');
 insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(112,'500020','0',null,'100.00');

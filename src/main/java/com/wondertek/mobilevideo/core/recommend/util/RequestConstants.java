@@ -162,4 +162,16 @@ public class RequestConstants {
 	 * 系统异常
 	 */
 	public static final String R_CODE_999999 = "999999";
+	/**
+	 * 2016-12-21
+	 * 查推荐标签分数时，一级标签无权重时默认此值
+	 */
+	public static final String P_DEFAUL_REQUEST_TAG_RECOMD_CAT_WEIGHT = "recomd.default.tag.cat.weight";
+	public static Double V_DEFAULT_RECOMD_CAT_WEIGHT = 50d;
+	/**
+	 * 2016-12-26
+	 * 查推荐标签分数时，二级标签无权重时默认此值
+	 */
+	public static final String P_DEFAUL_REQUEST_TAG_RECOMD_ITEM_WEIGHT = "recomd.default.tag.item.weight";
+	public static Double V_DEFAULT_RECOMD_ITEM_WEIGHT = 10d;
 }

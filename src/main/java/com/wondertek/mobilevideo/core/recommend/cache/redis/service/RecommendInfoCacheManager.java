@@ -13,7 +13,7 @@ import com.wondertek.mobilevideo.core.recommend.vo.RecommendInfoVo;
 public interface RecommendInfoCacheManager
 {
     
-    public List<RecommendInfoVo> queryByLabels(String labelNames, String prdType, String catId,Map<String,Double> labelScoreAndWeight);
+    public List<RecommendInfoVo> queryByLabels(String labelNames, String prdType, String catId, Map<String,Double> labelScoreAndWeight);
     /**
      *每隔固定时间查询一次数据库，更新redis缓存
      *

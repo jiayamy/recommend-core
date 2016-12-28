@@ -146,6 +146,18 @@ public class SystemConfigCache
 		if(RequestConstants.V_DEFAULT_RECOMD_MULTIPICCONT_RATIO < 0){
 			RequestConstants.V_DEFAULT_RECOMD_MULTIPICCONT_RATIO = 0d;
 		}
+		RequestConstants.V_DEFAULT_RECOMD_TAG_CAT_WEIGHT = getDoubleValueDefault(RequestConstants.P_DEFAULT_RECOMD_TAG_CAT_WEIGHT,100d);
+		if(RequestConstants.V_DEFAULT_RECOMD_TAG_CAT_WEIGHT < 0){
+			RequestConstants.V_DEFAULT_RECOMD_TAG_CAT_WEIGHT = 100d;
+		}
+		RequestConstants.V_DEFAULT_RECOMD_TAG_ITEM_WEIGHT = getDoubleValueDefault(RequestConstants.P_DEFAULT_RECOMD_TAG_ITEM_WEIGHT,100d);
+		if(RequestConstants.V_DEFAULT_RECOMD_TAG_ITEM_WEIGHT < 0){
+			RequestConstants.V_DEFAULT_RECOMD_TAG_ITEM_WEIGHT = 100d;
+		}
+		RequestConstants.V_DEFAULT_RECOMD_TAG_RCMDITEM_WEIGHT = getDoubleValueDefault(RequestConstants.P_DEFAULT_RECOMD_TAG_RCMDITEM_WEIGHT,100d);
+		if(RequestConstants.V_DEFAULT_RECOMD_TAG_RCMDITEM_WEIGHT < 0){
+			RequestConstants.V_DEFAULT_RECOMD_TAG_RCMDITEM_WEIGHT = 100d;
+		}
 	}
 
 	public static Map<String, String> getAllConfigs()

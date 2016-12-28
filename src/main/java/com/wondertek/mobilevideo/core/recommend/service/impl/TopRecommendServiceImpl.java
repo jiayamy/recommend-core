@@ -34,8 +34,8 @@ public class TopRecommendServiceImpl extends GenericManagerImpl<TopRecommend, Lo
 	}
 	
 	@Override
-	public Boolean checkExist(Long tId,String prdType,String topName,Long id) {
-		return topRecommendDao.checkExist(tId, prdType, topName,id);
+	public Boolean checkExist(Long topId,String prdType,String topName,Long id) {
+		return topRecommendDao.checkExist(topId, prdType, topName,id);
 	}
 	
 	@Override

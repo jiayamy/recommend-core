@@ -3,7 +3,7 @@ package com.wondertek.mobilevideo.core.recommend.cache.redis.service.impl;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +21,7 @@ import com.wondertek.mobilevideo.core.recommend.cache.redis.service.RecommendInf
 import com.wondertek.mobilevideo.core.recommend.model.RecommendInfo;
 import com.wondertek.mobilevideo.core.recommend.service.RecommendInfoService;
 import com.wondertek.mobilevideo.core.recommend.util.RecommendConstants;
+import com.wondertek.mobilevideo.core.recommend.util.RecommendInfoVoSort;
 import com.wondertek.mobilevideo.core.recommend.vo.RecommendInfoVo;
 import com.wondertek.mobilevideo.core.util.StringUtil;
 
@@ -189,7 +190,7 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
 	@Override
 	public List<RecommendInfoVo> queryByLabels(String labelNames, String prdType, String catId,Map<String,Double> labelScoreAndWeight) {
 		if(isCluster){
-			return recommendInfoCacheClusterManager.queryByLabels(labelNames, prdType, catId);
+			return recommendInfoCacheClusterManager.queryByLabels(labelNames, prdType, catId, labelScoreAndWeight);
 		}
 		Jedis jedis = null;
         try {
@@ -201,33 +202,33 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
         if (jedis == null) {//redis为空，从数据库中获取
         	List<RecommendInfo> list = recommendInfoService.queryByLabels(labelNames, prdType, catId);
         	returnList = new ArrayList<RecommendInfoVo>();
-        	//2012-12-19
-        	Double score = null;
-        	
+        	Double score = 0d;
+        	int count = list.size();
         	for(RecommendInfo recommendInfo : list){
         		RecommendInfoVo recommendInfoVo = new RecommendInfoVo();
         		recommendInfoVo.setPrdContId(recommendInfo.getPrdContId());
         		recommendInfoVo.setContName(recommendInfo.getContName());
-        		//2012-12-19
+        		score = count + 0d;
         		if(labelScoreAndWeight != null){
-            			for(String recommendName:labelNames.split(RecommendConstants.SPLIT_COMMA)){
-            				recommendName = recommendName.trim();
-            				if(!StringUtil.isNullStr(recommendName)){
-                    			score = labelScoreAndWeight.get(catId)+labelScoreAndWeight.get(recommendName);
-            				}
-            			}
-            			
-            		recommendInfoVo.setScore(score);
+        			score = labelScoreAndWeight.get(catId);
+        			for(String recommendName:StringUtil.null2Str(recommendInfo.getLabelInfo()).split(RecommendConstants.SPLIT_COMMA)){
+        				if(!StringUtil.isNullStr(recommendName) && labelScoreAndWeight.get(recommendName) != null){
+                			score = score + labelScoreAndWeight.get(recommendName);
+        				}
+        			}
         		}
+        		recommendInfoVo.setScore(score);
         		
         		returnList.add(recommendInfoVo);
+        		count --;
         	}
         	
         	if(log.isDebugEnabled())
         		log.debug("queried result from database successfully!labelName:" + labelNames + ",size:" + list.size());
         	list.clear();
         	list = null;
-        	return returnList;
+        	
+        	return filterAndSort(returnList);
         }
         //一个个标签的查找
         //获取标签，如果存在就查询
@@ -245,22 +246,6 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
 	        
 	        if(records == null || records.size() == 0){//为空
 	        	//查询数据库，若数据库还为空，则存储个空对象进去
-//	        	List<RecommendInfo> list = recommendInfoService.queryByLabels(labelName, prdType);
-//	        	List<RecommendInfoVo> tmp = new ArrayList<RecommendInfoVo>();
-//	        	for(RecommendInfo recommendInfo : list){
-//	        		RecommendInfoVo recommendInfoVo = new RecommendInfoVo();
-//	        		recommendInfoVo.setPrdContId(recommendInfo.getPrdContId());
-//	        		recommendInfoVo.setContName(recommendInfo.getContName());
-//	        		
-//	        		tmp.add(recommendInfoVo);
-//	        	}
-//	        	log.info("add the result queried from database into redis successfully!labelName:" + labelName + ",size:" + list.size());
-//	        	list.clear();
-//	        	list = null;
-//	        	
-//	        	jedis.zadd(keyBytes, 1, changeObjectsToByteArray(tmp));
-//	        	
-//	        	returnList.addAll(tmp);
 	        }else{
 	        	List<RecommendInfoVo> tmp = null;
 		        for (byte[] bytes : records){
@@ -268,15 +253,20 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
 		        	break;
 		        }
 		        if(tmp != null){
-		        	//2016-12-19 为返回集合添加二级推荐标签总分数
+		        	//为返回集合添加二级推荐标签总分数
+		        	Double score = 0d;
+		        	int count = tmp.size();
 		        	if(labelScoreAndWeight != null){
-		        		Double sco = null;
-		        		for(RecommendInfoVo ri:tmp){
-			        		sco = labelScoreAndWeight.get(catId)+labelScoreAndWeight.get(labelName);
-			        		ri.setScore(sco);
-			        	}
+		        		score = labelScoreAndWeight.get(catId)+labelScoreAndWeight.get(labelName);
 		        	}
-		        	
+	        		for(RecommendInfoVo ri:tmp){
+	        			if(labelScoreAndWeight == null){
+	        				score = count + 0d;
+	        			}
+	        			ri.setScore(score);
+	        			count --;
+		        	}
+	        		
 		        	returnList.addAll(tmp);
 		        }
 		        if(log.isDebugEnabled())
@@ -286,15 +276,30 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
         }
         redisManager.releaseJedis(jedis);//释放连接
         
-        //排序去重
+		return filterAndSort(returnList);
+	}
+	/**
+	 * 过滤去重排序
+	 * @param returnList
+	 * @return
+	 */
+	private List<RecommendInfoVo> filterAndSort(List<RecommendInfoVo> returnList) {
+		//去重
         List<RecommendInfoVo> rst = new ArrayList<RecommendInfoVo>();
-        Map<Long,Long> contIdMap = new HashMap<Long,Long>();
+        Map<Long,RecommendInfoVo> contIdMap = new HashMap<Long,RecommendInfoVo>();
         for(RecommendInfoVo recommendInfoVo : returnList){
         	if(!contIdMap.containsKey(recommendInfoVo.getPrdContId())){
-        		rst.add(recommendInfoVo);
-        		contIdMap.put(recommendInfoVo.getPrdContId(), recommendInfoVo.getPrdContId());
+        		contIdMap.put(recommendInfoVo.getPrdContId(), recommendInfoVo);
+        	}else{
+        		contIdMap.get(recommendInfoVo.getPrdContId()).setScore(recommendInfoVo.getScore() + contIdMap.get(recommendInfoVo.getPrdContId()).getScore());
         	}
         }
+        rst.addAll(contIdMap.values());
+        contIdMap.clear();
+        contIdMap = null;
+        //排序
+        Collections.sort(rst,new RecommendInfoVoSort());
+        
 		return rst;
 	}
 	private String getRecomdRedisKey(String prdType, String labelName, String catId) {

@@ -13,8 +13,9 @@ public class RecommendInfoVo implements Serializable{
 	public Double getScore() {
 		return score;
 	}
-	public void setScore(Double score) {
+	public RecommendInfoVo setScore(Double score) {
 		this.score = score;
+		return this;
 	}
 	public Long getPrdContId() {
 		return prdContId;

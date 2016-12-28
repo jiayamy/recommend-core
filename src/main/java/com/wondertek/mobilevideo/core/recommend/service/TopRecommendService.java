@@ -29,7 +29,7 @@ public interface TopRecommendService  extends GenericManager<TopRecommend, Long>
 	/**
 	 *检查是否存在 
 	 */
-	public Boolean checkExist(Long tId,String prdType,String topName,Long id);
+	public Boolean checkExist(Long topId,String prdType,String topName,Long id);
 
 	/**
 	 * 删除

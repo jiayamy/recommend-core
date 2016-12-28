@@ -112,6 +112,22 @@ public class RequestConstants {
 	 */
 	public static final String P_DEFAULT_RECOMD_MULTIPICCONT_RATIO = "recomd.default.multiPicCont.ratio";
 	public static Double V_DEFAULT_RECOMD_MULTIPICCONT_RATIO = 0d;
+	/**
+	 * 推荐时，一级标签默认权重
+	 */
+	public static final String P_DEFAULT_RECOMD_TAG_CAT_WEIGHT = "recomd.default.tag.cat.weight";
+	public static Double V_DEFAULT_RECOMD_TAG_CAT_WEIGHT = 100d;
+	/**
+	 * 推荐时，普通标签默认权重
+	 */
+	public static final String P_DEFAULT_RECOMD_TAG_ITEM_WEIGHT = "recomd.default.tag.item.weight";
+	public static Double V_DEFAULT_RECOMD_TAG_ITEM_WEIGHT = 100d;
+	/**
+	 * 推荐时，推荐标签默认权重
+	 */
+	public static final String P_DEFAULT_RECOMD_TAG_RCMDITEM_WEIGHT = "recomd.default.tag.rcmditem.weight";
+	public static Double V_DEFAULT_RECOMD_TAG_RCMDITEM_WEIGHT = 100d;
+	
 	
 	public static final String MAP_KEY_PREFIX_CAT = "1_";
 	public static final String MAP_KEY_PREFIX_CAT_LABEL = "2_";
@@ -162,16 +178,4 @@ public class RequestConstants {
 	 * 系统异常
 	 */
 	public static final String R_CODE_999999 = "999999";
-	/**
-	 * 2016-12-21
-	 * 查推荐标签分数时，一级标签无权重时默认此值
-	 */
-	public static final String P_DEFAUL_REQUEST_TAG_RECOMD_CAT_WEIGHT = "recomd.default.tag.cat.weight";
-	public static Double V_DEFAULT_RECOMD_CAT_WEIGHT = 50d;
-	/**
-	 * 2016-12-26
-	 * 查推荐标签分数时，二级标签无权重时默认此值
-	 */
-	public static final String P_DEFAUL_REQUEST_TAG_RECOMD_ITEM_WEIGHT = "recomd.default.tag.item.weight";
-	public static Double V_DEFAULT_RECOMD_ITEM_WEIGHT = 10d;
 }

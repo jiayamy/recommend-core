@@ -180,9 +180,6 @@ insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (17, 
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (18, 'request.default.tag.cat.max', '10', '请求用户标签时一级分类的最大个数');
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (19, 'request.default.tag.catitem.max', '10', '请求用户标签时一级分类下的普通标签最大个数');
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (20, 'request.default.tag.recomd.max', '10', '请求用户标签时一级分类下的推荐标签最大个数');
---20161228
-insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (21, 'recomd.default.tag.cat.weight', '50', '人工推荐时，一级标签默认权重');
-insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (21, 'recomd.default.tag.item.weight', '10', '人工推荐时，二级标签默认权重');
 --20161108
 CREATE TABLE R_VOMS_RECOMMEND
 (
@@ -262,7 +259,7 @@ insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(132,'500960','0'
 CREATE TABLE R_TOP_RECOMMEND
 (
     ID NUMBER NOT NULL,
-    T_ID NUMBER NOT NULL,
+    TOP_ID NUMBER NOT NULL,
     PRD_TYPE VARCHAR2(20),
     TOP_NAME VARCHAR2(200),
     STATUS_ NUMBER,
@@ -271,8 +268,10 @@ CREATE TABLE R_TOP_RECOMMEND
     CREATOR_  VARCHAR2(100),
     UPDATOR_  VARCHAR2(100),
     PRIMARY KEY (ID),
-    CONSTRAINT TOP_RECOMMEND_PRDCONTID UNIQUE (ID,T_ID)
+    CONSTRAINT TOP_RECOMMEND_PRDCONTID UNIQUE (TOP_ID,PRD_TYPE)
 );
 CREATE SEQUENCE  SEQ_R_TOP_RECOMMEND MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1000 CACHE 20 NOORDER  NOCYCLE;
---20161214
-alter table R_TOP_RECOMMEND RENAME COLUMN T_ID TO TOP_ID;
+--20161228
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (25, 'recomd.default.tag.cat.weight', '50', '推荐时，一级标签默认权重');
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (26, 'recomd.default.tag.item.weight', '50', '推荐时，普通标签默认权重');
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (27, 'recomd.default.tag.rcmditem.weight', '50', '推荐时，推荐标签默认权重');

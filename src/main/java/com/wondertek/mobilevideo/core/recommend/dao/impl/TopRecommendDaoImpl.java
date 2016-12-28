@@ -40,10 +40,10 @@ public class TopRecommendDaoImpl extends GenericDaoHibernate<TopRecommend,Long> 
         	params.add(id);
         }
         
-        Object tId = paramsMap.get("tId");
-        if (tId != null) {
-        	hql.append(" and tId = ?");
-        	params.add(tId);
+        Object topId = paramsMap.get("topId");
+        if (topId != null) {
+        	hql.append(" and topId = ?");
+        	params.add(topId);
         }
         
         Object prdType = paramsMap.get("prdType");
@@ -92,10 +92,10 @@ public class TopRecommendDaoImpl extends GenericDaoHibernate<TopRecommend,Long> 
         	params.add(id);
         }
         
-        Object tId = paramsMap.get("tId");
-        if (tId != null) {
-        	hql.append(" and tId = ?");
-        	params.add(tId);
+        Object topId = paramsMap.get("topId");
+        if (topId != null) {
+        	hql.append(" and topId = ?");
+        	params.add(topId);
         }
         
         Object prdType = paramsMap.get("prdType");
@@ -119,10 +119,10 @@ public class TopRecommendDaoImpl extends GenericDaoHibernate<TopRecommend,Long> 
 	}
 
 	@Override
-	public Boolean checkExist(Long tId,String prdType,String topName,Long id){
-		StringBuffer hql = new StringBuffer("select count(id) from TopRecommend where tId = ? and prdType = ?  and topName = ?");
+	public Boolean checkExist(Long topId,String prdType,String topName,Long id){
+		StringBuffer hql = new StringBuffer("select count(id) from TopRecommend where topId = ? and prdType = ?  and topName = ?");
         List<Object> params = new ArrayList<Object>();
-        params.add(tId);
+        params.add(topId);
         params.add(prdType);
         params.add(topName);
         if(id != null){

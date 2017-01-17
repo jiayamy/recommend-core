@@ -17,7 +17,9 @@ public class UserTag implements Serializable{
 	private Integer limit;	//每页条数
 	private String order;	//排序（暂时不用传参数）
 	private String ctVer;	//客户端版本号
+	private String vomsLabel;	//voms的推荐标签
 	private List<CatInfo> cats;
+	
 	public String getId() {
 		return id;
 	}
@@ -53,6 +55,12 @@ public class UserTag implements Serializable{
 	}
 	public void setCtVer(String ctVer) {
 		this.ctVer = ctVer;
+	}
+	public String getVomsLabel() {
+		return vomsLabel;
+	}
+	public void setVomsLabel(String vomsLabel) {
+		this.vomsLabel = vomsLabel;
 	}
 	public List<CatInfo> getCats() {
 		return cats;

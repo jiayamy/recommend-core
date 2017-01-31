@@ -56,7 +56,8 @@ public class BinaryJedisClusterFactory
 	}
 
 	public void init() throws Exception {
-		this.parseHostAndPort();
+		Set<HostAndPort> nodes = this.parseHostAndPort();
+		this.jedisCluster = new JedisCluster(nodes, timeout, maxRedirections,genericObjectPoolConfig);
 	}
 
 	public Integer getTimeout() {

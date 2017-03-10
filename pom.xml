@@ -306,6 +306,7 @@
             MSSQL_INSERT, MSSQL_REFRESH, MSSQL_CLEAN_INSERT -->
         <dbunit.operation.type>REFRESH</dbunit.operation.type>
         <spring.version>4.3.3.RELEASE</spring.version>
+        <struts.version>2.3.32</struts.version>
 	</properties>
 
 </project>

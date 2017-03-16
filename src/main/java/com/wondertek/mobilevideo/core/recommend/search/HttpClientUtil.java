@@ -61,9 +61,9 @@ public class HttpClientUtil {
 	/**
 	 * the timeout until a connection is etablished
 	 */
-	private static int connectionTimeOut = 3000;//TODO:数值待定
+	private static int connectionTimeOut = 500;//TODO:数值待定
 	
-	
+	private static int soTimeout = 500;
 	
 	public static HttpClient getClient(URI uri) {
 		
@@ -85,7 +85,7 @@ public class HttpClientUtil {
 			params.setDefaultMaxConnectionsPerHost(maxHostConnections);
 			params.setMaxTotalConnections(maxTotalConnections);
 			params.setConnectionTimeout(connectionTimeOut);
-			params.setSoTimeout(connectionTimeOut);
+			params.setSoTimeout(soTimeout);
 			connectionManager.setParams(params);
 			client = new HttpClient(connectionManager);
 			

@@ -28,15 +28,12 @@ import redis.clients.jedis.BinaryJedisCluster;
 
 
 public class UserTagCacheClusterManagerImpl implements UserTagCacheClusterManager {
-	public static Object obj = new Object();
-    protected static Boolean cacheAvailable = true;	//标记是否正在从数据库中更新stars全量数据到redis中
     
     private Log log = LogFactory.getLog(this.getClass());
     
     private BinaryJedisClusterFactory jedisClusterFactory;
     
     private UserTagService userTagService;
-    
     private static final String UT_PREFIX_KEY = "RI:CLUSTER:USERTAG:";
     private static final String UT_CUT_PREFIX_KEY = "RI:CLUSTER:USERTAG:CUT:";
     

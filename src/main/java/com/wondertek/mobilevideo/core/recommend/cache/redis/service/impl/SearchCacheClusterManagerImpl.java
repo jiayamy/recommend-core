@@ -23,9 +23,6 @@ public class SearchCacheClusterManagerImpl implements SearchCacheClusterManager{
 
     public static Object obj = new Object();
     
-   
-    protected static Boolean jedisClusterManager = false;//判断redis是否符合集群
-    
     private Log log = LogFactory.getLog(this.getClass());   
     
     private BinaryJedisClusterFactory jedisClusterFactory;  
@@ -172,8 +169,7 @@ public class SearchCacheClusterManagerImpl implements SearchCacheClusterManager{
 		}catch(Exception e){
 			log.error("redis getObject failed.error info:" + e);
 		}
-        if(jedisCluster == null){
-        //if (jedis == null) {//redis为空，从数据库中获取
+        if(jedisCluster == null){//redis为空，直接从搜索获取
         	//通知搜索服务器
         	return SearchUtil.httpRequest(httpUrl, searchRequest);
         }
@@ -181,7 +177,7 @@ public class SearchCacheClusterManagerImpl implements SearchCacheClusterManager{
         String id = SearchUtil.getSearchKey(searchRequest);
         String key = UT_PREFIX_KEY + id;
         byte[] keyBytes = changeKeyToByteArray(key);
-          // jedis.del(keyBytes);
+//        jedisCluster.del(keyBytes);
         List<SearchResult> rst = null;
         rst = changeByteArrayToObjects(jedisCluster.get(keyBytes));      
         
@@ -193,10 +189,8 @@ public class SearchCacheClusterManagerImpl implements SearchCacheClusterManager{
         		//放置一个空对象进去，后期循环的时候去掉
         		rst.add(new SearchResult());
         	}
-        	
         	jedisCluster.set(keyBytes, changeObjectsToByteArray(rst));        	
         	jedisCluster.expire(keyBytes, expireTime);
-        
         }else if(log.isDebugEnabled()){
         	log.debug("search from redis,id:"+id);
         }

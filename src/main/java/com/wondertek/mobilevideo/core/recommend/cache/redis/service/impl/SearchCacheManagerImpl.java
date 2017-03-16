@@ -29,16 +29,18 @@ public class SearchCacheManagerImpl implements SearchCacheManager
 {
 
     public static Object obj = new Object();
-    protected static Boolean cacheAvailable = true;	//标记是否正在从数据库中更新stars全量数据到redis中
+    
     private Log log = LogFactory.getLog(this.getClass());
     
     private RedisManager redisManager;
     
-    private static final String UT_PREFIX_KEY = "RI:SchRst:";
     private Boolean isCluster = Boolean.FALSE; 
     private SearchCacheClusterManager searchCacheClusterManager;
     
+    private static final String UT_PREFIX_KEY = "RI:SchRst:";
+    
     private int expireTime = 60 * 3;//3分钟
+    
     private static MessagePack msgpack = null;
     
     public SearchCacheManagerImpl(){}
@@ -180,7 +182,7 @@ public class SearchCacheManagerImpl implements SearchCacheManager
         } catch (Exception e) {
             log.error("redis getObject failed.error info:" + e);
         }
-        if (jedis == null) {//redis为空，从数据库中获取
+        if (jedis == null) {//redis为空，直接从搜索获取
         	//通知搜索服务器
         	return SearchUtil.httpRequest(httpUrl, searchRequest);
         }
@@ -201,11 +203,11 @@ public class SearchCacheManagerImpl implements SearchCacheManager
         		rst.add(new SearchResult());
         	}
         	jedis.set(keyBytes, changeObjectsToByteArray(rst));
-        	
         	jedis.expire(keyBytes, expireTime);
         }else if(log.isDebugEnabled()){
         	log.debug("search from redis,id:"+id);
         }
+        redisManager.releaseJedis(jedis);// 释放连接
 		return rst;
 	}
 	

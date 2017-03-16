@@ -1,13 +1,13 @@
 package com.wondertek.mobilevideo.core.recommend.cache.redis.commons;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import redis.clients.jedis.DebugParams;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisMonitor;
 import redis.clients.jedis.JedisPubSub;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class RedisManager
 {

@@ -180,7 +180,6 @@ insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (17, 
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (18, 'request.default.tag.cat.max', '10', '请求用户标签时一级分类的最大个数');
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (19, 'request.default.tag.catitem.max', '10', '请求用户标签时一级分类下的普通标签最大个数');
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (20, 'request.default.tag.recomd.max', '10', '请求用户标签时一级分类下的推荐标签最大个数');
-
 --20161108
 CREATE TABLE R_VOMS_RECOMMEND
 (
@@ -204,8 +203,75 @@ CREATE SEQUENCE  SEQ_R_VOMS_RECOMMEND MINVALUE 1 MAXVALUE 9999999999999999999999
 	alter table R_VOMS_RECOMMEND add OBJ_TYPE VARCHAR2(3);
 	ALTER TABLE R_VOMS_RECOMMEND DROP CONSTRAINT VOMS_RECOMMEND_PRDCONTID;
 	ALTER TABLE R_VOMS_RECOMMEND add CONSTRAINT VOMS_RECOMMEND_PRDCONTID UNIQUE (OBJ_ID, PRD_TYPE, TYPE_,OBJ_TYPE);
+
 --20161130
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (21, 'recomd.default.specialTopic.ratio', '0', '综合推荐时，专题推荐比例，只可为正小数，否则为0，如0.02');
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (22, 'recomd.default.combinedCont.ratio', '0', '综合推荐时，组合内容推荐比例，只可为正小数，否则为0，如0.02');
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (23, 'recomd.default.bigPicCont.ratio', '0.125', '综合推荐时，大图内容推荐比例，只可为正小数，否则为0，如0.02');
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (24, 'recomd.default.multiPicCont.ratio', '0', '综合推荐时，多图内容推荐比例，只可为正小数，否则为0，如0.02');
+--20161207
+CREATE TABLE R_ENUMS_CONFIG
+    (
+        ID NUMBER(22) NOT NULL,
+        KEY_ VARCHAR2(50) NOT NULL,
+        TYPE_ CHAR(1) NOT NULL,
+        PARENT VARCHAR2(50),
+        WEIGHT VARCHAR2(50),
+        PRIMARY KEY (ID)
+    );
+CREATE SEQUENCE  SEQ_R_ENUMS_CONFIG MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1000 CACHE 20 NOORDER  NOCYCLE;
+
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(101,'1001','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(102,'1002','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(103,'1003','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(104,'1004','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(105,'1005','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(106,'1006','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(107,'1007','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(108,'1008','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(109,'1009','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(100,'1000','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(110,'1010','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(111,'1011','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(112,'500020','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(113,'500060','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(114,'500067','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(115,'500072','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(116,'500078','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(117,'500100','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(118,'500106','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(119,'500111','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(120,'500213','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(121,'500323','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(122,'500405','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(123,'500468','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(124,'500424','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(125,'500377','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(126,'501200','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(127,'501207','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(128,'501217','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(129,'501227','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(130,'500320','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(131,'500422','0',null,'100.00');
+insert into R_ENUMS_CONFIG (ID,KEY_,TYPE_,PARENT,WEIGHT) values(132,'500960','0',null,'100.00');
+
+--20161205
+CREATE TABLE R_TOP_RECOMMEND
+(
+    ID NUMBER NOT NULL,
+    TOP_ID NUMBER NOT NULL,
+    PRD_TYPE VARCHAR2(20),
+    TOP_NAME VARCHAR2(200),
+    STATUS_ NUMBER,
+    CREATE_TIME DATE,
+    UPDATE_TIME DATE,
+    CREATOR_  VARCHAR2(100),
+    UPDATOR_  VARCHAR2(100),
+    PRIMARY KEY (ID),
+    CONSTRAINT TOP_RECOMMEND_PRDCONTID UNIQUE (TOP_ID,PRD_TYPE)
+);
+CREATE SEQUENCE  SEQ_R_TOP_RECOMMEND MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1000 CACHE 20 NOORDER  NOCYCLE;
+--20161228
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (25, 'recomd.default.tag.cat.weight', '50', '推荐时，一级标签默认权重');
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (26, 'recomd.default.tag.item.weight', '50', '推荐时，普通标签默认权重');
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (27, 'recomd.default.tag.rcmditem.weight', '50', '推荐时，推荐标签默认权重');

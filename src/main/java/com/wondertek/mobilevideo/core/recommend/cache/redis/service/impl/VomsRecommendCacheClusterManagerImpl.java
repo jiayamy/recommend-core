@@ -83,12 +83,12 @@ public class VomsRecommendCacheClusterManagerImpl implements VomsRecommendCacheC
 	/**
 	 * 将对象集合序列化为ByteArray
 	 */
-	public byte[] changeObjectsToByteArray(List<VomsRecommendVo> VomsRecommendVos) {
+	public byte[] changeObjectsToByteArray(List<VomsRecommendVo> vomsRecommendVos) {
 		try {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			Packer packer = msgpack.createPacker(out);
-			for (VomsRecommendVo VomsRecommendVo : VomsRecommendVos) {
-				packer.write(VomsRecommendVo);
+			for (VomsRecommendVo vomsRecommendVo : vomsRecommendVos) {
+				packer.write(vomsRecommendVo);
 			}
 			return out.toByteArray();
 		} catch (Exception e) {
@@ -113,8 +113,8 @@ public class VomsRecommendCacheClusterManagerImpl implements VomsRecommendCacheC
 
 	private VomsRecommendVo changeByteArrayToVal(byte[] bytes) {
 		try {
-			VomsRecommendVo VomsRecommendVo = msgpack.read(bytes, VomsRecommendVo.class);
-			return VomsRecommendVo;
+			VomsRecommendVo vomsRecommendVo = msgpack.read(bytes, VomsRecommendVo.class);
+			return vomsRecommendVo;
 		} catch (Exception e) {
 			log.error("change bytes to star failed.error info:" + e);
 		}
@@ -130,13 +130,13 @@ public class VomsRecommendCacheClusterManagerImpl implements VomsRecommendCacheC
 		try {
 			ByteArrayInputStream in = new ByteArrayInputStream(bytes);
 			Unpacker unpacker = msgpack.createUnpacker(in);
-			VomsRecommendVo VomsRecommendVo = null;
+			VomsRecommendVo vomsRecommendVo = null;
 			do {
-				VomsRecommendVo = unpacker.read(VomsRecommendVo.class);
-				if (VomsRecommendVo != null) {
-					list.add(VomsRecommendVo);
+				vomsRecommendVo = unpacker.read(VomsRecommendVo.class);
+				if (vomsRecommendVo != null) {
+					list.add(vomsRecommendVo);
 				}
-			} while (VomsRecommendVo != null);
+			} while (vomsRecommendVo != null);
 			return list;
 		} catch (Exception e) {
 			log.error("change byteArray to objects error:" + e);
@@ -268,35 +268,35 @@ public class VomsRecommendCacheClusterManagerImpl implements VomsRecommendCacheC
 			List<VomsRecommend> list = vomsRecommendService.getAllRecommend();
 			log.debug("updateVomsRecommendCache list size:" + list.size());
 			
-			Map<String, List<VomsRecommendVo>> VomsRecommendMap = new HashMap<String, List<VomsRecommendVo>>();
+			Map<String, List<VomsRecommendVo>> vomsRecommendVoMap = new HashMap<String, List<VomsRecommendVo>>();
 			// 得到具有相同标签名字的VomsRecommendVo 的map集合
 			if (list != null && !list.isEmpty()) {
 				for (VomsRecommend v : list) {
-					VomsRecommendVo VomsRecommendVo = new VomsRecommendVo();
-					VomsRecommendVo.setName(v.getName());
-					VomsRecommendVo.setObjId(v.getObjId());
-					VomsRecommendVo.setObjType(v.getObjType());
-					VomsRecommendVo.setType(v.getType());
+					VomsRecommendVo vomsRecommendVo = new VomsRecommendVo();
+					vomsRecommendVo.setName(v.getName());
+					vomsRecommendVo.setObjId(v.getObjId());
+					vomsRecommendVo.setObjType(v.getObjType());
+					vomsRecommendVo.setType(v.getType());
 					// 获取标签
 					for (String labelName : v.getLabelInfo().split(RecommendConstants.SPLIT_COMMA)) {
 						if (!StringUtil.isNullStr(labelName)) {
 							labelName = getRecomdRedisKey(v.getPrdType(), labelName);
-							if (!VomsRecommendMap.containsKey(labelName)) {
-								VomsRecommendMap.put(labelName, new ArrayList<VomsRecommendVo>());
+							if (!vomsRecommendVoMap.containsKey(labelName)) {
+								vomsRecommendVoMap.put(labelName, new ArrayList<VomsRecommendVo>());
 							}
-							VomsRecommendMap.get(labelName).add(VomsRecommendVo);
+							vomsRecommendVoMap.get(labelName).add(vomsRecommendVo);
 						}
 					}
 				}
 			}
 			List<String> labels = new ArrayList<String>();
 			String key = null;
-			for (String labelName : VomsRecommendMap.keySet()) {
+			for (String labelName : vomsRecommendVoMap.keySet()) {
 				labels.add(labelName);
 				key = RC_PERFIX_KEY + labelName;
 				byte[] keyBytes = changeKeyToByteArray(key);
 				jedisCluster.del(keyBytes);
-				jedisCluster.zadd(keyBytes, 1, changeObjectsToByteArray(VomsRecommendMap.get(labelName)));
+				jedisCluster.zadd(keyBytes, 1, changeObjectsToByteArray(vomsRecommendVoMap.get(labelName)));
 				jedisCluster.expire(keyBytes, expireTime);
 			}
 			key = RC_KEY_KEY;
@@ -305,8 +305,8 @@ public class VomsRecommendCacheClusterManagerImpl implements VomsRecommendCacheC
 			jedisCluster.zadd(keyBytes, 1, changeStringsToByteArray(labels));
 			jedisCluster.expire(keyBytes, expireTime);
 			
-			VomsRecommendMap.clear();
-			VomsRecommendMap = null;
+			vomsRecommendVoMap.clear();
+			vomsRecommendVoMap = null;
 			
 			cacheAvailable = true;
 			log.debug("updateVomsRecommendCache end,labels size:" + labels.size());

@@ -7,7 +7,16 @@ public class RecommendInfoVo implements Serializable{
 	
 	private Long prdContId;		//节目ID
 	private String contName;	//节目名称
+	//2016-12-16
+	private Double score;		//总评分
 	
+	public Double getScore() {
+		return score;
+	}
+	public RecommendInfoVo setScore(Double score) {
+		this.score = score;
+		return this;
+	}
 	public Long getPrdContId() {
 		return prdContId;
 	}
@@ -52,6 +61,6 @@ public class RecommendInfoVo implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "RecommendInfoVo [prdContId=" + prdContId + ", contName=" + contName + "]";
+		return "RecommendInfoVo [prdContId=" + prdContId + ", contName=" + contName +",score="+score+ "]";
 	}
 }

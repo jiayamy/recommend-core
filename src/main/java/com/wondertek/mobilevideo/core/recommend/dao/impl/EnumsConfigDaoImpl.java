@@ -3,8 +3,6 @@ package com.wondertek.mobilevideo.core.recommend.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Query;
-
 import com.wondertek.mobilevideo.core.base.GenericDaoHibernate;
 import com.wondertek.mobilevideo.core.recommend.dao.EnumsConfigDao;
 import com.wondertek.mobilevideo.core.recommend.model.EnumsConfig;
@@ -19,7 +17,7 @@ public class EnumsConfigDaoImpl extends GenericDaoHibernate<EnumsConfig,Long> im
 	public List<EnumsConfig> findByType(String type) {
 		StringBuffer sb = new StringBuffer();
 		List<Object> params = new ArrayList<Object>();
-		sb.append("from EnumsConfig where type = ? order by id");
+		sb.append("from EnumsConfig where type = ? order by id asc");
 		params.add(type);
 		
 		return this.query(sb.toString(), params.toArray());
@@ -29,7 +27,7 @@ public class EnumsConfigDaoImpl extends GenericDaoHibernate<EnumsConfig,Long> im
 	public List<EnumsConfig> findByParent(String parent) {
 		StringBuffer sb = new StringBuffer();
 		List<Object> params = new ArrayList<Object>();
-		sb.append("from EnumsConfig where parent = ? order by id");
+		sb.append("from EnumsConfig where parent = ? order by id asc");
 		params.add(parent);
 		
 		return this.query(sb.toString(), params.toArray());
@@ -39,13 +37,11 @@ public class EnumsConfigDaoImpl extends GenericDaoHibernate<EnumsConfig,Long> im
 	public List<EnumsConfig> findAll() {
 		StringBuffer sb = new StringBuffer();
 		List<Object> params = new ArrayList<Object>();
-		sb.append("from EnumsConfig order by id");
-		
+		sb.append("from EnumsConfig order by id asc");
 		
 		return this.query(sb.toString());
 	}	
 	
-
 	@Override
 	public Boolean checkExist(String key, String parent,String type) {
 		StringBuffer hql = new StringBuffer("select count(id) from EnumsConfig where key = ? and parent = ? and type = ?");
@@ -55,7 +51,4 @@ public class EnumsConfigDaoImpl extends GenericDaoHibernate<EnumsConfig,Long> im
         params.add(type);
 		return this.count(hql.toString(),params.toArray())>0;
 	}
-
-
-	
 }

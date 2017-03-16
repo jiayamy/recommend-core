@@ -19,9 +19,6 @@ import com.wondertek.mobilevideo.core.base.BaseObject;
 @Table(name = "R_ENUMS_CONFIG")
 public class EnumsConfig extends BaseObject{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -5914045897260863589L;
 
 	private Long id;

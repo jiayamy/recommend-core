@@ -1,10 +1,12 @@
 package com.wondertek.mobilevideo.core.recommend.dao.impl;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
 import com.wondertek.mobilevideo.core.base.GenericDaoHibernate;
@@ -45,7 +47,7 @@ public class VomsRecommendDaoImpl extends GenericDaoHibernate<VomsRecommend,Long
 	
 	@Override
 	public List<VomsRecommendVo> getVomsRecommendVos(List<String> types, String prdType, String labelInfo) {
-		StringBuffer hql = new StringBuffer("select new VomsRecommendVo(objId,name,objType,type) from VomsRecommend where isRecommend = ? and prdType=? ");
+		StringBuffer hql = new StringBuffer("select objId,name,objType,type from VomsRecommend where isRecommend = ? and prdType=? ");
 		List<Object> param = new ArrayList<Object>();
 		param.add(Boolean.TRUE);
 		param.add(prdType);
@@ -80,7 +82,18 @@ public class VomsRecommendDaoImpl extends GenericDaoHibernate<VomsRecommend,Long
 			}
 			hql.append(")");
 		}
-		return this.query(hql.toString(),param.toArray());
+		List<Object[]> list = this.query(hql.toString(),param.toArray());
+		List<VomsRecommendVo> returnList = new ArrayList<VomsRecommendVo>();
+		if(list != null && !list.isEmpty()){
+			for(Object[] o : list){
+				returnList.add(new VomsRecommendVo(
+						StringUtil.nullToLong(o[0]),
+						StringUtil.null2Str(o[1]),
+						StringUtil.null2Str(o[2]),
+						StringUtil.null2Str(o[3])));
+			}
+		}
+		return returnList;
 	}
 	public List<VomsRecommend> getByParam(Map<String, Object> paramsMap, int start, int limit) {
 		StringBuffer hql = new StringBuffer("from VomsRecommend where 1 = 1");
@@ -213,6 +226,24 @@ public class VomsRecommendDaoImpl extends GenericDaoHibernate<VomsRecommend,Long
         	params.add(isRecommend);
         } 
 		return this.count(hql.toString(), params.toArray());
+	}
+
+	@Override
+	public void updateIsRecommend(List<Long> ids, Boolean isRecommend, String updator) {
+		if(ids == null || ids.isEmpty()){
+			return;
+		}
+		Session session = this.getSession();
+		SQLQuery sqlQuery = session.createSQLQuery("update R_VOMS_RECOMMEND set IS_RECOMMEND = ?, UPDATOR_ = ?, UPDATE_TIME = ? where IS_RECOMMEND = ? and id in(:ids)");
+		sqlQuery.setString(0, isRecommend ? "1" : "0");
+		sqlQuery.setString(1, updator);
+		sqlQuery.setTimestamp(2, new Timestamp(new Date().getTime()));
+		sqlQuery.setString(3, isRecommend ? "0" : "1");
+		sqlQuery.setParameterList("ids", ids);
+		
+		sqlQuery.executeUpdate();
+		
+		releaseSession(session);
 	}
 }
 

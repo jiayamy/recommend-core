@@ -46,5 +46,9 @@
     <bean id="enumsConfigDao" class="com.wondertek.mobilevideo.core.recommend.dao.impl.EnumsConfigDaoImpl">
     	<property name="sessionFactory" ref="sessionFactory_recommend"></property>
     </bean>
+    <!-- 20161205 -->
+    <bean id="topRecommendDao" class="com.wondertek.mobilevideo.core.recommend.dao.impl.TopRecommendDaoImpl">
+    	<property name="sessionFactory" ref="sessionFactory_recommend"></property>
+    </bean>
     
 </beans>

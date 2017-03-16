@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 import redis.clients.jedis.BinaryJedisCluster;
@@ -12,11 +14,12 @@ import redis.clients.jedis.JedisCluster;
 
 public class BinaryJedisClusterFactory
 {
+	private Log log = LogFactory.getLog(this.getClass());
 	private Integer timeout;
 	private Integer maxRedirections;
 	private String address;
 	private GenericObjectPoolConfig genericObjectPoolConfig;
-
+	private Boolean isCluster = Boolean.FALSE;
 	private BinaryJedisCluster jedisCluster;
 
 	private Pattern p = Pattern.compile("^.+[:]\\d{1,5}\\s*$");
@@ -56,8 +59,12 @@ public class BinaryJedisClusterFactory
 	}
 
 	public void init() throws Exception {
-		Set<HostAndPort> nodes = this.parseHostAndPort();
-		this.jedisCluster = new JedisCluster(nodes, timeout, maxRedirections,genericObjectPoolConfig);
+		if(isCluster){
+			Set<HostAndPort> nodes = this.parseHostAndPort();
+			this.jedisCluster = new JedisCluster(nodes, timeout, maxRedirections,genericObjectPoolConfig);
+		}else{
+			log.error("init error,cluster is false");
+		}
 	}
 
 	public Integer getTimeout() {
@@ -91,5 +98,13 @@ public class BinaryJedisClusterFactory
 	public void setGenericObjectPoolConfig(
 			GenericObjectPoolConfig genericObjectPoolConfig) {
 		this.genericObjectPoolConfig = genericObjectPoolConfig;
+	}
+
+	public Boolean getIsCluster() {
+		return isCluster;
+	}
+
+	public void setIsCluster(Boolean isCluster) {
+		this.isCluster = isCluster;
 	}
 }

@@ -40,7 +40,7 @@ public class SearchUtil {
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaArea()); 
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getPageSize()); 
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getPageStart()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getOrder()); 
+		keys += S_VERTICALLINE + (StringUtil.isNullStr(request.getOrder()) ? "1" : StringUtil.null2Str(request.getOrder())); 
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaGkzp()); 
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaPlat()); 
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaProj()); 
@@ -114,6 +114,8 @@ public class SearchUtil {
 		}
 		if(request.getOrder() != null && !"".equals(request.getOrder())){
 			list.add(new NameValuePair("order", request.getOrder()));
+		}else{
+			list.add(new NameValuePair("order", "1"));
 		}
 		NameValuePair[] arr = new NameValuePair[list.size()];
 		for (int i = 0; i < list.size(); i++) {

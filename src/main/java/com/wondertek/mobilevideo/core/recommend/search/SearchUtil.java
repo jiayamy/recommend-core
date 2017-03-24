@@ -21,8 +21,7 @@ public class SearchUtil {
 	
 	public static String getSearchKey(SearchRequest request){
 		//请求搜索引擎第一次
-		String keys = S_VERTICALLINE + StringUtil.null2Str(request.getMsisdn()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getCt()); 
+		String keys = S_VERTICALLINE + StringUtil.null2Str(request.getCt()); 
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getCtVer()); 
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getUa()); 
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getType()); 
@@ -30,30 +29,12 @@ public class SearchUtil {
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getCoreName()); 
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getFields()); 
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getPackId()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getLimitDate()); 
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getContDisplayType()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaType()); 
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaShape()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaYear()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaMing()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaChu()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaArea()); 
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getPageSize()); 
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getPageStart()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getOrder()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaGkzp()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaPlat()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaProj()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaMovieForm()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaIsDubi()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaDirector()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaScore()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaVideoName()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaTime()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getIsUpdating()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getContFormType()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaGkhd()); 
-		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaReportArea()); 
+		keys += S_VERTICALLINE + (StringUtil.isNullStr(request.getOrder()) ? "1" : StringUtil.null2Str(request.getOrder())); 
+		
 		if(log.isDebugEnabled() && RequestConstants.V_PRINT_REQUEST_ENABLE){
 			log.debug("Search keys :" + keys); 
 		}
@@ -77,9 +58,6 @@ public class SearchUtil {
 	private static NameValuePair[] getNameValuePairs(SearchRequest request) {
 		List<NameValuePair> list = new ArrayList<NameValuePair>();
 		//参数
-		if(request.getMsisdn() != null && !"".equals(request.getMsisdn())){
-			list.add(new NameValuePair("msisdn", request.getMsisdn()));
-		}
 		if(request.getCt() != null && !"".equals(request.getCt())){
 			list.add(new NameValuePair("ct", request.getCt()));
 		}
@@ -114,6 +92,8 @@ public class SearchUtil {
 		}
 		if(request.getOrder() != null && !"".equals(request.getOrder())){
 			list.add(new NameValuePair("order", request.getOrder()));
+		}else{
+			list.add(new NameValuePair("order", "1"));
 		}
 		NameValuePair[] arr = new NameValuePair[list.size()];
 		for (int i = 0; i < list.size(); i++) {
@@ -127,6 +107,7 @@ public class SearchUtil {
 			if(StringUtil.isNullStr(xml)){
 				return searchResult;
 			}
+			System.out.println(xml);
 			Document doc = null;
 			try {
 				doc = DocumentHelper.parseText(xml);
@@ -141,15 +122,9 @@ public class SearchUtil {
 					for (Object nodeObj : xmlList) {
 						SearchResult resultItem = new SearchResult();
 						Element node = (Element) nodeObj;
-						resultItem.setResultType(node.valueOf("@resultType"));
-						resultItem.setSearchId(node.elementText("contId"));
 						resultItem.setContentId(node.elementText("searchId"));
-//						resultItem.setMediaDirector(node.elementText("mediaDirector"));
-//						resultItem.setMediaActor(node.elementText("mediaActor"));
-//						resultItem.setMediaType(node.elementText("mediaType"));
-//						resultItem.setPublishTime(node.elementText("publishTime"));
-//						resultItem.setHits(StringUtil.nullToLong(node.elementText("hits")));
-						resultItem.setScore(StringUtil.nullToLong(node.elementText("score")));
+						resultItem.setContName(node.elementText("contName"));
+						resultItem.setScore(StringUtil.nullToDouble(node.elementText("score")));
 						searchResult.add(resultItem);
 					}
 //					resultMap.put("searchResult", searchResult);

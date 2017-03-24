@@ -289,10 +289,10 @@ public class RecommendInfoCacheClusterManagerImpl implements RecommendInfoCacheC
 		String key = RI_KEY_KEY;
         byte []keyBytes = changeKeyToByteArray(key);
         records = jedisCluster.zrange(keyBytes, 0, -1);
-        if(records == null || records.size() == 0){//为空
-        	return null;
-        }
         List<String> tmp = new ArrayList<String>();
+        if(records == null || records.size() == 0){//为空
+        	return tmp;
+        }
         for (byte[] bytes : records){
         	tmp = changeByteArrayToStrings(bytes);
         	break;

@@ -21,6 +21,7 @@ public class EnumsInfo extends BaseObject {
 	
 	private Long id; 		// id
 	private String key; 	// 系统参数主键
+	private String keyDesc;	// key的描述值，比如 key为1055，val是歌手类型，keyDesc就是mediaGeshoul，这个是与搜索字段对应的
 	private String val; 	// 系统参数值
 	private int type; 		// 系统参数说明
 
@@ -43,6 +44,16 @@ public class EnumsInfo extends BaseObject {
 	public void setKey(String key) {
 		this.key = key;
 	}
+	
+	@Column(name="KEY_DESC")
+	public String getKeyDesc() {
+		return keyDesc;
+	}
+
+	public void setKeyDesc(String keyDesc) {
+		this.keyDesc = keyDesc;
+	}
+
 	@Column(name="VAL_")
 	public String getVal() {
 		return val;
@@ -66,6 +77,7 @@ public class EnumsInfo extends BaseObject {
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((key == null) ? 0 : key.hashCode());
+		result = prime * result + ((keyDesc == null) ? 0 : keyDesc.hashCode());
 		result = prime * result + type;
 		result = prime * result + ((val == null) ? 0 : val.hashCode());
 		return result;
@@ -90,6 +102,11 @@ public class EnumsInfo extends BaseObject {
 				return false;
 		} else if (!key.equals(other.key))
 			return false;
+		if (keyDesc == null) {
+			if (other.keyDesc != null)
+				return false;
+		} else if (!keyDesc.equals(other.keyDesc))
+			return false;
 		if (type != other.type)
 			return false;
 		if (val == null) {
@@ -102,7 +119,7 @@ public class EnumsInfo extends BaseObject {
 
 	@Override
 	public String toString() {
-		return "EnumsInfo [id=" + id + ", key=" + key + ", val=" + val + ", type=" + type + "]";
+		return "EnumsInfo [id=" + id + ", key=" + key + ", keyDesc=" + keyDesc + ", val=" + val + ", type=" + type
+				+ "]";
 	}
-	
 }

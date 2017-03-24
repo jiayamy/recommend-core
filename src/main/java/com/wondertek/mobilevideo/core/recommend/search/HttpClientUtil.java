@@ -61,9 +61,9 @@ public class HttpClientUtil {
 	/**
 	 * the timeout until a connection is etablished
 	 */
-	private static int connectionTimeOut = 500;//TODO:数值待定
+	private static int connectionTimeOut = 1000;//TODO:数值待定
 	
-	private static int soTimeout = 500;
+	private static int soTimeout = 1000;
 	
 	public static HttpClient getClient(URI uri) {
 		

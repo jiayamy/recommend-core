@@ -10,6 +10,7 @@ public class CatItem implements Serializable {
 	
 	public String labelName;
 	public String labelId;		//标签
+	public String labelKey;		//标签英文
 	public String labelValue;	//
 	public Double score;
 	public String getLabelName() {
@@ -36,11 +37,18 @@ public class CatItem implements Serializable {
 	public void setLabelId(String labelId) {
 		this.labelId = labelId;
 	}
+	public String getLabelKey() {
+		return labelKey;
+	}
+	public void setLabelKey(String labelKey) {
+		this.labelKey = labelKey;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((labelId == null) ? 0 : labelId.hashCode());
+		result = prime * result + ((labelKey == null) ? 0 : labelKey.hashCode());
 		result = prime * result + ((labelName == null) ? 0 : labelName.hashCode());
 		result = prime * result + ((labelValue == null) ? 0 : labelValue.hashCode());
 		result = prime * result + ((score == null) ? 0 : score.hashCode());
@@ -59,6 +67,11 @@ public class CatItem implements Serializable {
 			if (other.labelId != null)
 				return false;
 		} else if (!labelId.equals(other.labelId))
+			return false;
+		if (labelKey == null) {
+			if (other.labelKey != null)
+				return false;
+		} else if (!labelKey.equals(other.labelKey))
 			return false;
 		if (labelName == null) {
 			if (other.labelName != null)
@@ -79,7 +92,7 @@ public class CatItem implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return "CatItem [labelName=" + labelName + ", labelId=" + labelId + ", labelValue=" + labelValue + ", score="
-				+ score + "]";
+		return "CatItem [labelName=" + labelName + ", labelId=" + labelId + ", labelKey=" + labelKey + ", labelValue="
+				+ labelValue + ", score=" + score + "]";
 	}
 }

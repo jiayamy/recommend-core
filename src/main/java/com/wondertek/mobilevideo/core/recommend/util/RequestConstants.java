@@ -33,6 +33,7 @@ public class RequestConstants {
 	public static int V_DEFAUL_REQUEST_TAG_RECOMD_MAX = 10;
 	/**
 	 * 正常调用请求最多查询多少条记录进行分页
+	 * @deprecated
 	 */
 	public static final String P_DEFAULT_SEARCH_COUNT_MAX = "search.default.count.max";
 	public static int V_DEFAULT_SEARCH_COUNT_MAX = 100;
@@ -64,6 +65,7 @@ public class RequestConstants {
 	public static int V_DEFAULT_SEARCH_LIMIT = 20;
 	/**
 	 * 调用搜索引擎时，查询一次一级分类下的固定标签最多查询多少条记录
+	 * @deprecated
 	 */
 	public static final String P_DEFAULT_SEARCH_LIMIT_CATITEM = "search.default.limit.catItem";
 	public static int V_DEFAULT_SEARCH_LIMIT_CATITEM = 5;
@@ -74,6 +76,7 @@ public class RequestConstants {
 	public static int V_DEFAULT_SEARCH_CAT_MAX = 3;
 	/**
 	 * 调用搜索引擎时，查询一次一级分类最多分多少次查询
+	 * @deprecated
 	 */
 	public static final String P_DEFAULT_SEARCH_CAT_PER_MAX = "search.default.cat.per.max";
 	public static int V_DEFAULT_SEARCH_CAT_PER_MAX = 2;

@@ -112,19 +112,21 @@ public class SystemConfigCache
 			RequestConstants.V_SEARCH_URL = sVal;
 		}
 		
-		RequestConstants.V_SEARCH_RECOMD_ENABLE = StringUtil.nullToBoolean(getValue(RequestConstants.P_SEARCH_RECOMD_ENABLE));
+//		RequestConstants.V_SEARCH_RECOMD_ENABLE = StringUtil.nullToBoolean(getValue(RequestConstants.P_SEARCH_RECOMD_ENABLE));
 		
 		RequestConstants.V_DEFAULT_SEARCH_ENABLE = StringUtil.nullToBoolean(getValue(RequestConstants.P_DEFAULT_SEARCH_ENABLE));
 		
 		RequestConstants.V_DEFAULT_SEARCH_LIMIT = getIntValueDefault(RequestConstants.P_DEFAULT_SEARCH_LIMIT,20);
 		
-		RequestConstants.V_DEFAULT_SEARCH_LIMIT_CATITEM = getIntValueDefault(RequestConstants.P_DEFAULT_SEARCH_LIMIT_CATITEM,5);
+//		RequestConstants.V_DEFAULT_SEARCH_LIMIT_CATITEM = getIntValueDefault(RequestConstants.P_DEFAULT_SEARCH_LIMIT_CATITEM,5);
 		
 		RequestConstants.V_DEFAULT_SEARCH_CAT_MAX = getIntValueDefault(RequestConstants.P_DEFAULT_SEARCH_CAT_MAX,3);
 		
 //		RequestConstants.V_DEFAULT_SEARCH_CAT_PER_MAX = getIntValueDefault(RequestConstants.P_DEFAULT_SEARCH_CAT_PER_MAX,2);
 		
 		RequestConstants.V_DEFAULT_SEARCH_CATITEM_MAX = getIntValueDefault(RequestConstants.P_DEFAULT_SEARCH_CATITEM_MAX,5);
+		
+		RequestConstants.V_DEFAULT_SEARCH_WITH_WEIGHT = StringUtil.nullToBoolean(getValue(RequestConstants.P_DEFAULT_SEARCH_WITH_WEIGHT));
 		
 		RequestConstants.V_DEFAULT_RECOMD_CAT_MAX = getIntValueDefault(RequestConstants.P_DEFAULT_RECOMD_CAT_MAX,5);
 		

@@ -114,6 +114,20 @@ insert into R_ENUMS_INFO (ID, KEY_, VAL_, TYPE_, KEY_BAK) values (1064, '1064', 
 insert into R_ENUMS_INFO (ID, KEY_, VAL_, TYPE_, KEY_BAK) values (1065, '1065', '作者/记者', '1', 'mediaJizhe');
 insert into R_ENUMS_INFO (ID, KEY_, VAL_, TYPE_, KEY_BAK) values (1066, '1066', '播出平台', '1', 'mediaPlat');
 insert into R_ENUMS_INFO (ID, KEY_, VAL_, TYPE_, KEY_BAK) values (1067, '1067', '描述地区', '1', 'mediaMiaoshud');
+insert into R_ENUMS_INFO (ID, KEY_, VAL_, TYPE_, KEY_BAK) values (1068, '1068', '报道地区', '1', 'mediaReportArea');
+insert into R_ENUMS_INFO (ID, KEY_, VAL_, TYPE_, KEY_BAK) values (1069, '1069', '项目', '1', 'mediaProj');
+insert into R_ENUMS_INFO (ID, KEY_, VAL_, TYPE_, KEY_BAK) values (1070, '1070', 'G客作品', '1', 'mediaGkzp');
+insert into R_ENUMS_INFO (ID, KEY_, VAL_, TYPE_, KEY_BAK) values (1071, '1071', 'G客活动', '1', 'mediaGkhd');
+insert into R_ENUMS_INFO (ID, KEY_, VAL_, TYPE_, KEY_BAK) values (1072, '1072', '首播时间', '1', 'mediaPremiereTime');
+insert into R_ENUMS_INFO (ID, KEY_, VAL_, TYPE_, KEY_BAK) values (1073, '1073', '主演', '1', 'mediaActor');
+insert into R_ENUMS_INFO (ID, KEY_, VAL_, TYPE_, KEY_BAK) values (1074, '1074', '所属片名', '1', 'mediaVideoName');
+insert into R_ENUMS_INFO (ID, KEY_, VAL_, TYPE_, KEY_BAK) values (1075, '1075', '内容类型', '1', 'mediaType');
+insert into R_ENUMS_INFO (ID, KEY_, VAL_, TYPE_, KEY_BAK) values (1076, '1076', '上映时间', '1', 'mediaTime');
+insert into R_ENUMS_INFO (ID, KEY_, VAL_, TYPE_, KEY_BAK) values (1077, '1077', '电影形式', '1', 'mediaMovieForm');
+insert into R_ENUMS_INFO (ID, KEY_, VAL_, TYPE_, KEY_BAK) values (1078, '1078', '导演', '1', 'mediaDirector');
+insert into R_ENUMS_INFO (ID, KEY_, VAL_, TYPE_, KEY_BAK) values (1079, '1079', '播出年代', '1', 'mediaYear');
+insert into R_ENUMS_INFO (ID, KEY_, VAL_, TYPE_, KEY_BAK) values (1080, '1080', '关键字', '1', 'priKeyword');
+insert into R_ENUMS_INFO (ID, KEY_, VAL_, TYPE_, KEY_BAK) values (1081, '1081', '推荐标签', '1', 'contRecomm');
 
 
 CREATE TABLE R_INFO
@@ -174,7 +188,7 @@ insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (10, 
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (12, 'search.recomd.enable', 'true', '搜索时，带推荐标签');
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (14, 'recomd.default.cat.max', '5', '人工推荐时，最多查询多少个一级分类');
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (15, 'recomd.default.catitem.max', '10', '人工推荐时，最多查询多少个一级分类下推荐标签');
-insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (16, 'search.default.enable', 'false', '是否调用搜索引擎');
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (16, 'search.default.enable', 'true', '是否调用搜索引擎');
 --20161017
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (17, 'print.request.enable', 'true', '是否大数据的日志');
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (18, 'request.default.tag.cat.max', '10', '请求用户标签时一级分类的最大个数');
@@ -275,3 +289,13 @@ CREATE SEQUENCE  SEQ_R_TOP_RECOMMEND MINVALUE 1 MAXVALUE 99999999999999999999999
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (25, 'recomd.default.tag.cat.weight', '50', '推荐时，一级标签默认权重');
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (26, 'recomd.default.tag.item.weight', '50', '推荐时，普通标签默认权重');
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (27, 'recomd.default.tag.rcmditem.weight', '50', '推荐时，推荐标签默认权重');
+
+--20170324
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (28, 'search.default.with.weight', 'false', '调用搜索引擎时，是否带权重搜索');
+
+delete from R_SYSTEM_CONFIG where CONFIG_KEY = 'search.default.limit.catItem';
+delete from R_SYSTEM_CONFIG where CONFIG_KEY = 'search.default.cat.per.max';
+delete from R_SYSTEM_CONFIG where CONFIG_KEY = 'search.recomd.enable';
+delete from R_SYSTEM_CONFIG where CONFIG_KEY = 'search.default.count.max';
+
+ALTER TABLE R_ENUMS_INFO RENAME COLUMN KEY_BAK TO KEY_DESC;

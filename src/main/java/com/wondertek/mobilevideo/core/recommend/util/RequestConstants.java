@@ -153,6 +153,7 @@ public class RequestConstants {
 	public static final String R_TOTAL_COMBINEDCONT = "combinedContTotal";
 	public static final String R_TOTAL_BIGPICCONT = "bigPicContTotal";
 	public static final String R_TOTAL_MULTIPICCONT = "multiPicContTotal";
+	public static final String R_VOMS_REQUESTTIME = "requestTime";
 	
 	/**	 * 成功	 */
 	public static final String R_CODE_000000 = "000000";

@@ -23,11 +23,13 @@ public class PrdContInfo implements Serializable {
 	private String cpId; 
 	private String name;
 	private String displayName;
+	private String requestTime;
 	public PrdContInfo() {
 	}
-	public PrdContInfo(Long prdContId, String name) {
+	public PrdContInfo(Long prdContId, String name,String requestTime) {
 		this.prdContId = prdContId;
 		this.name = name;
+		this.requestTime = requestTime;
 	}
 	public Long getPrdContId() {
 		return prdContId;
@@ -101,6 +103,12 @@ public class PrdContInfo implements Serializable {
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
+	public String getRequestTime() {
+		return requestTime;
+	}
+	public void setRequestTime(String requestTime) {
+		this.requestTime = requestTime;
+	}
 	public PrdContInfo(Long prdContId, String contentId, Integer bcStatus, Integer pubStatus,
 			Integer publishNoVomsStatus, String formType, Date createTime, Date updateTime, String prdInfoName,
 			String cpId, String name, String displayName) {
@@ -122,7 +130,7 @@ public class PrdContInfo implements Serializable {
 		return "PrdContInfo [prdContId=" + prdContId + ", contentId=" + contentId + ", bcStatus=" + bcStatus
 				+ ", pubStatus=" + pubStatus + ", publishNoVomsStatus=" + publishNoVomsStatus + ", formType=" + formType
 				+ ", createTime=" + createTime + ", updateTime=" + updateTime + ", prdInfoName=" + prdInfoName
-				+ ", cpId=" + cpId + ", name=" + name + ", displayName=" + displayName + "]";
+				+ ", cpId=" + cpId + ", name=" + name + ", displayName=" + displayName + ",requestTime=" + requestTime + "]";
 	}
 	@Override
 	public int hashCode() {
@@ -139,7 +147,7 @@ public class PrdContInfo implements Serializable {
 		result = prime * result + ((prdInfoName == null) ? 0 : prdInfoName.hashCode());
 		result = prime * result + ((pubStatus == null) ? 0 : pubStatus.hashCode());
 		result = prime * result + ((publishNoVomsStatus == null) ? 0 : publishNoVomsStatus.hashCode());
-		result = prime * result + ((updateTime == null) ? 0 : updateTime.hashCode());
+		result = prime * result + ((requestTime == null) ? 0 : requestTime.hashCode());
 		return result;
 	}
 	@Override
@@ -160,6 +168,11 @@ public class PrdContInfo implements Serializable {
 			if (other.contentId != null)
 				return false;
 		} else if (!contentId.equals(other.contentId))
+			return false;
+		if (requestTime == null) {
+			if (other.requestTime != null)
+				return false;
+		} else if (!requestTime.equals(other.requestTime))
 			return false;
 		if (cpId == null) {
 			if (other.cpId != null)

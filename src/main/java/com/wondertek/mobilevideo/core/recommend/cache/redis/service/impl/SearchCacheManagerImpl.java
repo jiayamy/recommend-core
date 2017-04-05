@@ -68,7 +68,7 @@ public class SearchCacheManagerImpl implements SearchCacheManager
         try {
             keyBytes = msgpack.write(key);
         } catch (Exception e) {
-            log.error("change key to bytes failed.error info:" + e);
+            log.debug("change key to bytes failed.error info:" + e);
         }
         return keyBytes;
     }
@@ -83,7 +83,7 @@ public class SearchCacheManagerImpl implements SearchCacheManager
         try {
             valueBytes = msgpack.write(SearchResult);
         } catch (Exception e) {
-            log.error("change value to bytes failed.error info:" + e);
+            log.debug("change value to bytes failed.error info:" + e);
         }
         return valueBytes;
     }
@@ -100,7 +100,7 @@ public class SearchCacheManagerImpl implements SearchCacheManager
     		}
     		return out.toByteArray();
     	}catch (Exception e){
-    		log.error("write val object to byteArray error:"+e);
+    		log.debug("write val object to byteArray error:"+e);
     		return  null;
     	}
     }
@@ -114,7 +114,7 @@ public class SearchCacheManagerImpl implements SearchCacheManager
     		}
     		return out.toByteArray();
     	}catch (Exception e){
-    		log.error("write val object to byteArray error:"+e);
+    		log.debug("write val object to byteArray error:"+e);
     		return  null;
     	}
     }
@@ -124,7 +124,7 @@ public class SearchCacheManagerImpl implements SearchCacheManager
         	SearchResult SearchResult = msgpack.read(bytes, SearchResult.class);
             return SearchResult ;
         } catch (Exception e) {
-            log.error("change bytes to star failed.error info:" + e);
+            log.debug("change bytes to star failed.error info:" + e);
         }
         return null;
     }
@@ -147,7 +147,7 @@ public class SearchCacheManagerImpl implements SearchCacheManager
             }while (SearchResult != null);
             return list;
         }catch (Exception e){
-            log.error("change byteArray to objects error:"+e);
+            log.debug("change byteArray to objects error:"+e);
             return list;
         }
     }
@@ -167,7 +167,7 @@ public class SearchCacheManagerImpl implements SearchCacheManager
             }while (val != null);
             return list;
         }catch (Exception e){
-            log.error("change byteArray to objects error:"+e);
+            log.debug("change byteArray to objects error:"+e);
             return list;
         }
     }

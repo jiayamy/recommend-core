@@ -82,7 +82,6 @@ public class SearchUtil {
 		if(request.getMediaShape() != null && !"".equals(request.getMediaShape())){
 			list.add(new NameValuePair("mediaShape", request.getMediaShape()));
 		}
-		
 		//排序相关
 		if(request.getPageSize() != null && !"".equals(request.getPageSize())){
 			list.add(new NameValuePair("pageSize", request.getPageSize()));

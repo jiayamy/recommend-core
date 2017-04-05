@@ -59,7 +59,7 @@ public class VomsRecommendCacheClusterManagerImpl implements VomsRecommendCacheC
 		try {
 			keyBytes = msgpack.write(key);
 		} catch (Exception e) {
-			log.error("change key to bytes failed.error info:" + e);
+			log.debug("change key to bytes failed.error info:" + e);
 		}
 		return keyBytes;
 	}
@@ -75,7 +75,7 @@ public class VomsRecommendCacheClusterManagerImpl implements VomsRecommendCacheC
 		try {
 			valueBytes = msgpack.write(vomsRecommendVo);
 		} catch (Exception e) {
-			log.error("change value to bytes failed.error info:" + e);
+			log.debug("change value to bytes failed.error info:" + e);
 		}
 		return valueBytes;
 	}
@@ -92,7 +92,7 @@ public class VomsRecommendCacheClusterManagerImpl implements VomsRecommendCacheC
 			}
 			return out.toByteArray();
 		} catch (Exception e) {
-			log.error("write val object to byteArray error:" + e);
+			log.debug("write val object to byteArray error:" + e);
 			return null;
 		}
 	}
@@ -106,7 +106,7 @@ public class VomsRecommendCacheClusterManagerImpl implements VomsRecommendCacheC
 			}
 			return out.toByteArray();
 		} catch (Exception e) {
-			log.error("write val object to byteArray error:" + e);
+			log.debug("write val object to byteArray error:" + e);
 			return null;
 		}
 	}
@@ -116,7 +116,7 @@ public class VomsRecommendCacheClusterManagerImpl implements VomsRecommendCacheC
 			VomsRecommendVo vomsRecommendVo = msgpack.read(bytes, VomsRecommendVo.class);
 			return vomsRecommendVo;
 		} catch (Exception e) {
-			log.error("change bytes to star failed.error info:" + e);
+			log.debug("change bytes to star failed.error info:" + e);
 		}
 		return null;
 	}
@@ -139,7 +139,7 @@ public class VomsRecommendCacheClusterManagerImpl implements VomsRecommendCacheC
 			} while (vomsRecommendVo != null);
 			return list;
 		} catch (Exception e) {
-			log.error("change byteArray to objects error:" + e);
+			log.debug("change byteArray to objects error:" + e);
 			return list;
 		}
 	}
@@ -159,7 +159,7 @@ public class VomsRecommendCacheClusterManagerImpl implements VomsRecommendCacheC
 			} while (val != null);
 			return list;
 		} catch (Exception e) {
-			log.error("change byteArray to objects error:" + e);
+			log.debug("change byteArray to objects error:" + e);
 			return list;
 		}
 	}

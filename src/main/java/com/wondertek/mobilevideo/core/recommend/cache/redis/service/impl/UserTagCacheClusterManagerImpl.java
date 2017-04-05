@@ -70,7 +70,7 @@ public class UserTagCacheClusterManagerImpl implements UserTagCacheClusterManage
         try {
             keyBytes = msgpack.write(key);
         } catch (Exception e) {
-            log.error("change key to bytes failed.error info:" + e);
+            log.debug("change key to bytes failed.error info:" + e);
         }
         return keyBytes;
     }
@@ -84,7 +84,7 @@ public class UserTagCacheClusterManagerImpl implements UserTagCacheClusterManage
         try {
             valueBytes = msgpack.write(UserTag);
         } catch (Exception e) {
-            log.error("change value to bytes failed.error info:" + e);
+            log.debug("change value to bytes failed.error info:" + e);
         }
         return valueBytes;
     }
@@ -101,7 +101,7 @@ public class UserTagCacheClusterManagerImpl implements UserTagCacheClusterManage
     		}
     		return out.toByteArray();
     	}catch (Exception e){
-    		log.error("write val object to byteArray error:"+e);
+    		log.debug("write val object to byteArray error:"+e);
     		return  null;
     	}
     }
@@ -115,7 +115,7 @@ public class UserTagCacheClusterManagerImpl implements UserTagCacheClusterManage
     		}
     		return out.toByteArray();
     	}catch (Exception e){
-    		log.error("write val object to byteArray error:"+e);
+    		log.debug("write val object to byteArray error:"+e);
     		return  null;
     	}
     }
@@ -124,7 +124,7 @@ public class UserTagCacheClusterManagerImpl implements UserTagCacheClusterManage
         	UserTag UserTag = msgpack.read(bytes, UserTag.class);
             return UserTag ;
         } catch (Exception e) {
-            log.error("change bytes to star failed.error info:" + e);
+            log.debug("change bytes to star failed.error info:" + e);
         }
         return null;
     }
@@ -147,7 +147,7 @@ public class UserTagCacheClusterManagerImpl implements UserTagCacheClusterManage
             }while (UserTag != null);
             return list;
         }catch (Exception e){
-            log.error("change byteArray to objects error:"+e);
+            log.debug("change byteArray to objects error:"+e);
             return list;
         }
     }
@@ -167,7 +167,7 @@ public class UserTagCacheClusterManagerImpl implements UserTagCacheClusterManage
             }while (val != null);
             return list;
         }catch (Exception e){
-            log.error("change byteArray to objects error:"+e);
+            log.debug("change byteArray to objects error:"+e);
             return list;
         }
     }

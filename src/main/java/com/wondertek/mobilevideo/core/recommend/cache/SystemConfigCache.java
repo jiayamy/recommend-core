@@ -116,6 +116,8 @@ public class SystemConfigCache
 		
 		RequestConstants.V_DEFAULT_SEARCH_ENABLE = StringUtil.nullToBoolean(getValue(RequestConstants.P_DEFAULT_SEARCH_ENABLE));
 		
+		RequestConstants.V_DEFAULT_SEARCH_AGAIN_AFTERFAIL = StringUtil.nullToBoolean(getValue(RequestConstants.P_DEFAULT_SEARCH_AGAIN_AFTERFAIL));
+		
 		RequestConstants.V_DEFAULT_SEARCH_LIMIT = getIntValueDefault(RequestConstants.P_DEFAULT_SEARCH_LIMIT,20);
 		
 //		RequestConstants.V_DEFAULT_SEARCH_LIMIT_CATITEM = getIntValueDefault(RequestConstants.P_DEFAULT_SEARCH_LIMIT_CATITEM,5);
@@ -127,6 +129,11 @@ public class SystemConfigCache
 		RequestConstants.V_DEFAULT_SEARCH_CATITEM_MAX = getIntValueDefault(RequestConstants.P_DEFAULT_SEARCH_CATITEM_MAX,5);
 		
 		RequestConstants.V_DEFAULT_SEARCH_WITH_WEIGHT = StringUtil.nullToBoolean(getValue(RequestConstants.P_DEFAULT_SEARCH_WITH_WEIGHT));
+		
+		RequestConstants.V_DEFAULT_SEARCH_SOTIMEOUT = StringUtil.nullToInteger(getValue(RequestConstants.P_DEFAULT_SEARCH_SOTIMEOUT));
+		if(RequestConstants.V_DEFAULT_SEARCH_SOTIMEOUT < 500){
+			RequestConstants.V_DEFAULT_SEARCH_SOTIMEOUT = 500;
+		}
 		
 		RequestConstants.V_DEFAULT_RECOMD_CAT_MAX = getIntValueDefault(RequestConstants.P_DEFAULT_RECOMD_CAT_MAX,5);
 		

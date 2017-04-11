@@ -95,6 +95,14 @@ public class RequestConstants {
 	 */
 	public static Boolean V_DEFAULT_SEARCH_ENABLE = Boolean.TRUE;
 	/**
+	 * 调用搜索引擎时，是否调用搜索引擎
+	 */
+	public static final String P_DEFAULT_SEARCH_AGAIN_AFTERFAIL = "search.default.searchagain.afterfail";
+	/**
+	 * 调用搜索引擎时，如果搜索失败，是否再试一次
+	 */
+	public static Boolean V_DEFAULT_SEARCH_AGAIN_AFTERFAIL = Boolean.FALSE;
+	/**
 	 * 调用搜索引擎时，查询一次一级分类最多查询多少条记录
 	 */
 	public static final String P_DEFAULT_SEARCH_LIMIT = "search.default.limit";
@@ -146,6 +154,15 @@ public class RequestConstants {
 	 * 调用搜索引擎时，是否带权重分数查询
 	 */
 	public static Boolean V_DEFAULT_SEARCH_WITH_WEIGHT = Boolean.FALSE;
+	/**
+	 * 调用搜索引擎时，是否带权重分数查询
+	 */
+	public static final String P_DEFAULT_SEARCH_SOTIMEOUT = "search.default.soTimeout";
+	/**
+	 * 调用搜索引擎时，是否带权重分数查询
+	 */
+	public static int V_DEFAULT_SEARCH_SOTIMEOUT = 3000;
+	
 	/**
 	 * 人工推荐时，最多查询多少个一级分类
 	 */

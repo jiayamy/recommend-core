@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -37,17 +36,15 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.wondertek.mobilevideo.core.recommend.util.RequestConstants;
 import com.wondertek.mobilevideo.core.util.CmsUtil;
 import com.wondertek.mobilevideo.core.util.ErrorVO;
-import com.wondertek.mobilevideo.core.util.StringUtil;
 import com.wondertek.mobilevideo.core.util.XmlUtil;
 
 public class HttpClientUtil {
 	public static Log log = LogFactory.getLog(HttpClientUtil.class);
 
 	private static Map<String,HttpClient> clientMap =  new ConcurrentHashMap<String,HttpClient>();
-	private static MultiThreadedHttpConnectionManager connectionManager;
-	private static HttpClient client;
 	/**
 	 * maximum number of connections allowed per host
 	 */
@@ -63,7 +60,7 @@ public class HttpClientUtil {
 	 */
 	private static int connectionTimeOut = 1000;//TODO:数值待定
 	
-	private static int soTimeout = 1000;
+	private static int soTimeout = 3000;
 	
 	public static HttpClient getClient(URI uri) {
 		
@@ -79,6 +76,10 @@ public class HttpClientUtil {
 		HttpClient client = clientMap.get(host+":"+port);
 		
 		if(client==null){
+			soTimeout = RequestConstants.V_DEFAULT_SEARCH_SOTIMEOUT;
+			if(soTimeout < 500){
+				soTimeout = 500;
+			}
 			
 			MultiThreadedHttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
 			HttpConnectionManagerParams params = new HttpConnectionManagerParams();
@@ -96,25 +97,12 @@ public class HttpClientUtil {
 			client.setHostConfiguration(hostConfiguration);
 			client.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET, "UTF-8");
 			clientMap.put(host+":"+port, client);
-			
 		}
 		
 		return client;
 		
 	}
 	
-	static {
-		connectionManager = new MultiThreadedHttpConnectionManager();
-		HttpConnectionManagerParams params = new HttpConnectionManagerParams();
-		params.setDefaultMaxConnectionsPerHost(maxHostConnections);
-		params.setMaxTotalConnections(maxTotalConnections);
-		params.setConnectionTimeout(connectionTimeOut);
-		params.setSoTimeout(connectionTimeOut);
-		connectionManager.setParams(params);
-		client = new HttpClient(connectionManager);
-		client.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET, "UTF-8");
-	}
-
 	public static String requestGet(String url) {
 		GetMethod getMethod = new GetMethod(url);
 		getMethod.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,new DefaultHttpMethodRetryHandler());
@@ -133,45 +121,6 @@ public class HttpClientUtil {
 		getMethod.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,new DefaultHttpMethodRetryHandler());
 		return getResponseStr(getMethod);
 	}
-	
-	public static int getRequestStatusCode(String url, Map<String, String> headerMap, int outTime){
-		// 模拟访问Header参数
-		List<String> headerList = new ArrayList<String> ();
-		headerList.add("X-UP-BEAR-TYPE".toLowerCase());
-		headerList.add("x-up-calling-line-id".toLowerCase());
-		headerList.add("referer".toLowerCase());
-		headerList.add("User-Agent".toLowerCase());
-		headerList.add("WDAccept-Encoding".toLowerCase());
-		
-
-		int statusCode = 0;
-		GetMethod getMethod = new GetMethod(url);
-		try {
-			StringBuffer sb = new StringBuffer ();
-			if(headerMap != null && headerMap.size() > 0){
-				for(Iterator<String> it = headerMap.keySet().iterator(); it.hasNext(); ){
-					String key = it.next();
-					if(headerList.contains(key.toLowerCase())){
-						getMethod.setRequestHeader(key, headerMap.get(key));
-						sb.append(key + "=" + headerMap.get(key) + ", ");
-					}
-				}
-			}
-			log.info("[URL=" + url + ", " + sb.toString() + "]");
-			statusCode = client.executeMethod(getMethod);
-			if(statusCode == 200 
-					&& getMethod.getResponseHeader("isError") != null
-					&& StringUtil.nullToBoolean(getMethod.getResponseHeader("isError").getValue())){
-				statusCode = 500;
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		} finally {
-			getMethod.releaseConnection();
-		}
-		return statusCode;
-	}
-	
 	/**
 	 * 使用post方式调用
 	 * @param url 调用的URL

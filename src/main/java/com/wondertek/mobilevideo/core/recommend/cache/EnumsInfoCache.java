@@ -51,7 +51,7 @@ public class EnumsInfoCache
 					if(!tmp2.containsKey(enumsInfo.getType())){
 						tmp2.put(enumsInfo.getType(), new HashMap<String,EnumsInfo>());
 					}
-					tmp.get(enumsInfo.getType()).put(enumsInfo.getKey(), enumsInfo);
+					tmp2.get(enumsInfo.getType()).put(enumsInfo.getKey(), enumsInfo);
 				}
 			}
 			VAL_ENUMSINFO = tmp;

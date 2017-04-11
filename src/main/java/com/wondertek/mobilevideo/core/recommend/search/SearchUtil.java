@@ -52,6 +52,12 @@ public class SearchUtil {
 		if(log.isDebugEnabled() && RequestConstants.V_PRINT_REQUEST_ENABLE){
 			log.debug("search result:" + xml);
 		}
+		if(StringUtil.isNullStr(xml) && RequestConstants.V_DEFAULT_SEARCH_AGAIN_AFTERFAIL){//超时，是否再连一次
+			xml = httpClientUtil.httpClientPost(httpUrl, list);
+			if(log.isDebugEnabled() && RequestConstants.V_PRINT_REQUEST_ENABLE){
+				log.debug("search result:" + xml);
+			}
+		}
 		return pomsParserXML(request,xml);
 	}
 

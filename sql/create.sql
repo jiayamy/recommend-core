@@ -299,3 +299,8 @@ delete from R_SYSTEM_CONFIG where CONFIG_KEY = 'search.recomd.enable';
 delete from R_SYSTEM_CONFIG where CONFIG_KEY = 'search.default.count.max';
 
 ALTER TABLE R_ENUMS_INFO RENAME COLUMN KEY_BAK TO KEY_DESC;
+
+--20170407
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (29, 'search.default.soTimeout', '3000', '调用搜索引擎时，请求数据返回超时时间，单位 ms，重启生效');
+--20170410
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (30, 'search.default.searchagain.afterfail', 'false', '调用搜索引擎时，如果搜索失败，是否再试一次');

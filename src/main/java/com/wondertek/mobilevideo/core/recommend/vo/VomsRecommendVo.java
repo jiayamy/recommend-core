@@ -1,6 +1,9 @@
 package com.wondertek.mobilevideo.core.recommend.vo;
 
 import java.io.Serializable;
+import java.util.Date;
+
+import com.wondertek.mobilevideo.core.recommend.util.RecommendUtil;
 
 /**
  * 展示推荐VO
@@ -15,6 +18,7 @@ public class VomsRecommendVo implements Serializable{
 	private String name; //名称
 	private String objType;//推荐对象
 	private String type; //类型
+	private Long publishTime;	//发布时间
 	
 	public Long getObjId() {
 		return objId;
@@ -40,14 +44,23 @@ public class VomsRecommendVo implements Serializable{
 		this.objType = objType;
 	}
 
+	public Long getPublishTime() {
+		return publishTime;
+	}
+
+	public void setPublishTime(Long publishTime) {
+		this.publishTime = publishTime;
+	}
+
 	public VomsRecommendVo() {
 	}
 
-	public VomsRecommendVo(Long objId, String name, String objType, String type) {
+	public VomsRecommendVo(Long objId, String name, String objType, String type, Date updateTime) {
 		this.objId = objId;
 		this.name = name;
 		this.objType = objType;
 		this.type = type;
+		this.publishTime = RecommendUtil.getYYYYMMDDHHMMFormat(updateTime);
 	}
 
 	public String getType() {
@@ -64,6 +77,7 @@ public class VomsRecommendVo implements Serializable{
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((objId == null) ? 0 : objId.hashCode());
 		result = prime * result + ((objType == null) ? 0 : objType.hashCode());
+		result = prime * result + ((publishTime == null) ? 0 : publishTime.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
@@ -92,6 +106,11 @@ public class VomsRecommendVo implements Serializable{
 				return false;
 		} else if (!objType.equals(other.objType))
 			return false;
+		if (publishTime == null) {
+			if (other.publishTime != null)
+				return false;
+		} else if (!publishTime.equals(other.publishTime))
+			return false;
 		if (type == null) {
 			if (other.type != null)
 				return false;
@@ -102,6 +121,8 @@ public class VomsRecommendVo implements Serializable{
 
 	@Override
 	public String toString() {
-		return "VomsRecommendVo [objId=" + objId + ", name=" + name + ", objType=" + objType + ", type=" + type + "]";
+		return "VomsRecommendVo [objId=" + objId + ", name=" + name + ", objType=" + objType + ", type=" + type
+				+ ", publishTime=" + publishTime + "]";
 	}
+	
 }

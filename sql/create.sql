@@ -304,3 +304,46 @@ ALTER TABLE R_ENUMS_INFO RENAME COLUMN KEY_BAK TO KEY_DESC;
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (29, 'search.default.soTimeout', '3000', '调用搜索引擎时，请求数据返回超时时间，单位 ms，重启生效');
 --20170410
 insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (30, 'search.default.searchagain.afterfail', 'false', '调用搜索引擎时，如果搜索失败，是否再试一次');
+
+--20170523
+update R_ENUMS_INFO set TYPE_ = 2 WHERE ID = 110;
+update R_ENUMS_INFO set TYPE_ = 2 WHERE ID = 112;
+update R_ENUMS_INFO set TYPE_ = 2 WHERE ID = 113;
+update R_ENUMS_INFO set TYPE_ = 2 WHERE ID = 114;
+update R_ENUMS_INFO set TYPE_ = 2 WHERE ID = 115;
+update R_ENUMS_INFO set TYPE_ = 2 WHERE ID = 116;
+update R_ENUMS_INFO set TYPE_ = 2 WHERE ID = 117;
+update R_ENUMS_INFO set TYPE_ = 2 WHERE ID = 118;
+update R_ENUMS_INFO set TYPE_ = 2 WHERE ID = 119;
+update R_ENUMS_INFO set TYPE_ = 2 WHERE ID = 120;
+update R_ENUMS_INFO set TYPE_ = 2 WHERE ID = 121;
+update R_ENUMS_INFO set TYPE_ = 2 WHERE ID = 125;
+update R_ENUMS_INFO set TYPE_ = 2 WHERE ID = 126;
+update R_ENUMS_INFO set TYPE_ = 2 WHERE ID = 127;
+update R_ENUMS_INFO set TYPE_ = 2 WHERE ID = 128;
+update R_ENUMS_INFO set TYPE_ = 2 WHERE ID = 129;
+update R_ENUMS_INFO set TYPE_ = 2 WHERE ID = 130;
+update R_ENUMS_INFO set TYPE_ = 2 WHERE ID = 131;
+update R_ENUMS_INFO set TYPE_ = 2 WHERE ID = 132;
+
+update R_ENUMS_CONFIG set TYPE_ = 2 WHERE ID = 110;
+update R_ENUMS_CONFIG set TYPE_ = 2 WHERE ID = 112;
+update R_ENUMS_CONFIG set TYPE_ = 2 WHERE ID = 113;
+update R_ENUMS_CONFIG set TYPE_ = 2 WHERE ID = 114;
+update R_ENUMS_CONFIG set TYPE_ = 2 WHERE ID = 115;
+update R_ENUMS_CONFIG set TYPE_ = 2 WHERE ID = 116;
+update R_ENUMS_CONFIG set TYPE_ = 2 WHERE ID = 117;
+update R_ENUMS_CONFIG set TYPE_ = 2 WHERE ID = 118;
+update R_ENUMS_CONFIG set TYPE_ = 2 WHERE ID = 119;
+update R_ENUMS_CONFIG set TYPE_ = 2 WHERE ID = 120;
+update R_ENUMS_CONFIG set TYPE_ = 2 WHERE ID = 121;
+update R_ENUMS_CONFIG set TYPE_ = 2 WHERE ID = 125;
+update R_ENUMS_CONFIG set TYPE_ = 2 WHERE ID = 126;
+update R_ENUMS_CONFIG set TYPE_ = 2 WHERE ID = 127;
+update R_ENUMS_CONFIG set TYPE_ = 2 WHERE ID = 128;
+update R_ENUMS_CONFIG set TYPE_ = 2 WHERE ID = 129;
+update R_ENUMS_CONFIG set TYPE_ = 2 WHERE ID = 130;
+update R_ENUMS_CONFIG set TYPE_ = 2 WHERE ID = 131;
+update R_ENUMS_CONFIG set TYPE_ = 2 WHERE ID = 132;
+
+insert into R_SYSTEM_CONFIG (ID, CONFIG_KEY, CONFIG_VALUE, DETAIL_) values (31, 'search.default.publishTime', '30', '调用搜索引擎时，查询数据多久之前的数据(天)');

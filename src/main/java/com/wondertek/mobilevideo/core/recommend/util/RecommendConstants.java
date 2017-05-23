@@ -9,4 +9,6 @@ public class RecommendConstants {
 	public static final String SPLIT_COMMA = ",";
 	
 	public static final String S_BLANK = "";
+	
+	public static final String DATE_FORMAT_YYYYMMDDHHMM = "yyyyMMddHHmm";
 }

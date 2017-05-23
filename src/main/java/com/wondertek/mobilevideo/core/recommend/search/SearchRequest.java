@@ -6,8 +6,8 @@ package com.wondertek.mobilevideo.core.recommend.search;
  */
 public class SearchRequest {
 	public static final String CORE_NAME_DEFAULT = "program";
-	public static final String TYPE_DEFAULT = "2";
-	public static final String ORDER_DEFAULT = "1";
+	public static final String TYPE_DEFAULT = "2";	//搜索词0 类目1 个性推荐2
+	public static final String ORDER_DEFAULT = "1";	//综合评分0 发布时间1 点击量2 播出年代3 上映时间4 首播时间5 明星粉丝6
 	private String ct;
 	private String ctVer;
 	private String ua;
@@ -18,6 +18,7 @@ public class SearchRequest {
 	private String packId;
 	private String contDisplayType;
 	private String mediaShape;
+	private String publishTimeStart;
 	private String pageSize;
 	private String pageStart;
 	private String order = ORDER_DEFAULT;
@@ -100,6 +101,12 @@ public class SearchRequest {
 	public void setOrder(String order) {
 		this.order = order;
 	}
+	public String getPublishTimeStart() {
+		return publishTimeStart;
+	}
+	public void setPublishTimeStart(String publishTimeStart) {
+		this.publishTimeStart = publishTimeStart;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -115,6 +122,7 @@ public class SearchRequest {
 		result = prime * result + ((packId == null) ? 0 : packId.hashCode());
 		result = prime * result + ((pageSize == null) ? 0 : pageSize.hashCode());
 		result = prime * result + ((pageStart == null) ? 0 : pageStart.hashCode());
+		result = prime * result + ((publishTimeStart == null) ? 0 : publishTimeStart.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		result = prime * result + ((ua == null) ? 0 : ua.hashCode());
 		return result;
@@ -183,6 +191,11 @@ public class SearchRequest {
 				return false;
 		} else if (!pageStart.equals(other.pageStart))
 			return false;
+		if (publishTimeStart == null) {
+			if (other.publishTimeStart != null)
+				return false;
+		} else if (!publishTimeStart.equals(other.publishTimeStart))
+			return false;
 		if (type == null) {
 			if (other.type != null)
 				return false;
@@ -199,7 +212,7 @@ public class SearchRequest {
 	public String toString() {
 		return "SearchRequest [ct=" + ct + ", ctVer=" + ctVer + ", ua=" + ua + ", type=" + type + ", keyword=" + keyword
 				+ ", coreName=" + coreName + ", fields=" + fields + ", packId=" + packId + ", contDisplayType="
-				+ contDisplayType + ", mediaShape=" + mediaShape + ", pageSize=" + pageSize + ", pageStart=" + pageStart
-				+ ", order=" + order + "]";
+				+ contDisplayType + ", mediaShape=" + mediaShape + ", publishTimeStart=" + publishTimeStart
+				+ ", pageSize=" + pageSize + ", pageStart=" + pageStart + ", order=" + order + "]";
 	}
 }

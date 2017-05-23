@@ -164,6 +164,15 @@ public class RequestConstants {
 	public static int V_DEFAULT_SEARCH_SOTIMEOUT = 3000;
 	
 	/**
+	 * 调用搜索引擎时，查询数据多久之前的数据(天)
+	 */
+	public static final String P_DEFAULT_SEARCH_PUBLISHTIME = "search.default.publishTime";
+	/**
+	 * 调用搜索引擎时，查询数据多久之前的数据(天)
+	 */
+	public static int V_DEFAULT_SEARCH_PUBLISHTIME = 30;
+	
+	/**
 	 * 人工推荐时，最多查询多少个一级分类
 	 */
 	public static final String P_DEFAULT_RECOMD_CAT_MAX = "recomd.default.cat.max";

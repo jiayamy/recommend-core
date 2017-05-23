@@ -47,7 +47,7 @@ public class VomsRecommendDaoImpl extends GenericDaoHibernate<VomsRecommend,Long
 	
 	@Override
 	public List<VomsRecommendVo> getVomsRecommendVos(List<String> types, String prdType, String labelInfo) {
-		StringBuffer hql = new StringBuffer("select objId,name,objType,type from VomsRecommend where isRecommend = ? and prdType=? ");
+		StringBuffer hql = new StringBuffer("select objId,name,objType,type,updateTime from VomsRecommend where isRecommend = ? and prdType=? ");
 		List<Object> param = new ArrayList<Object>();
 		param.add(Boolean.TRUE);
 		param.add(prdType);
@@ -90,7 +90,8 @@ public class VomsRecommendDaoImpl extends GenericDaoHibernate<VomsRecommend,Long
 						StringUtil.nullToLong(o[0]),
 						StringUtil.null2Str(o[1]),
 						StringUtil.null2Str(o[2]),
-						StringUtil.null2Str(o[3])));
+						StringUtil.null2Str(o[3]),
+						(Date)o[4]));
 			}
 		}
 		return returnList;

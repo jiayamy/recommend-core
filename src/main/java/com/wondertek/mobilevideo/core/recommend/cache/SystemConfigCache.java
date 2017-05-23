@@ -135,6 +135,11 @@ public class SystemConfigCache
 			RequestConstants.V_DEFAULT_SEARCH_SOTIMEOUT = 500;
 		}
 		
+		RequestConstants.V_DEFAULT_SEARCH_PUBLISHTIME = StringUtil.nullToInteger(getValue(RequestConstants.P_DEFAULT_SEARCH_PUBLISHTIME));
+		if(RequestConstants.V_DEFAULT_SEARCH_PUBLISHTIME < 0){
+			RequestConstants.V_DEFAULT_SEARCH_PUBLISHTIME = 0;
+		}
+		
 		RequestConstants.V_DEFAULT_RECOMD_CAT_MAX = getIntValueDefault(RequestConstants.P_DEFAULT_RECOMD_CAT_MAX,5);
 		
 		RequestConstants.V_DEFAULT_RECOMD_CATITEM_MAX = getIntValueDefault(RequestConstants.P_DEFAULT_RECOMD_CATITEM_MAX,10);

@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,8 @@ import com.wondertek.mobilevideo.core.recommend.model.RecommendInfo;
 import com.wondertek.mobilevideo.core.recommend.service.RecommendInfoService;
 import com.wondertek.mobilevideo.core.recommend.util.RecommendConstants;
 import com.wondertek.mobilevideo.core.recommend.util.RecommendInfoVoSort;
+import com.wondertek.mobilevideo.core.recommend.util.RecommendUtil;
+import com.wondertek.mobilevideo.core.recommend.util.RequestConstants;
 import com.wondertek.mobilevideo.core.recommend.vo.RecommendInfoVo;
 import com.wondertek.mobilevideo.core.util.StringUtil;
 
@@ -208,6 +211,7 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
         		RecommendInfoVo recommendInfoVo = new RecommendInfoVo();
         		recommendInfoVo.setPrdContId(recommendInfo.getPrdContId());
         		recommendInfoVo.setContName(recommendInfo.getContName());
+        		recommendInfoVo.setPublishTime(RecommendUtil.getYYYYMMDDHHMMFormat(recommendInfo.getUpdateTime()));
         		score = count + 0d;
         		if(labelScoreAndWeight != null){
         			score = labelScoreAndWeight.get(catId);
@@ -284,10 +288,16 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
 	 * @return
 	 */
 	private List<RecommendInfoVo> filterAndSort(List<RecommendInfoVo> returnList) {
+		long startTime = RecommendUtil.getYYYYMMDDHHMMFormatForDay(new Date(), RequestConstants.V_DEFAULT_SEARCH_PUBLISHTIME);
 		//去重
         List<RecommendInfoVo> rst = new ArrayList<RecommendInfoVo>();
         Map<Long,RecommendInfoVo> contIdMap = new HashMap<Long,RecommendInfoVo>();
         for(RecommendInfoVo recommendInfoVo : returnList){
+        	//去除指定时间之前的数据
+        	if(RequestConstants.V_DEFAULT_SEARCH_PUBLISHTIME > 0 && 
+        			recommendInfoVo.getPublishTime() != null && recommendInfoVo.getPublishTime() < startTime){
+        		continue;
+        	}
         	if(!contIdMap.containsKey(recommendInfoVo.getPrdContId())){
         		contIdMap.put(recommendInfoVo.getPrdContId(), recommendInfoVo);
         	}else{
@@ -351,7 +361,7 @@ public class RecommendInfoCacheManagerImpl implements RecommendInfoCacheManager
             		RecommendInfoVo recommendInfoVo = new RecommendInfoVo();
 	        		recommendInfoVo.setPrdContId(recommendInfo.getPrdContId());
 	        		recommendInfoVo.setContName(recommendInfo.getContName());
-	        		
+	        		recommendInfoVo.setPublishTime(RecommendUtil.getYYYYMMDDHHMMFormat(recommendInfo.getUpdateTime()));
 	        		//获取标签
 	        		for(String labelName : recommendInfo.getLabelInfo().split(RecommendConstants.SPLIT_COMMA)){
 	        			if(!StringUtil.isNullStr(labelName)){

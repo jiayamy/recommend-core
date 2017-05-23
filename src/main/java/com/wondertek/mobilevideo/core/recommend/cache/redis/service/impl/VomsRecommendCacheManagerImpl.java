@@ -3,6 +3,7 @@ package com.wondertek.mobilevideo.core.recommend.cache.redis.service.impl;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,8 @@ import com.wondertek.mobilevideo.core.recommend.cache.redis.service.VomsRecommen
 import com.wondertek.mobilevideo.core.recommend.model.VomsRecommend;
 import com.wondertek.mobilevideo.core.recommend.service.VomsRecommendService;
 import com.wondertek.mobilevideo.core.recommend.util.RecommendConstants;
+import com.wondertek.mobilevideo.core.recommend.util.RecommendUtil;
+import com.wondertek.mobilevideo.core.recommend.util.RequestConstants;
 import com.wondertek.mobilevideo.core.recommend.vo.VomsRecommendVo;
 import com.wondertek.mobilevideo.core.util.StringUtil;
 
@@ -193,6 +196,7 @@ public class VomsRecommendCacheManagerImpl implements VomsRecommendCacheManager 
 		if (isCluster) {
 			return vomsRecommendCacheClusterManager.queryByLabelInfo(types, prdType, labelInfo);
 		}
+		long startTime = RecommendUtil.getYYYYMMDDHHMMFormatForDay(new Date(), RequestConstants.V_DEFAULT_SEARCH_PUBLISHTIME);
 		Jedis jedis = null;
 		try {
 			jedis = redisManager.getJedis();
@@ -201,7 +205,18 @@ public class VomsRecommendCacheManagerImpl implements VomsRecommendCacheManager 
 		}
 		List<VomsRecommendVo> returnList = null;
 		if (jedis == null) { // redis为空，从数据库中获取
-			returnList = vomsRecommendService.getVomsRecommendVos(types, prdType, labelInfo);
+			List<VomsRecommendVo> list = vomsRecommendService.getVomsRecommendVos(types, prdType, labelInfo);
+			returnList = new ArrayList<VomsRecommendVo>();
+			if(list != null){
+				for(VomsRecommendVo vo : list){
+					//去除指定时间之前的数据
+					if(RequestConstants.V_DEFAULT_SEARCH_PUBLISHTIME > 0 && 
+		        			vo.getPublishTime() != null && vo.getPublishTime() < startTime){
+		        		continue;
+		        	}
+		        	returnList.add(vo);
+				}
+			}
 			if (log.isDebugEnabled()) {
 				log.debug("queried result from database successfully!labelInfo:" + labelInfo + ",size:" + returnList.size());
 			}
@@ -253,6 +268,11 @@ public class VomsRecommendCacheManagerImpl implements VomsRecommendCacheManager 
 		List<VomsRecommendVo> rst = new ArrayList<VomsRecommendVo>();
 		Map<Long, String> contIdMap = new HashMap<Long, String>();
 		for (VomsRecommendVo vo : returnList) {
+			//去除指定时间之前的数据
+			if(RequestConstants.V_DEFAULT_SEARCH_PUBLISHTIME > 0 && 
+        			vo.getPublishTime() != null && vo.getPublishTime() < startTime){
+        		continue;
+        	}
 			if (!contIdMap.containsKey(vo.getObjId())) {
 				rst.add(vo);
 				contIdMap.put(vo.getObjId(), vo.getObjType());
@@ -294,6 +314,7 @@ public class VomsRecommendCacheManagerImpl implements VomsRecommendCacheManager 
 					vomsRecommendVo.setObjId(v.getObjId());
 					vomsRecommendVo.setObjType(v.getObjType());
 					vomsRecommendVo.setType(v.getType());
+					vomsRecommendVo.setPublishTime(RecommendUtil.getYYYYMMDDHHMMFormat(v.getUpdateTime()));
 					// 获取标签
 					for (String labelName : v.getLabelInfo().split(RecommendConstants.SPLIT_COMMA)) {
 						if (!StringUtil.isNullStr(labelName)) {

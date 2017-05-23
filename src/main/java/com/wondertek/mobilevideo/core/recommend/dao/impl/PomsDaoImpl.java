@@ -31,7 +31,7 @@ public class PomsDaoImpl extends GenericDaoHibernate<PrdContInfo,Long> implement
 
 		if (proContIds != null) {
 			if (proContIds.size() == 1) {
-				 sql += "pc.prd_cont_id = ？";
+				 sql += "pc.prd_cont_id = ?";
 
 			}else if(proContIds.size() > 1) {
 				 sql += "pc.prd_cont_id in(:ids)";

@@ -1,5 +1,8 @@
 package com.wondertek.mobilevideo.core.recommend.util;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import com.wondertek.mobilevideo.core.base.Constants;
 import com.wondertek.mobilevideo.core.recommend.cache.EnumsConfigCache;
 import com.wondertek.mobilevideo.core.recommend.cache.EnumsInfoCache;
@@ -8,6 +11,8 @@ import com.wondertek.mobilevideo.core.recommend.cache.SystemConfigCache;
 import com.wondertek.mobilevideo.core.recommend.cache.redis.service.RecommendInfoCacheManager;
 import com.wondertek.mobilevideo.core.recommend.cache.redis.service.TopRecommendCacheManager;
 import com.wondertek.mobilevideo.core.recommend.cache.redis.service.VomsRecommendCacheManager;
+import com.wondertek.mobilevideo.core.util.DateUtil;
+import com.wondertek.mobilevideo.core.util.StringUtil;
 
 public class RecommendUtil {
 	public static void init(){
@@ -40,5 +45,17 @@ public class RecommendUtil {
 	public static void initVomsRecommednRedisCache() {
 		VomsRecommendCacheManager vomsRecommendCacheManager = (VomsRecommendCacheManager) Constants.ctx.getBean("vomsRecommendCacheManager");
 		vomsRecommendCacheManager.updataCache();
+	}
+	public static long getYYYYMMDDHHMMFormat(Date now){
+		if(now == null){
+			return 0;
+		}
+		return StringUtil.nullToLong(DateUtil.formatDate(RecommendConstants.DATE_FORMAT_YYYYMMDDHHMM, now));
+	}
+	public static long getYYYYMMDDHHMMFormatForDay(Date now , int dayOfYear){
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);
+		cal.add(Calendar.DAY_OF_YEAR, 0 - dayOfYear);
+		return getYYYYMMDDHHMMFormat(cal.getTime());
 	}
 }

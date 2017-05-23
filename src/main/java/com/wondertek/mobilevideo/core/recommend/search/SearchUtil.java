@@ -31,6 +31,7 @@ public class SearchUtil {
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getPackId()); 
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getContDisplayType()); 
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getMediaShape()); 
+		keys += S_VERTICALLINE + StringUtil.null2Str(request.getPublishTimeStart()); 
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getPageSize()); 
 		keys += S_VERTICALLINE + StringUtil.null2Str(request.getPageStart()); 
 		keys += S_VERTICALLINE + (StringUtil.isNullStr(request.getOrder()) ? "1" : StringUtil.null2Str(request.getOrder())); 
@@ -88,6 +89,9 @@ public class SearchUtil {
 		if(request.getMediaShape() != null && !"".equals(request.getMediaShape())){
 			list.add(new NameValuePair("mediaShape", request.getMediaShape()));
 		}
+		if(request.getPublishTimeStart() != null && !"".equals(request.getPublishTimeStart())){
+			list.add(new NameValuePair("publishTimeStart", request.getPublishTimeStart()));
+		}
 		//排序相关
 		if(request.getPageSize() != null && !"".equals(request.getPageSize())){
 			list.add(new NameValuePair("pageSize", request.getPageSize()));
@@ -130,6 +134,8 @@ public class SearchUtil {
 						resultItem.setContentId(node.elementText("searchId"));
 						resultItem.setContName(node.elementText("contName"));
 						resultItem.setScore(StringUtil.nullToDouble(node.elementText("score")));
+						resultItem.setPublishTime(StringUtil.nullToLong(node.elementText("publishTime")));
+						resultItem.setContDisplayType(node.elementText("contDisplayType"));
 						searchResult.add(resultItem);
 					}
 //					resultMap.put("searchResult", searchResult);
